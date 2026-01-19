@@ -46,4 +46,9 @@ public class PlayerStateMachine : MonoBehaviour
     {
         _isActive = active;
     }
+
+    public bool CheckForAttackHit(int direction, AttackType type)
+    {
+        return _currentState.DoesIncomingAttackHit(type, direction > 0);
+    }
 }

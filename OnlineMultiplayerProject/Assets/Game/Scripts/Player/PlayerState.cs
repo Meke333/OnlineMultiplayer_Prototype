@@ -52,7 +52,7 @@ public abstract class PlayerState
     protected abstract void BlockEvent(bool isPressed);
     protected abstract void LeftAttack(bool isPressed);
     protected abstract void RightAttack(bool isPressed);
-    protected abstract void IncomingAttack(AttackType type, bool isRightAttack);
+    public abstract bool DoesIncomingAttackHit(AttackType type, bool isRightAttack);
 
 
     public PlayerState Process()

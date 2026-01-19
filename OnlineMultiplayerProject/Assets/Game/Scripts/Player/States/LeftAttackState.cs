@@ -31,8 +31,9 @@ public class LeftAttackState: PlayerState
         return;
     }
 
-    protected override void IncomingAttack(AttackType type, bool isRightAttack)
+    public override bool DoesIncomingAttackHit(AttackType type, bool isRightAttack)
     {
         OnDamage(type);
+        return true;
     }
 }

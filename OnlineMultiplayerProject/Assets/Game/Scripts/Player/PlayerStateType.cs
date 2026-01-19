@@ -5,5 +5,6 @@
     Dodge = 2,
     Block = 3,
     Hurt = 4,
+    Down = 5,
     
 }

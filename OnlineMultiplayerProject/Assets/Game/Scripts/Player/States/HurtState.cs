@@ -39,8 +39,8 @@ public class HurtState: PlayerState
         return;
     }
 
-    protected override void IncomingAttack(AttackType type, bool isRightAttack)
+    public override bool DoesIncomingAttackHit(AttackType type, bool isRightAttack)
     {
-        return;
+        return true;
     }
 }

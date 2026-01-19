@@ -6,8 +6,9 @@ using UnityEngine;
 public class PlayerScript : NetworkBehaviour
 {
     [SerializeField] private InputReader _playerInputReader;
+    [SerializeField] private PlayerStateMachine _playerStateMachine; 
     
-    
+    [field: SerializeField] public PlayerNumberType PlayerNumber { get; private set; } 
 
     #region Input
 
@@ -44,6 +45,11 @@ public class PlayerScript : NetworkBehaviour
 
     #endregion
 
+    public bool CheckToBeHit(int direction, AttackType type)
+    {
+        return _playerStateMachine.CheckForAttackHit(direction, type);
+    }
+    
     public void TakingDamage(float damage)
     {
         

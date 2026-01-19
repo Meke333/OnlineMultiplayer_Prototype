@@ -48,15 +48,16 @@ public class DodgeState : PlayerState
         stageType = StageType.Exit;
     }
 
-    protected override void IncomingAttack(AttackType type, bool isRightAttack)
+    public override bool DoesIncomingAttackHit(AttackType type, bool isRightAttack)
     {
         //opposite site to counter!
         if (stateData.inputReader.MoveDirection.x < 0 && !isRightAttack)
-            return;
+            return false;
         
         if (stateData.inputReader.MoveDirection.x > 0 && isRightAttack)
-            return;
+            return false;
         
         OnDamage(type);
+        return true;
     }
 }

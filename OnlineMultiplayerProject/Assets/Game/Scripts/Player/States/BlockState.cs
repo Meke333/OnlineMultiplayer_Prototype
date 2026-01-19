@@ -47,10 +47,11 @@ public class BlockState : PlayerState
         stageType = StageType.Exit;
     }
 
-    protected override void IncomingAttack(AttackType type, bool isRightAttack)
+    public override bool DoesIncomingAttackHit(AttackType type, bool isRightAttack)
     {
         //No StateSwitching only do HP reduction, unless it's causing knockdown
         OnDamage(type);
+        return true;
     }
 
     protected override void OnDamage(AttackType type)
