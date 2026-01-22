@@ -45,7 +45,11 @@ GameObject:
   - component: {fileID: 6822425671528688239}
   - component: {fileID: 1773132042040930684}
   - component: {fileID: 8829045608157741384}
+  - component: {fileID: 2335969950896661212}
   - component: {fileID: 2544463415049462545}
+  - component: {fileID: 900998870862033398}
+  - component: {fileID: 8111838302717836665}
+  - component: {fileID: 3963574713323088100}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -132,6 +136,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerScript
   ShowTopMostFoldoutHeaderGroup: 1
   _playerInputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
+  _playerStateMachine: {fileID: 0}
+  <PlayerNumber>k__BackingField: 0
+--- !u!114 &2335969950896661212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3076193848507524310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbc0135911a4d614e8b6953557ea5fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerEvents
 --- !u!114 &2544463415049462545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,11 +162,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75c0cefe695f4bf2b52616bb1774a45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStateMachine
+  ShowTopMostFoldoutHeaderGroup: 1
   statename: 
   _playerScript: {fileID: 8829045608157741384}
+  _playerEvents: {fileID: 0}
   _inputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
   _attackDamageConfiguration: {fileID: 11400000, guid: 7b3f7216cf612844b9e004a16bfaad56, type: 2}
+  playerStateType:
+    m_InternalValue: 0
   _isActive: 0
+--- !u!114 &900998870862033398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3076193848507524310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f304ad2046480489737ddb0d8ed6a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  ShowTopMostFoldoutHeaderGroup: 1
+  _playerScript: {fileID: 0}
+  _playerEvents: {fileID: 0}
+--- !u!114 &8111838302717836665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3076193848507524310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5df2d9b247c24a1caad28bfacd3fd6f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDamage
+  ShowTopMostFoldoutHeaderGroup: 1
+  _playerScript: {fileID: 0}
+  _playerEvents: {fileID: 0}
+  _inputReader: {fileID: 0}
+  _configuration: {fileID: 0}
+--- !u!114 &3963574713323088100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3076193848507524310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5fcab439df75cb47833f5507b8b55b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
+  ShowTopMostFoldoutHeaderGroup: 1
+  _animator: {fileID: 0}
+  _playerEvents: {fileID: 0}
 --- !u!1 &6559212970219866934
 GameObject:
   m_ObjectHideFlags: 0

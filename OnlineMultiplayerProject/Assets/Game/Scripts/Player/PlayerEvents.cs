@@ -7,6 +7,10 @@ public class PlayerEvents : MonoBehaviour
     public Action AttackEnded;
     
 
+    public Action<PlayerStateType> StateChanged;
+    public Action<float> GettingDamage;
+    public Action KnockedDown;
+    
     public Action<int, AttackType> TransmitAttack; //direction, attackType
     public Action<bool> TransmitMissedAttack;
     public Action CheckedForMissedAttack;

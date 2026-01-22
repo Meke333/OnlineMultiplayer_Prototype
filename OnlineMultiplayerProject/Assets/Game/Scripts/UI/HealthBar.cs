@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class HealthBar : NetworkBehaviour
 {
-    public HealthBar Instance;
+    public static HealthBar Instance;
     [SerializeField] private Slider playerOneSlider;
     [SerializeField] private Slider playerTwoSlider;
     
@@ -26,7 +26,8 @@ public class HealthBar : NetworkBehaviour
             Destroy(this.gameObject);
     }
 
-    public void ChangeHealth(PlayerNumberType playerNumber, float value)
+    [ServerRpc]
+    public void ChangeHealthServerRpc(PlayerNumberType playerNumber, float value, bool reduce = true)
     {
         NetworkVariable<float> temp = playerNumber switch
         {
@@ -34,7 +35,10 @@ public class HealthBar : NetworkBehaviour
             PlayerNumberType.PlayerTwo => playerTwoHealth,
         };
         
-        temp.Value = value;
+        if (reduce)
+            temp.Value -= value;
+        else
+            temp.Value = value;
         
         //if value <= 0 then inform the statemachine of the corresponding player!!
         

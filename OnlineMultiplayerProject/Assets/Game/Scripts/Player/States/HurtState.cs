@@ -10,13 +10,12 @@ public class HurtState: PlayerState
     public override void SetStateType()
     {
         stateType = PlayerStateType.Hurt;
-        nextState = new IdleState(stateData);
-        stageType = StageType.Exit;
     }
 
     protected override void Enter()
     {
-        base.Enter();
+        nextState = new IdleState(stateData);
+        stageType = StageType.Exit;
     }
 
     protected override void MoveEvent(Vector2 direction)
@@ -39,8 +38,4 @@ public class HurtState: PlayerState
         return;
     }
 
-    public override bool DoesIncomingAttackHit(AttackType type, bool isRightAttack)
-    {
-        return true;
-    }
 }

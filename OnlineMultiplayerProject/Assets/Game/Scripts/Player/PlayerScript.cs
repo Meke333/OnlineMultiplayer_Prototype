@@ -44,15 +44,5 @@ public class PlayerScript : NetworkBehaviour
 
 
     #endregion
-
-    public bool CheckToBeHit(int direction, AttackType type)
-    {
-        return _playerStateMachine.CheckForAttackHit(direction, type);
-    }
-    
-    public void TakingDamage(float damage)
-    {
-        
-    }
     
 }

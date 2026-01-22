@@ -34,6 +34,8 @@ public class BlockState : PlayerState
         if (!isPressed)
             return;
 
+        stateData.inputStateData.leftAttackInput = false;
+
         nextState = new LeftAttackState(stateData);
         stageType = StageType.Exit;
     }
@@ -42,22 +44,12 @@ public class BlockState : PlayerState
     {
         if (!isPressed)
             return;
+        
+        stateData.inputStateData.rightAttackInput = false;
 
         nextState = new RightAttackState(stateData);
         stageType = StageType.Exit;
     }
 
-    public override bool DoesIncomingAttackHit(AttackType type, bool isRightAttack)
-    {
-        //No StateSwitching only do HP reduction, unless it's causing knockdown
-        OnDamage(type);
-        return true;
-    }
 
-    protected override void OnDamage(AttackType type)
-    {
-        float damage = stateData.attackDamageConfiguration.DetermineDamage(type) / 4;
-        
-        stateData.playerScript.TakingDamage(damage);
-    }
 }

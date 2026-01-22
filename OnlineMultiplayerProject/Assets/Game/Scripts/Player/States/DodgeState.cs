@@ -16,8 +16,8 @@ public class DodgeState : PlayerState
         if (Mathf.Abs(direction.x) >= 0.01f)
             return;
      
-        Debug.Log("BlockButton: " + stateData.inputReader.BlockButton);
-        if (stateData.inputReader.BlockButton)
+        Debug.Log("BlockButton: " + stateData.inputStateData.blockInput);
+        if (stateData.inputStateData.blockInput)
             nextState = new BlockState(stateData);
         else
             nextState = new IdleState(stateData);
@@ -35,6 +35,8 @@ public class DodgeState : PlayerState
         if (!isPressed)
             return;
 
+        stateData.inputStateData.leftAttackInput = false;
+
         nextState = new LeftAttackState(stateData);
         stageType = StageType.Exit;
     }
@@ -44,20 +46,10 @@ public class DodgeState : PlayerState
         if (!isPressed)
             return;
 
+        stateData.inputStateData.rightAttackInput = false;
+        
         nextState = new RightAttackState(stateData);
         stageType = StageType.Exit;
     }
-
-    public override bool DoesIncomingAttackHit(AttackType type, bool isRightAttack)
-    {
-        //opposite site to counter!
-        if (stateData.inputReader.MoveDirection.x < 0 && !isRightAttack)
-            return false;
-        
-        if (stateData.inputReader.MoveDirection.x > 0 && isRightAttack)
-            return false;
-        
-        OnDamage(type);
-        return true;
-    }
+    
 }

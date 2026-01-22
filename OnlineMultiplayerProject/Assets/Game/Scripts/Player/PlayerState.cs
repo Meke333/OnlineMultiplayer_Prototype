@@ -26,25 +26,22 @@ public abstract class PlayerState
 
     protected virtual void Enter()
     {
-        stateData.inputReader.MoveEvent += MoveEvent;
-        stateData.inputReader.BlockEvent += BlockEvent;
-        stateData.inputReader.LeftAttackEvent += LeftAttack;
-        stateData.inputReader.RightAttackEvent += RightAttack;
         stageType = StageType.Update;
     }
 
     
     protected virtual void Update()
     {
+        MoveEvent(stateData.inputStateData.moveDirection);
+        BlockEvent(stateData.inputStateData.blockInput);
+        LeftAttack(stateData.inputStateData.leftAttackInput);
+        RightAttack(stateData.inputStateData.rightAttackInput);
+        
         stageType = StageType.Update;
     }
 
     protected virtual void Exit()
     {
-        stateData.inputReader.MoveEvent -= MoveEvent;
-        stateData.inputReader.BlockEvent -= BlockEvent;
-        stateData.inputReader.LeftAttackEvent -= LeftAttack;
-        stateData.inputReader.RightAttackEvent -= RightAttack;
         stageType = StageType.Exit;
     }
     
@@ -52,8 +49,6 @@ public abstract class PlayerState
     protected abstract void BlockEvent(bool isPressed);
     protected abstract void LeftAttack(bool isPressed);
     protected abstract void RightAttack(bool isPressed);
-    public abstract bool DoesIncomingAttackHit(AttackType type, bool isRightAttack);
-
 
     public PlayerState Process()
     {
@@ -73,22 +68,17 @@ public abstract class PlayerState
         return this;
     }
 
-    protected virtual void OnDamage(AttackType type)
+    public virtual void OnDamage()
     {
-        float damage = stateData.attackDamageConfiguration.DetermineDamage(type);
-
-        stateData.playerScript.TakingDamage(damage);
-        
         nextState = new HurtState(stateData);
         stageType = StageType.Exit;
-        
-        
     }
 
     //Create an Event for this to happen
-    protected virtual void OnKnockdown()
+    public virtual void OnKnockdown()
     {
-        throw new NotImplementedException();
+        //nextState = new KnockdownState(stateData)
+        //stageType = StageType.Exit;
     }
 
 }
