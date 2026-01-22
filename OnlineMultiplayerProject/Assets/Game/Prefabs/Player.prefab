@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7433562913280344235}
+  - component: {fileID: 4110436994733830617}
   m_Layer: 0
   m_Name: Gloves
   m_TagString: Untagged
@@ -33,6 +34,28 @@ Transform:
   - {fileID: 2833112073095129406}
   m_Father: {fileID: 2209008374879272708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &4110436994733830617
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2194901018554973096}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4a7efda1d2798d544b99ca07412e7898, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3076193848507524310
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,7 +66,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2209008374879272708}
   - component: {fileID: 6822425671528688239}
-  - component: {fileID: 1773132042040930684}
   - component: {fileID: 8829045608157741384}
   - component: {fileID: 2335969950896661212}
   - component: {fileID: 2544463415049462545}
@@ -87,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1382426391
+  GlobalObjectIdHash: 679736961
   InScenePlacedSourceGlobalObjectIdHash: 679736961
   DeferredDespawnTick: 0
   Ownership: 1
@@ -100,28 +122,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1773132042040930684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3076193848507524310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a14bcf26c7390b4392772a6848b5aca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InputHandler
-  ShowTopMostFoldoutHeaderGroup: 1
-  _inputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
-  _moveDirectionInput:
-    m_InternalValue: {x: 0, y: 0}
-  _leftAttackInput:
-    m_InternalValue: 0
-  _rightAttackInput:
-    m_InternalValue: 0
-  _blockInput:
-    m_InternalValue: 0
 --- !u!114 &8829045608157741384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,6 +138,7 @@ MonoBehaviour:
   _playerInputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
   _playerStateMachine: {fileID: 0}
   <PlayerNumber>k__BackingField: 0
+  _cinemachineCameraTarget: {fileID: 9126858374209596906}
 --- !u!114 &2335969950896661212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +166,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   statename: 
   _playerScript: {fileID: 8829045608157741384}
-  _playerEvents: {fileID: 0}
+  _playerEvents: {fileID: 2335969950896661212}
   _inputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
   _attackDamageConfiguration: {fileID: 11400000, guid: 7b3f7216cf612844b9e004a16bfaad56, type: 2}
   playerStateType:
@@ -184,8 +185,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   ShowTopMostFoldoutHeaderGroup: 1
-  _playerScript: {fileID: 0}
-  _playerEvents: {fileID: 0}
+  _playerScript: {fileID: 8829045608157741384}
+  _playerEvents: {fileID: 2335969950896661212}
 --- !u!114 &8111838302717836665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,10 +200,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDamage
   ShowTopMostFoldoutHeaderGroup: 1
-  _playerScript: {fileID: 0}
-  _playerEvents: {fileID: 0}
-  _inputReader: {fileID: 0}
-  _configuration: {fileID: 0}
+  _playerScript: {fileID: 8829045608157741384}
+  _playerEvents: {fileID: 2335969950896661212}
+  _inputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
+  _configuration: {fileID: 11400000, guid: 7b3f7216cf612844b9e004a16bfaad56, type: 2}
 --- !u!114 &3963574713323088100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,8 +217,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
   ShowTopMostFoldoutHeaderGroup: 1
-  _animator: {fileID: 0}
-  _playerEvents: {fileID: 0}
+  _animator: {fileID: 4110436994733830617}
+  _playerEvents: {fileID: 2335969950896661212}
 --- !u!1 &6559212970219866934
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,7 +539,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 779432096334138026}
-  - component: {fileID: 1908727840529774531}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -561,46 +561,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2209008374879272708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1908727840529774531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9126858374209596906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
-  Priority:
-    Enabled: 0
-    m_Value: 0
-  OutputChannel: 1
-  StandbyUpdate: 2
-  m_StreamingVersion: 20241001
-  m_LegacyPriority: 0
-  Target:
-    TrackingTarget: {fileID: 0}
-    LookAtTarget: {fileID: 0}
-    CustomLookAtTarget: 0
-  Lens:
-    FieldOfView: 60.000004
-    OrthographicSize: 10
-    NearClipPlane: 0.1
-    FarClipPlane: 5000
-    Dutch: 0
-    ModeOverride: 0
-    PhysicalProperties:
-      GateFit: 2
-      SensorSize: {x: 21.946, y: 16.002}
-      LensShift: {x: 0, y: 0}
-      FocusDistance: 10
-      Iso: 200
-      ShutterSpeed: 0.005
-      Aperture: 16
-      BladeCount: 5
-      Curvature: {x: 2, y: 11}
-      BarrelClipping: 0.25
-      Anamorphism: 0
-  BlendHint: 0

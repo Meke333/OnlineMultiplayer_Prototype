@@ -17,11 +17,29 @@ public class HostGameManager : IDisposable
     //How many players can connect!!
     private const int MaxConnections = 10;
     private Allocation _allocation;
+    private List<NetworkObject> _playerPrefabs;
     private string _joinCode;
-    public string GameSceneName = "Gameplay";
     private string _lobbyID;
     public NetworkServer NetworkServer {get; private set;}
 
+#if UNITY_EDITOR
+    public UnityEditor.SceneAsset SceneAsset;
+    private void OnValidate()
+    {
+        if (SceneAsset == null)
+            return;
+        
+        _gameSceneName = SceneAsset.name;
+    }
+#endif
+    
+    [SerializeField] private string _gameSceneName = "Gameplay";
+
+    public HostGameManager(List<NetworkObject> playerPrefabs)
+    {
+        _playerPrefabs = playerPrefabs;
+    }
+    
     public async Task StartHostAsync()
     {
         try
@@ -82,12 +100,13 @@ public class HostGameManager : IDisposable
         }
         
         //connection approval
-        NetworkServer = new NetworkServer(NetworkManager.Singleton);
+        NetworkServer = new NetworkServer(NetworkManager.Singleton, _playerPrefabs);
 
         UserData userData = new UserData
         {
             userName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Host Unknown"),
-            userAuthID = AuthenticationService.Instance.PlayerId
+            userAuthID = AuthenticationService.Instance.PlayerId,
+            PrefabIndex = PlayerPrefs.GetInt(NameSelector.PlayerPrefabKey, 0)
         };
         
         string payload = JsonUtility.ToJson(userData); //JSON to Byte Array
@@ -99,7 +118,7 @@ public class HostGameManager : IDisposable
         //Step 4: Finally start the host
         NetworkManager.Singleton.StartHost();
         //Step 5: Change to main gameplay scene
-        NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene(_gameSceneName, LoadSceneMode.Single);
     }
 
     private IEnumerator HeartbeatLobby(float waitTime)

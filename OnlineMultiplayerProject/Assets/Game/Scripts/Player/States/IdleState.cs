@@ -12,11 +12,16 @@ public class IdleState : PlayerState
         stateType = PlayerStateType.Idle;
     }
 
+    protected override void Update()
+    {
+        base.Update();
+    }
+
     protected override void MoveEvent(Vector2 direction)
     {
+        
         if (Mathf.Abs(direction.x) < 0.01f)
             return;
-
         nextState = new DodgeState(stateData);
         stageType = StageType.Exit;
     }

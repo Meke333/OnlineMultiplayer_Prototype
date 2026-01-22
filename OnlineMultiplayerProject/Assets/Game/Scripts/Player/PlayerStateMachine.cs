@@ -16,7 +16,7 @@ public class PlayerStateMachine : NetworkBehaviour
     
     
     private PlayerState _currentState;
-    private StateData _stateData;
+    [SerializeField, ReadOnly]private StateData _stateData;
     
     public NetworkVariable<PlayerStateType> playerStateType = new NetworkVariable<PlayerStateType>(0, 
         NetworkVariableReadPermission.Everyone, 
@@ -39,7 +39,7 @@ public class PlayerStateMachine : NetworkBehaviour
     {
         SetUp();
 
-        if (!IsOwner || !IsClient)
+        if (!IsOwner)
             return;
 
         _inputReader.MoveEvent += MoveInputChangeServerRpc;
@@ -54,7 +54,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-        if (!IsOwner || !IsClient)
+        if (!IsOwner)
             return;
 
         _inputReader.MoveEvent -= MoveInputChangeServerRpc;
@@ -76,7 +76,7 @@ public class PlayerStateMachine : NetworkBehaviour
         
         _currentState = _currentState.Process();
         statename = _currentState.ToString();
-
+        
         UpdateChangeToClientsClientRpc();
     }
 
@@ -90,24 +90,28 @@ public class PlayerStateMachine : NetworkBehaviour
     private void MoveInputChangeServerRpc(Vector2 direction)
     {
         _stateData.inputStateData.moveDirection = direction;
+        Debug.Log("S: "+ _playerScript.PlayerNumber + "; MoveInput + " + direction.ToString());
     }
 
     [ServerRpc]
     private void BlockInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.blockInput = input;
+        Debug.Log("S: "+ _playerScript.PlayerNumber + "; Block + " + input.ToString());
     }
 
     [ServerRpc]
     private void LeftAttackInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.leftAttackInput = input;
+        Debug.Log("S: "+ _playerScript.PlayerNumber + "; LeftAttack + " + input.ToString());
     }
 
     [ServerRpc]
     private void RightAttackInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.rightAttackInput = input;
+        Debug.Log("S: "+ _playerScript.PlayerNumber + "; RightAttack + " + input.ToString());
     }
 
     [ServerRpc]

@@ -5,6 +5,7 @@ public class UserData
 {
     public string userName;
     public string userAuthID;
+    public int PrefabIndex;
     public GameInfo userPreferrredGamePreferences = new GameInfo();
     //public string password;
     //public string email;

@@ -108,7 +108,8 @@ public class InputHandler : NetworkBehaviour
             0 => "Move",
             1 => "LeftAttack",
             2 => "RightAttack",
-            3 => "Block"
+            3 => "Block",
+            _ => "Unknown"
         };
         
         

@@ -1,4 +1,5 @@
-﻿public class StateData
+﻿[System.Serializable]
+public class StateData
 {
     public PlayerScript playerScript;
     public InputStateData inputStateData;
@@ -8,5 +9,4 @@
     public int attackDirection;
     public bool didAttackEnd;
     
-
 }

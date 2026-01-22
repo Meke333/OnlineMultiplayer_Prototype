@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class InteractionBetweenPlayersMediator : MonoBehaviour
 {
     public static InteractionBetweenPlayersMediator Instance {get; private set;}
     
-    [SerializeField] private PlayerDamage _playerOne;
-    [SerializeField] private PlayerDamage _playerTwo;
+    public PlayerDamage playerOne;
+    public PlayerDamage playerTwo;
 
     private void Awake()
     {
@@ -21,7 +22,7 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
 
     public bool AttackInteraction(PlayerNumberType attacker, int direction, AttackType type)
     {
-        PlayerDamage target = attacker == PlayerNumberType.PlayerOne ? _playerTwo : _playerOne;
+        PlayerDamage target = attacker == PlayerNumberType.PlayerOne ? playerTwo : playerOne;
 
         bool result = target.DoesAttackLand(direction, type);
         if (result)

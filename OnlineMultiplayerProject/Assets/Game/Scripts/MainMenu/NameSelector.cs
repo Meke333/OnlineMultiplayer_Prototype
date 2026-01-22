@@ -8,11 +8,15 @@ public class NameSelector : MonoBehaviour
     [SerializeField] private Button _hostButton;
     [SerializeField] private Button _clientButton;
     [SerializeField] private Button _lobbyButton;
+    [SerializeField] private TMP_Dropdown PrefabDropdown;
     [SerializeField] private int _minNameLength = 1;
     [SerializeField] private int _maxNameLength = 12;
 
+    private int PrefabSelectedIndex = 0;
+
     public static string Name {get; private set;}
     public const string PlayerNameKey = "PlayerName";
+    public const string PlayerPrefabKey = "PlayerPrefabIndex";
 
     void Start()
     {
@@ -23,6 +27,8 @@ public class NameSelector : MonoBehaviour
 
         _nameField.text = PlayerPrefs.GetString(PlayerNameKey, string.Empty);
         Name = _nameField.text;
+        PrefabDropdown.value = PlayerPrefs.GetInt(PlayerPrefabKey, 0);
+        
 
         HandleNameChanged();
     }
@@ -37,9 +43,15 @@ public class NameSelector : MonoBehaviour
         Name = _nameField.text;
     }
 
+    public void OnPrefabIndexChanged(int newIndex)
+    {
+        PrefabSelectedIndex = newIndex;
+    }
+
     public void DoConnect()
     {
         PlayerPrefs.SetString(PlayerNameKey, _nameField.text);
+        PlayerPrefs.SetInt(PlayerPrefabKey, PrefabSelectedIndex);
         Name = _nameField.text;
     }
 }

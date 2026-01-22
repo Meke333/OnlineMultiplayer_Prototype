@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 public class InputStateData
 {
     public Vector2 moveDirection;

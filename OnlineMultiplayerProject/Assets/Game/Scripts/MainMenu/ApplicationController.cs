@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,6 +9,7 @@ public class ApplicationController : MonoBehaviour
     [SerializeField] private ClientSingleton _clientSingletonPrefab;
     [SerializeField] private HostSingleton _hostSingletonPrefab;
     [SerializeField] private ServerSingleton _serverSingletonPrefab;
+    [SerializeField] private List<NetworkObject> _playerPrefabs;
 
     private async void Start()
     {
@@ -25,7 +28,7 @@ public class ApplicationController : MonoBehaviour
         }
 
         HostSingleton hostSingleton = Instantiate(_hostSingletonPrefab);
-        hostSingleton.CreateHost();
+        hostSingleton.CreateHost(_playerPrefabs);
         
         ClientSingleton clientSingleton = Instantiate(_clientSingletonPrefab);
         bool isAuthenticated = await clientSingleton.CreateClient();

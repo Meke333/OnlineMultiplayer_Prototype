@@ -19,6 +19,7 @@ public abstract class PlayerState
 
     public PlayerState(StateData input)
     {
+        SetStateType();
         stateData = input;
     }
 
@@ -36,8 +37,6 @@ public abstract class PlayerState
         BlockEvent(stateData.inputStateData.blockInput);
         LeftAttack(stateData.inputStateData.leftAttackInput);
         RightAttack(stateData.inputStateData.rightAttackInput);
-        
-        stageType = StageType.Update;
     }
 
     protected virtual void Exit()
