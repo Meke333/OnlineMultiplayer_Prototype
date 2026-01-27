@@ -22,7 +22,8 @@ public class NetworkServer : IDisposable
     
     private Dictionary<ulong, string> _clientIdToAuth = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authIdToUserData = new Dictionary<string, UserData>();
-
+    private Dictionary<ulong, bool> _clientIdtoActiveCheck = new Dictionary<ulong, bool>();
+    
     public NetworkServer(NetworkManager networkManager, List<NetworkObject> playerPrefabs)
     {
         _networkManager = networkManager;
@@ -41,8 +42,21 @@ public class NetworkServer : IDisposable
 
     public UserData GetUserDataByClientId(ulong clientId)
     {
-        if (!_clientIdToAuth.TryGetValue(clientId, out string authId)) return null;
-        if (!_authIdToUserData.TryGetValue(authId, out UserData userData)) return null;
+        Debug.Log("clientId = " + clientId);
+        Debug.Log(_clientIdToAuth.ContainsKey(clientId));
+        Debug.Log(_clientIdToAuth[clientId] == null);
+        
+        if (!_clientIdToAuth.TryGetValue(clientId, out string authId))
+        {
+            Debug.Log("Nope 1");
+            return null;
+        }
+
+        if (!_authIdToUserData.TryGetValue(authId, out UserData userData))
+        {
+            Debug.Log("Nope 2");
+            return null;
+        }
         
         return userData;
 
@@ -55,6 +69,8 @@ public class NetworkServer : IDisposable
 
     private void DoOnDisconnect(ulong clientId)
     {
+        //For some reason this gets called, whenever a client gets Approved???
+        Debug.Log("DoOnDisconnect");
         if (_clientIdToAuth.TryGetValue(clientId, out string authId))
         {
             _clientIdToAuth.Remove(clientId);
@@ -64,6 +80,8 @@ public class NetworkServer : IDisposable
 
             playerNumberIndex--;
         }
+
+        //playerNumberIndex = _clientIdtoActiveCheck.Count;
     }
 
     //We can make it a Task and make it async and make a time-out!!
@@ -71,37 +89,57 @@ public class NetworkServer : IDisposable
         NetworkManager.ConnectionApprovalRequest request, 
         NetworkManager.ConnectionApprovalResponse response)
     {
+        response.Pending = true;
         string payload = System.Text.Encoding.UTF8.GetString(request.Payload); //Byte array into string (JSON); better than custom parsing
         UserData userData = JsonUtility.FromJson<UserData>(payload);
+
         
         Debug.Log("Approval for: " + userData.userName);
+        Debug.Log(userData.PrefabIndex);
 
         //CHECK IF USER DATA IS VALID HERE!!! (name checkbox)
 
-        _clientIdToAuth[request.ClientNetworkId] = userData.userAuthID;
-        _authIdToUserData[userData.userAuthID] = userData;
+        Debug.Log("ClientNetworkId = " + request.ClientNetworkId);
+        
+        //To-Do: If ClientID is the same and the it's old in the dictionary: replace it!
+        
+        if (!_clientIdToAuth.TryAdd(request.ClientNetworkId, userData.userAuthID))
+            _clientIdToAuth[request.ClientNetworkId] = userData.userAuthID;
+        Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
+        
+        if (!_authIdToUserData.TryAdd(userData.userAuthID, userData))
+            _authIdToUserData[userData.userAuthID] = userData;
+        Debug.Log(_authIdToUserData[userData.userAuthID] == null);
         
         OnUserJoined?.Invoke(userData);
         
         //This disables instantiating a player prefab
         response.CreatePlayerObject = false;
+        response.Approved = true;
+        response.Pending = false;
         Debug.Log("Hello 0");
+        Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
+        Debug.Log(_authIdToUserData[userData.userAuthID] == null);
         await SpawnPlayerDelayed(request.ClientNetworkId);
         Debug.Log("Hello 6");
         
-        response.Approved = true;
         //response.CreatePlayerObject = true;
     }
 
     private async Task SpawnPlayerDelayed(ulong clientId)
     {
         Debug.Log("Hello 1");
-        await Task.Delay(1000);
         Debug.Log("Hello 2.1");
+        
+        
+        Debug.Log(_clientIdToAuth[clientId] == null);
         
         UserData userdata = GetUserDataByClientId(clientId);
 
         //To-Do: Exchange Position and Rotation dependent on Playernumber
+        Debug.Log("_playerPrefab == null: " + (_playerPrefabs == null));
+        Debug.Log("userData == null: " + (userdata == null));
+        
         Debug.Log("Hello 2.2: " + _playerPrefabs.Count + "; " + userdata.PrefabIndex);
         NetworkObject playerObject = GameObject.Instantiate(_playerPrefabs[userdata.PrefabIndex], 
             new Vector3(100, 50, 100),
@@ -119,10 +157,13 @@ public class NetworkServer : IDisposable
         }
         else
         {
+
+            await Task.Delay(3000);
             PlayerNumberType number = (PlayerNumberType)playerNumberIndex;
             Debug.Log("PlayerNumber: " + playerNumberIndex + "; " + (PlayerNumberType)playerNumberIndex);
-            playerObject.GetComponentInChildren<PlayerScript>().SetPlayerNumberType((PlayerNumberType) playerNumberIndex);
-
+            PlayerScript player = playerObject.GetComponentInChildren<PlayerScript>();
+            player.SetPlayerNumberType((PlayerNumberType)playerNumberIndex);
+            
             switch (number)
             {
                 case PlayerNumberType.PlayerOne:
@@ -133,6 +174,11 @@ public class NetworkServer : IDisposable
                     InteractionBetweenPlayersMediator.Instance.playerTwo =
                         playerObject.GetComponentInChildren<PlayerDamage>();
                     break;
+            }
+
+            if (player.IsHost || player.IsServer)
+            {
+                player.UpdatePlayerAfterLoadClientRpc();
             }
             Debug.Log("Hello 4");
             

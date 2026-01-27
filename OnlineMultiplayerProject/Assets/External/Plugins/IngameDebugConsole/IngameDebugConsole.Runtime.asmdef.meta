@@ -9,6 +9,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 68068
   packageName: In-game Debug Console
-  packageVersion: 1.8.2
-  assetPath: Assets/Plugins/IngameDebugConsole/IngameDebugConsole.Runtime.asmdef
-  uploadId: 764785
+  packageVersion: 1.8.4
+  assetPath: Assets/External/Plugins/IngameDebugConsole/IngameDebugConsole.Runtime.asmdef
+  uploadId: 842686

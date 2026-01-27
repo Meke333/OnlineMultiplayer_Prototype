@@ -10,7 +10,8 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] private InputReader _playerInputReader;
     [SerializeField] private PlayerStateMachine _playerStateMachine; 
     
-    [field: SerializeField] public PlayerNumberType PlayerNumber { get; private set; }
+    public NetworkVariable<PlayerNumberType> PlayerNumber = new NetworkVariable<PlayerNumberType>();
+    [field: SerializeField] public PlayerNumberType PlayerNumberValue { get; private set; }
 
     [SerializeField] private GameObject _cinemachineCameraTarget;
     
@@ -28,15 +29,15 @@ public class PlayerScript : NetworkBehaviour
 
     #endregion
 
-    private async void Start()
+    /*private async void Start()
     {
-        await Task.Delay(2000);
+        await Task.Delay(4000);
         
         if (IsHost || IsServer)
         {
             UpdatePlayerAfterLoadClientRpc();
         }
-    }
+    }*/
 
 
 
@@ -49,21 +50,32 @@ public class PlayerScript : NetworkBehaviour
 
 
     #endregion
-
+    
     public void SetPlayerNumberType(PlayerNumberType playerNumberType)
     {
-        PlayerNumber = playerNumberType;
+        PlayerNumberValue = playerNumberType;
+        
+        UpdatePlayerNumberClientRpc();
     }
     
     //ClientRpc
     [ClientRpc]
-    private void UpdatePlayerAfterLoadClientRpc()
+    private void UpdatePlayerNumberClientRpc()
     {
+        PlayerNumber.Value = PlayerNumberValue;
+    }
+    
+    [ClientRpc]
+    public void UpdatePlayerAfterLoadClientRpc()
+    {
+        if (InitialTransformInformation.Instance == null)
+            return;
         //Position
-        Transform information = PlayerNumber switch
+        Transform information = PlayerNumber.Value switch
         {
             PlayerNumberType.PlayerOne => InitialTransformInformation.Instance.PlayerOneInformation,
-            PlayerNumberType.PlayerTwo => InitialTransformInformation.Instance.PlayerTwoInformation
+            PlayerNumberType.PlayerTwo => InitialTransformInformation.Instance.PlayerTwoInformation,
+            _ => InitialTransformInformation.Instance.PlayerTwoInformation
         };
 
         transform.SetPositionAndRotation(information.position, information.rotation);

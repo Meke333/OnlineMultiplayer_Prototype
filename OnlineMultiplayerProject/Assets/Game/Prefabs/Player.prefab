@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 679736961
+  GlobalObjectIdHash: 3826546086
   InScenePlacedSourceGlobalObjectIdHash: 679736961
   DeferredDespawnTick: 0
   Ownership: 1
@@ -169,6 +169,17 @@ MonoBehaviour:
   _playerEvents: {fileID: 2335969950896661212}
   _inputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
   _attackDamageConfiguration: {fileID: 11400000, guid: 7b3f7216cf612844b9e004a16bfaad56, type: 2}
+  _stateData:
+    playerScript: {fileID: 0}
+    inputStateData:
+      moveDirection: {x: 0, y: 0}
+      blockInput: 0
+      leftAttackInput: 0
+      rightAttackInput: 0
+    attackDamageConfiguration: {fileID: 0}
+    attackType: 0
+    attackDirection: 0
+    didAttackEnd: 0
   playerStateType:
     m_InternalValue: 0
   _isActive: 0

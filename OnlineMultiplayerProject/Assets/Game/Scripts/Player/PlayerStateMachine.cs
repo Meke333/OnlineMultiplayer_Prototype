@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using TriInspector;
 using Unity.Netcode;
 using UnityEngine;
@@ -24,8 +25,9 @@ public class PlayerStateMachine : NetworkBehaviour
 
     [SerializeField, ReadOnly] private bool _isActive; 
 
-    public void SetUp()
+    public async void SetUp()
     {
+        await Task.Delay(4000);
         _stateData = new StateData();
         _stateData.inputStateData = new InputStateData();
         _stateData.attackDamageConfiguration = _attackDamageConfiguration;
@@ -77,6 +79,9 @@ public class PlayerStateMachine : NetworkBehaviour
         _currentState = _currentState.Process();
         statename = _currentState.ToString();
         
+        if (playerStateType.Value == _currentState.stateType)
+            return;
+        
         UpdateChangeToClientsClientRpc();
     }
 
@@ -90,28 +95,28 @@ public class PlayerStateMachine : NetworkBehaviour
     private void MoveInputChangeServerRpc(Vector2 direction)
     {
         _stateData.inputStateData.moveDirection = direction;
-        Debug.Log("S: "+ _playerScript.PlayerNumber + "; MoveInput + " + direction.ToString());
+        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; MoveInput + " + direction.ToString());
     }
 
     [ServerRpc]
     private void BlockInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.blockInput = input;
-        Debug.Log("S: "+ _playerScript.PlayerNumber + "; Block + " + input.ToString());
+        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; Block + " + input.ToString());
     }
 
     [ServerRpc]
     private void LeftAttackInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.leftAttackInput = input;
-        Debug.Log("S: "+ _playerScript.PlayerNumber + "; LeftAttack + " + input.ToString());
+        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; LeftAttack + " + input.ToString());
     }
 
     [ServerRpc]
     private void RightAttackInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.rightAttackInput = input;
-        Debug.Log("S: "+ _playerScript.PlayerNumber + "; RightAttack + " + input.ToString());
+        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; RightAttack + " + input.ToString());
     }
 
     [ServerRpc]
@@ -136,8 +141,11 @@ public class PlayerStateMachine : NetworkBehaviour
     [ClientRpc]
     private void UpdateChangeToClientsClientRpc()
     {
+        if (_currentState == null)
+            return;
+        
         playerStateType.Value = _currentState.stateType;
-        _playerEvents.StateChanged.Invoke(playerStateType.Value);
+        _playerEvents.StateChanged?.Invoke(playerStateType.Value);
 
         if (_currentState.stateType == PlayerStateType.Attack)
         {

@@ -34,7 +34,7 @@ public class PlayerAttack : NetworkBehaviour
     [ServerRpc]
     private void PerformAttackServerRpc(int direction, AttackType type)
     {
-        bool didHit = InteractionBetweenPlayersMediator.Instance.AttackInteraction(_playerScript.PlayerNumber, direction, type);
+        bool didHit = InteractionBetweenPlayersMediator.Instance.AttackInteraction(_playerScript.PlayerNumber.Value, direction, type);
 
         if (!didHit)
             AttackMissedClientRpc();
