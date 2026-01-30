@@ -10,7 +10,7 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] private InputReader _playerInputReader;
     [SerializeField] private PlayerStateMachine _playerStateMachine; 
     
-    public NetworkVariable<PlayerNumberType> PlayerNumber = new NetworkVariable<PlayerNumberType>();
+    public NetworkVariable<PlayerNumberType> PlayerNumber = new NetworkVariable<PlayerNumberType>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [field: SerializeField] public PlayerNumberType PlayerNumberValue { get; private set; }
 
     [SerializeField] private GameObject _cinemachineCameraTarget;
@@ -53,22 +53,27 @@ public class PlayerScript : NetworkBehaviour
     
     public void SetPlayerNumberType(PlayerNumberType playerNumberType)
     {
-        PlayerNumberValue = playerNumberType;
+        if (!IsServer && !IsHost)
+            return;
         
-        UpdatePlayerNumberClientRpc();
+        PlayerNumberValue = playerNumberType;
+        PlayerNumber.Value = PlayerNumberValue;
+        
+        //UpdatePlayerNumberClientRpc();
     }
     
+    /*
     //ClientRpc
     [ClientRpc]
     private void UpdatePlayerNumberClientRpc()
     {
-        PlayerNumber.Value = PlayerNumberValue;
     }
+    */
     
     [ClientRpc]
     public void UpdatePlayerAfterLoadClientRpc()
     {
-        if (InitialTransformInformation.Instance == null)
+        if (!InitialTransformInformation.Instance)
             return;
         //Position
         Transform information = PlayerNumber.Value switch

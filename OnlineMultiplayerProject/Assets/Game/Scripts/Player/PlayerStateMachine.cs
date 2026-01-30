@@ -82,6 +82,7 @@ public class PlayerStateMachine : NetworkBehaviour
         if (playerStateType.Value == _currentState.stateType)
             return;
         
+        playerStateType.Value = _currentState.stateType;
         UpdateChangeToClientsClientRpc();
     }
 
@@ -124,6 +125,29 @@ public class PlayerStateMachine : NetworkBehaviour
     {
         _currentState.OnDamage();
     }
+    
+    // In your EventsManagerpublic static event Action SomethingHappened;
+    // In a script listening for this event
+    //  void Start()
+    //  {
+    //      EventsManager.SomethingHappened += OnSomethingHappened;
+    //  }
+    //  void OnSomethingHappened()
+    //  {
+    //      Run local logic
+    //      If multiplayer, send ServerRpc to notify the server
+    //
+    //      if (NetworkManager.Singleton.IsClient)
+    //      {
+    //      NotifyServerOfEventServerRpc();
+    //      }
+    //  }
+    //
+    // [ServerRpc]
+    //  void NotifyServerOfEventServerRpc()
+    //  {
+            //Run server-side logic, possibly also call a ClientRpc
+    //  }
 
     [ServerRpc]
     private void GetKnockedDownServerRpc()
@@ -137,14 +161,12 @@ public class PlayerStateMachine : NetworkBehaviour
         _stateData.didAttackEnd = true;
     }
     
-    //ClientRpc
-    [ClientRpc]
-    private void UpdateChangeToClientsClientRpc()
+    [ServerRpc]
+    private void UpdateChangeToServerServerRpc()
     {
         if (_currentState == null)
             return;
         
-        playerStateType.Value = _currentState.stateType;
         _playerEvents.StateChanged?.Invoke(playerStateType.Value);
 
         if (_currentState.stateType == PlayerStateType.Attack)
@@ -153,5 +175,24 @@ public class PlayerStateMachine : NetworkBehaviour
             _playerEvents.AttackFired?.Invoke();            
         }
     }
+    
+    //ClientRpc
+    [ClientRpc]
+    private void UpdateChangeToClientsClientRpc()
+    {
+        if (_currentState == null)
+            return;
+        
+        Debug.Log("State Invoke Event: " + IsOwner + "; " + (_playerEvents.StateChanged == null));
+        _playerEvents.StateChanged?.Invoke(playerStateType.Value);
+
+        if (_currentState.stateType == PlayerStateType.Attack)
+        {
+            _playerEvents.TransmitAttack?.Invoke(_stateData.attackDirection, _stateData.attackType);
+            _playerEvents.AttackFired?.Invoke();            
+        }
+    }
+
+
     
 }

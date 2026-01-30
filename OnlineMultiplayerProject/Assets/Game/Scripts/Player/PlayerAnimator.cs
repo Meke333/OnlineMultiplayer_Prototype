@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,15 +8,40 @@ public class PlayerAnimator : NetworkBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private PlayerEvents _playerEvents;
 
+    public NetworkVariable<AttackType> AttackTypeVariable = new NetworkVariable<AttackType>(0,
+        NetworkVariableReadPermission.Everyone, 
+        NetworkVariableWritePermission.Server); 
+    public NetworkVariable<bool> DidAttackMissVariable = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+    public NetworkVariable<bool> MissCheckVariable = new NetworkVariable<bool>(false, 
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+    public NetworkVariable<float> MoveDirectionVariable = new NetworkVariable<float>(0, 
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+    public NetworkVariable<bool> IsBlockingVariable = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+    public NetworkVariable<bool> IsHurtVariable = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+    public NetworkVariable<bool> IsKnockedDownVariable = new NetworkVariable<bool>(false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+    
+
     public override void OnNetworkSpawn()
     {
+        Debug.Log("Hello Spawn Animator 1");
         if (!IsOwner) return;
-
-        _playerEvents.TransmitAttack += TransmitAttackEvent;
-        _playerEvents.TransmitMissedAttack += TransmitMissedAttackEvent;
-        _playerEvents.CheckedForMissedAttack += CheckedForMissedAttackEvent;
-        _playerEvents.TransmitDodgeDirection += TransmitDodgeDirectionEvent;
-        _playerEvents.PlayerStateChanged += PlayerStateChangedEvent;
+        Debug.Log("Hello Spawn Animator 2");
+        
+        _playerEvents.TransmitAttack += TransmitAttackEventClientRpc;
+        _playerEvents.TransmitMissedAttack += TransmitMissedAttackEventClientRpc;
+        _playerEvents.CheckedForMissedAttack += CheckedForMissedAttackEventClientRpc;
+        _playerEvents.TransmitDodgeDirection += TransmitDodgeDirectionEventClientRpc;
+        _playerEvents.PlayerStateChanged += PlayerStateChangedEventClientRpc;
         _playerEvents.PlayerGetUp += PlayerGetUpEvent;
     }
     
@@ -23,21 +49,37 @@ public class PlayerAnimator : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        _playerEvents.TransmitAttack -= TransmitAttackEvent;
-        _playerEvents.TransmitMissedAttack -= TransmitMissedAttackEvent;
-        _playerEvents.CheckedForMissedAttack -= CheckedForMissedAttackEvent;
-        _playerEvents.TransmitDodgeDirection -= TransmitDodgeDirectionEvent;
-        _playerEvents.PlayerStateChanged -= PlayerStateChangedEvent;
+        _playerEvents.TransmitAttack -= TransmitAttackEventClientRpc;
+        _playerEvents.TransmitMissedAttack -= TransmitMissedAttackEventClientRpc;
+        _playerEvents.CheckedForMissedAttack -= CheckedForMissedAttackEventClientRpc;
+        _playerEvents.TransmitDodgeDirection -= TransmitDodgeDirectionEventClientRpc;
+        _playerEvents.PlayerStateChanged -= PlayerStateChangedEventClientRpc;
         _playerEvents.PlayerGetUp -= PlayerGetUpEvent;
+    }
+    
+    private async void DelayAnimatorBoolDeactivation(string name)
+    {
+        await Task.Delay(300);
+        DeactivateBoolClientRpc(name);
+    }
+
+    [ClientRpc]
+    private void DeactivateBoolClientRpc(string name)
+    {
+        _animator.SetBool(name, false);
     }
 
     #region Events
 
-    private void TransmitAttackEvent(int direction, AttackType type)
+    //Async Wait Method calling ClientRpc
+    
+    [ClientRpc]
+    private void TransmitAttackEventClientRpc(int direction, AttackType type)
     {
-        _animator.SetTrigger(PlayerAnimatorStrings.AttackTrigger);
+        _animator.SetBool(PlayerAnimatorStrings.AttackBool, true);
         _animator.SetFloat(PlayerAnimatorStrings.AttackDirection, direction);
         
+//Create a Network Variable
         int number = type switch
         {
             AttackType.Jab_Straight => 0,
@@ -46,41 +88,61 @@ public class PlayerAnimator : NetworkBehaviour
         };
         
         _animator.SetFloat(PlayerAnimatorStrings.AttackType, number);
-        
+
+        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.AttackBool);
     }
     
-    private void TransmitMissedAttackEvent(bool value)
+    [ClientRpc]
+    private void TransmitMissedAttackEventClientRpc(bool value)
     {
+//Create a Network Variable
         _animator.SetBool(PlayerAnimatorStrings.DidAttackMiss, value);
+
+        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.DidAttackMiss);
     }
 
-    private void CheckedForMissedAttackEvent()
+    [ClientRpc]
+    private void CheckedForMissedAttackEventClientRpc()
     {
-        _animator.SetTrigger(PlayerAnimatorStrings.MissCheckTrigger);
+//Create a Network Variable & Convert Trigger as Bool!!
+        _animator.SetBool(PlayerAnimatorStrings.MissCheckBool, true);
+
+        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.MissCheckBool);
     }
 
-    private void TransmitDodgeDirectionEvent(int direction)
+    [ClientRpc]
+    private void TransmitDodgeDirectionEventClientRpc(int direction)
     {
+//Create a Network Variable
         _animator.SetFloat(PlayerAnimatorStrings.MoveDirection, direction);
     }
 
-    private void PlayerStateChangedEvent(PlayerStateType state)
-    {
+    [ClientRpc]
+    private void PlayerStateChangedEventClientRpc(PlayerStateType state)
+    { 
+//Create a Network Variable
+        Debug.Log("PlayerStateChanged: " + state);
         _animator.SetBool(PlayerAnimatorStrings.IsBlocking, state == PlayerStateType.Block);
+        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.IsBlocking);
         
         switch (state)
         {
             case PlayerStateType.Hurt:
-                _animator.SetTrigger(PlayerAnimatorStrings.HurtTrigger);
+                _animator.SetBool(PlayerAnimatorStrings.HurtBool, true);
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.HurtBool);
                 break;
             case PlayerStateType.Down:
-                _animator.SetTrigger(PlayerAnimatorStrings.KnockdownTrigger);
+                _animator.SetBool(PlayerAnimatorStrings.KnockdownBool, true);
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.KnockdownBool);
                 break;
         }
     }
     private void PlayerGetUpEvent()
     {
-        _animator.SetTrigger(PlayerAnimatorStrings.GetUpTrigger);
+//Create a Network Variable & Convert Trigger as Bool!!
+        _animator.SetBool(PlayerAnimatorStrings.GetUpBool, true);
+        
+        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.GetUpBool);
     }
 
     #endregion
@@ -101,12 +163,12 @@ public static class PlayerAnimatorStrings
     public const string AttackType = "AttackType";
     public const string MoveDirection = "MoveDirection";
     public const string IsBlocking = "IsBlocking";
-    public const string AttackTrigger = "AttackTrigger";
-    public const string GetUpTrigger = "GetUpTrigger";
+    public const string AttackBool = "AttackBool";
+    public const string GetUpBool = "GetUpBool";
     public const string DidAttackMiss = "DidAttackMiss";
-    public const string MissCheckTrigger = "MissCheckTrigger";
-    public const string KnockdownTrigger = "KnockdownTrigger";
-    public const string HurtTrigger = "HurtTrigger";
+    public const string MissCheckBool = "MissCheckBool";
+    public const string KnockdownBool = "KnockdownBool";
+    public const string HurtBool = "HurtBool";
 
     #endregion
     

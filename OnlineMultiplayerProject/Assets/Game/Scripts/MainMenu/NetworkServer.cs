@@ -129,6 +129,7 @@ public class NetworkServer : IDisposable
     private async Task SpawnPlayerDelayed(ulong clientId)
     {
         Debug.Log("Hello 1");
+        await Task.Delay(3000);
         Debug.Log("Hello 2.1");
         
         
@@ -158,7 +159,6 @@ public class NetworkServer : IDisposable
         else
         {
 
-            await Task.Delay(3000);
             PlayerNumberType number = (PlayerNumberType)playerNumberIndex;
             Debug.Log("PlayerNumber: " + playerNumberIndex + "; " + (PlayerNumberType)playerNumberIndex);
             PlayerScript player = playerObject.GetComponentInChildren<PlayerScript>();
