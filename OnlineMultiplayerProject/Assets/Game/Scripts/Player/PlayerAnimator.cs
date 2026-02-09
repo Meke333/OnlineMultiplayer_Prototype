@@ -33,27 +33,27 @@ public class PlayerAnimator : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        Debug.Log("Hello Spawn Animator 1");
-        if (!IsOwner) return;
-        Debug.Log("Hello Spawn Animator 2");
+        Debug.Log("Hello Spawn Animator 1: " + IsClient);
+        if (!IsServer) return;
+        Debug.Log("Hello Spawn Animator 2: " + IsClient);
         
         _playerEvents.TransmitAttack += TransmitAttackEventClientRpc;
         _playerEvents.TransmitMissedAttack += TransmitMissedAttackEventClientRpc;
         _playerEvents.CheckedForMissedAttack += CheckedForMissedAttackEventClientRpc;
         _playerEvents.TransmitDodgeDirection += TransmitDodgeDirectionEventClientRpc;
-        _playerEvents.PlayerStateChanged += PlayerStateChangedEventClientRpc;
+        _playerEvents.PlayerStateChanged += PlayerStateChangedEvent;
         _playerEvents.PlayerGetUp += PlayerGetUpEvent;
     }
     
     public override void OnNetworkDespawn()
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
         _playerEvents.TransmitAttack -= TransmitAttackEventClientRpc;
         _playerEvents.TransmitMissedAttack -= TransmitMissedAttackEventClientRpc;
         _playerEvents.CheckedForMissedAttack -= CheckedForMissedAttackEventClientRpc;
         _playerEvents.TransmitDodgeDirection -= TransmitDodgeDirectionEventClientRpc;
-        _playerEvents.PlayerStateChanged -= PlayerStateChangedEventClientRpc;
+        _playerEvents.PlayerStateChanged -= PlayerStateChangedEvent;
         _playerEvents.PlayerGetUp -= PlayerGetUpEvent;
     }
     
@@ -117,13 +117,19 @@ public class PlayerAnimator : NetworkBehaviour
         _animator.SetFloat(PlayerAnimatorStrings.MoveDirection, direction);
     }
 
+    
+    public void PlayerStateChangedEvent(PlayerStateType state)
+    { 
+//Create a Network Variable
+        PlayerStateChangedEventClientRpc(state);
+    }
+    
     [ClientRpc]
     private void PlayerStateChangedEventClientRpc(PlayerStateType state)
     { 
 //Create a Network Variable
         Debug.Log("PlayerStateChanged: " + state);
         _animator.SetBool(PlayerAnimatorStrings.IsBlocking, state == PlayerStateType.Block);
-        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.IsBlocking);
         
         switch (state)
         {

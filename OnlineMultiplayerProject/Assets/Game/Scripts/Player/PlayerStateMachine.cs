@@ -14,7 +14,7 @@ public class PlayerStateMachine : NetworkBehaviour
     [SerializeField] private PlayerEvents _playerEvents;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private AttackDamageConfiguration _attackDamageConfiguration;
-    
+    [SerializeField] private PlayerAnimator _playerAnimator;
     
     private PlayerState _currentState;
     [SerializeField, ReadOnly]private StateData _stateData;
@@ -83,6 +83,7 @@ public class PlayerStateMachine : NetworkBehaviour
             return;
         
         playerStateType.Value = _currentState.stateType;
+        UpdateChangeToServerServerRpc();
         UpdateChangeToClientsClientRpc();
     }
 
@@ -167,12 +168,16 @@ public class PlayerStateMachine : NetworkBehaviour
         if (_currentState == null)
             return;
         
+        Debug.Log("ServerRpc + 1");
+        
+        Debug.Log("Server State Invoke Event: " + IsServer + "; " + (_playerEvents.StateChanged == null));
+        _playerAnimator.PlayerStateChangedEvent(playerStateType.Value);
         _playerEvents.StateChanged?.Invoke(playerStateType.Value);
 
         if (_currentState.stateType == PlayerStateType.Attack)
         {
             _playerEvents.TransmitAttack?.Invoke(_stateData.attackDirection, _stateData.attackType);
-            _playerEvents.AttackFired?.Invoke();            
+            _playerEvents.AttackFired?.Invoke();
         }
     }
     
@@ -183,14 +188,17 @@ public class PlayerStateMachine : NetworkBehaviour
         if (_currentState == null)
             return;
         
-        Debug.Log("State Invoke Event: " + IsOwner + "; " + (_playerEvents.StateChanged == null));
+        Debug.Log("ServerRpc + 2");
+        
+        Debug.Log("State Invoke Event: " + IsServer + "; " + (_playerEvents.StateChanged == null));
         _playerEvents.StateChanged?.Invoke(playerStateType.Value);
 
+        /*
         if (_currentState.stateType == PlayerStateType.Attack)
         {
             _playerEvents.TransmitAttack?.Invoke(_stateData.attackDirection, _stateData.attackType);
-            _playerEvents.AttackFired?.Invoke();            
-        }
+            _playerEvents.AttackFired?.Invoke();
+        }*/
     }
 
 

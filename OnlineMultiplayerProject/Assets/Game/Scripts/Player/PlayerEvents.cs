@@ -1,8 +1,12 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerEvents : MonoBehaviour
+public class PlayerEvents : NetworkBehaviour
 {
+    [SerializeField] private Delegate[] _invoctionList;
+    [SerializeField] private int count;
+    
     public Action AttackFired;
     public Action AttackEnded;
     
@@ -20,4 +24,11 @@ public class PlayerEvents : MonoBehaviour
     public Action PlayerGetKnockdown;
     public Action PlayerGetUp;
 
+    private void FixedUpdate()
+    {
+        if (!IsServer)
+            return;
+        _invoctionList = PlayerStateChanged.GetInvocationList();
+        count = _invoctionList.Length;
+    }
 }

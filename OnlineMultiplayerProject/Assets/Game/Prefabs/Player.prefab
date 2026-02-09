@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3826546086
+  GlobalObjectIdHash: 679736961
   InScenePlacedSourceGlobalObjectIdHash: 679736961
   DeferredDespawnTick: 0
   Ownership: 1
@@ -153,6 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc0135911a4d614e8b6953557ea5fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEvents
+  ShowTopMostFoldoutHeaderGroup: 1
+  count: 0
 --- !u!114 &2544463415049462545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,6 +173,7 @@ MonoBehaviour:
   _playerEvents: {fileID: 2335969950896661212}
   _inputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
   _attackDamageConfiguration: {fileID: 11400000, guid: 7b3f7216cf612844b9e004a16bfaad56, type: 2}
+  _playerAnimator: {fileID: 3963574713323088100}
   _stateData:
     playerScript: {fileID: 0}
     inputStateData:
