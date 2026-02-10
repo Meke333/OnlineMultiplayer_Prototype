@@ -9,6 +9,11 @@ public class LeftAttackState: PlayerState
     public override void SetStateType()
     {
         stateType = PlayerStateType.Attack;
+        
+        stateData.attackType = DetermineAttackType();
+        stateData.attackDirection = -1;
+        Debug.Log("SETSTATETYPE NOW");
+        
     }
     
     protected override void Enter()
@@ -16,8 +21,6 @@ public class LeftAttackState: PlayerState
         base.Enter();
         stateData.didAttackEnd = false;
 
-        stateData.attackType = DetermineAttackType();
-        stateData.attackDirection = -1;
     }
 
     private AttackType DetermineAttackType()

@@ -3,15 +3,13 @@ using UnityEngine;
 
 public class AttackEnded : StateMachineBehaviour
 {
-    private PlayerEvents _playerEvents;
-    private PlayerScript _playerScript;
-
+    [SerializeField] private PlayerStateMachine _playerStateMachine;
 
     // OnStateEnter is called before OnStateEnter is called on any state inside this state machine
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        _playerStateMachine = animator.transform.root.GetComponentInChildren<PlayerStateMachine>();
+    }
 
     // OnStateUpdate is called before OnStateUpdate is called on any state inside this state machine
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -34,29 +32,23 @@ public class AttackEnded : StateMachineBehaviour
     // OnStateMachineExit is called when exiting a state machine via its Exit Node
     override public void OnStateMachineExit(Animator animator, int stateMachinePathHash)
     {
-        if (_playerEvents == null || _playerScript == null)
-            SetUp(animator);
-
-        if (_playerEvents == null)
-            return;
-
-        if (_playerScript.IsOwner)
+        if (!_playerStateMachine)
         {
-            _playerEvents?.AttackEnded.Invoke();
+            Debug.LogError("PlayerStateMachine is null");
+        }
+        
+        Debug.Log("AttackEnded 1");
+        if (_playerStateMachine.IsOwner) 
+        {
+            Debug.Log("AttackEnded 2");
+            _playerStateMachine.AttackEndedServerRpc();
         }
 
     }
 
     private void SetUp(Animator animator)
     {
-        if (_playerEvents == null)
-        {
-            _playerEvents = animator.GetComponentInParent<PlayerEvents>();
-        }
-
-        if (_playerScript == null)
-        {
-            _playerScript = animator.GetComponentInParent<PlayerScript>();
-        }
+        if (!_playerStateMachine)
+            _playerStateMachine = animator.transform.root.GetComponentInChildren<PlayerStateMachine>();
     }
 }

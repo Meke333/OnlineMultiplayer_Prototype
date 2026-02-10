@@ -5,45 +5,59 @@ using UnityEngine;
 public class PlayerAttack : NetworkBehaviour
 {
     [SerializeField] private PlayerScript _playerScript;
-    [SerializeField] private PlayerEvents _playerEvents;
+    [SerializeField] private PlayerStateMachine _playerStateMachine;
+
+    private int _attackDirection;
+    private AttackType _attackType;
     
-    //Here we trigger the check for the server to transmit an incoming attack 
-    public override void OnNetworkSpawn()
+    [ServerRpc]
+    public void PrepareAttackServerRpc(int direction, AttackType type)
     {
-        if (!IsOwner) return;
-
-        _playerEvents.TransmitAttack += EvaluateAttack;
+        _attackDirection =  direction;
+        _attackType = type;
     }
-
-    public override void OnNetworkDespawn()
-    {
-        _playerEvents.TransmitAttack -= EvaluateAttack;
-    }
-
-    #region Events
-
-    private void EvaluateAttack(int direction, AttackType type)
-    {
-        PerformAttackServerRpc(direction, type);
-    }
-
-    #endregion
-    
     
     //ServerRPC
     [ServerRpc]
-    private void PerformAttackServerRpc(int direction, AttackType type)
+    public void PerformAttackServerRpc()
     {
-        bool didHit = InteractionBetweenPlayersMediator.Instance.AttackInteraction(_playerScript.PlayerNumber.Value, direction, type);
+        if (!_playerStateMachine)
+            return;
+        
+        bool didHit = NetworkServer.PlayerNumberIndex <= 2 
+                      || InteractionBetweenPlayersMediator.Instance.
+                          AttackInteraction(
+                              _playerScript.PlayerNumber.Value, 
+                              _attackDirection, 
+                              _attackType);
 
+        Debug.LogWarning("REMOVE THIS LATER");
+        didHit = false;
+        
         if (!didHit)
             AttackMissedClientRpc();
+
+        AttackCheckedClientRpc();
+    }
+
+    [ClientRpc]
+    private void AttackCheckedClientRpc()
+    {
+        if (!IsOwner)
+            return;
+        
+        Debug.Log("ATTACK 1");
+        _playerStateMachine.AttackCheckedServerRpc();
     }
     
-    //ClientRpc
     [ClientRpc]
     private void AttackMissedClientRpc()
     {
-        _playerEvents.TransmitMissedAttack?.Invoke(true);
+        if (!IsOwner)
+            return;
+        
+        Debug.Log("ATTACK 2");
+        
+        _playerStateMachine.AttackMissedServerRpc();
     }
 }

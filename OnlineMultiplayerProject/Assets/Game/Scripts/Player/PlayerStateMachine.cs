@@ -15,6 +15,7 @@ public class PlayerStateMachine : NetworkBehaviour
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private AttackDamageConfiguration _attackDamageConfiguration;
     [SerializeField] private PlayerAnimator _playerAnimator;
+    [SerializeField] private PlayerAttack _playerAttack;
     
     private PlayerState _currentState;
     [SerializeField, ReadOnly]private StateData _stateData;
@@ -22,6 +23,17 @@ public class PlayerStateMachine : NetworkBehaviour
     public NetworkVariable<PlayerStateType> playerStateType = new NetworkVariable<PlayerStateType>(0, 
         NetworkVariableReadPermission.Everyone, 
         NetworkVariableWritePermission.Server);
+
+    public NetworkVariable<int> attackDirection = new NetworkVariable<int>(0,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+    public NetworkVariable<AttackType> attackType = new NetworkVariable<AttackType>(0, 
+        NetworkVariableReadPermission.Everyone, 
+        NetworkVariableWritePermission.Server);
+
+    private PlayerStateType _lastClientStateType;
+        
 
     [SerializeField, ReadOnly] private bool _isActive; 
 
@@ -73,18 +85,30 @@ public class PlayerStateMachine : NetworkBehaviour
         if (!_isActive)
             return;
 
-        if (!IsServer)
-            return;
+        //Debug.Log("" + _playerScript.PlayerNumber.Value + " M: Active");
+
+        if (IsServer)
+        {
+            
+            _currentState = _currentState.Process();
+            statename = _currentState.ToString();
         
-        _currentState = _currentState.Process();
-        statename = _currentState.ToString();
+            if (playerStateType.Value == _currentState.stateType)
+                return;
         
-        if (playerStateType.Value == _currentState.stateType)
-            return;
+            playerStateType.Value = _currentState.stateType;
         
-        playerStateType.Value = _currentState.stateType;
-        UpdateChangeToServerServerRpc();
-        UpdateChangeToClientsClientRpc();
+            UpdateChangeToServer();
+        }
+
+        if (IsClient && IsOwner)
+        {
+            UpdateChangeToClients();
+        }
+        
+        //Debug.Log("" + _playerScript.PlayerNumber.Value + " M: IsServer");
+        
+        //UpdateChangeToClientsClientRpc();
     }
 
     protected void ToggleActivity(bool active)
@@ -98,6 +122,12 @@ public class PlayerStateMachine : NetworkBehaviour
     {
         _stateData.inputStateData.moveDirection = direction;
         Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; MoveInput + " + direction.ToString());
+        
+        _playerAnimator.TransmitDodgeDirection(direction.x == 0 
+            ? 0 
+            : direction.x < 0 
+                ? -1 
+                : 1 );
     }
 
     [ServerRpc]
@@ -157,50 +187,79 @@ public class PlayerStateMachine : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void AttackEndedServerRpc()
+    public void AttackEndedServerRpc()
     {
         _stateData.didAttackEnd = true;
+        
+        Debug.Log("AttackEnded 3");
+
+        if (!IsOwner)
+            return;
+        Debug.LogWarning("HERE'S THE PROBLEM!!");
+        
+        _playerAnimator.AttackEndedServerRpc();
     }
     
-    [ServerRpc]
-    private void UpdateChangeToServerServerRpc()
+    private void UpdateChangeToServer()
     {
-        if (_currentState == null)
-            return;
-        
-        Debug.Log("ServerRpc + 1");
-        
-        Debug.Log("Server State Invoke Event: " + IsServer + "; " + (_playerEvents.StateChanged == null));
-        _playerAnimator.PlayerStateChangedEvent(playerStateType.Value);
-        _playerEvents.StateChanged?.Invoke(playerStateType.Value);
+        //Debug.Log("Server State Invoke Event: " + IsServer + "; " + IsClient + "; " + IsLocalPlayer);
 
-        if (_currentState.stateType == PlayerStateType.Attack)
-        {
-            _playerEvents.TransmitAttack?.Invoke(_stateData.attackDirection, _stateData.attackType);
-            _playerEvents.AttackFired?.Invoke();
-        }
+        Debug.Log("IS THIS THE SERVER??? " + IsServer);
+
+        attackDirection.Value = _stateData.attackDirection;
+        attackType.Value = _stateData.attackType;
+
+
+        //UpdateChangeToClients();
+    }
+
+    [ClientRpc]
+    private void SendMessageClientRpc(int number)
+    {
+        Debug.Log("MESSAGE (" + _playerScript.PlayerNumber.Value + "): " + number);
     }
     
     //ClientRpc
-    [ClientRpc]
-    private void UpdateChangeToClientsClientRpc()
+    
+    private void UpdateChangeToClients()
     {
-        if (_currentState == null)
+
+        if (!IsOwner)
+            return;
+
+        if (_lastClientStateType == playerStateType.Value)
             return;
         
-        Debug.Log("ServerRpc + 2");
+        _lastClientStateType = playerStateType.Value;
+        Debug.Log("PLEASE WORK");
         
-        Debug.Log("State Invoke Event: " + IsServer + "; " + (_playerEvents.StateChanged == null));
-        _playerEvents.StateChanged?.Invoke(playerStateType.Value);
+        _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
 
-        /*
-        if (_currentState.stateType == PlayerStateType.Attack)
+        switch (playerStateType.Value) 
         {
-            _playerEvents.TransmitAttack?.Invoke(_stateData.attackDirection, _stateData.attackType);
-            _playerEvents.AttackFired?.Invoke();
-        }*/
+            case PlayerStateType.Attack:
+
+                _playerAttack.PrepareAttackServerRpc(attackDirection.Value, attackType.Value);
+                Debug.Log("ATTACK: " + attackDirection.Value + "; " + attackType.Value);
+
+                _playerAnimator.TransmitAttackServerRpc(attackDirection.Value, attackType.Value);
+                break;
+        }
     }
 
+    [ServerRpc]
+    public void AttackCheckedServerRpc()
+    {
+        _playerAnimator.CheckedForMissedAttack();
+    }
+    
+    [ServerRpc]
+    public void AttackMissedServerRpc()
+    {
+        _playerAnimator.TransmitMissedAttack(true);
+    }
+    
+    
 
     
 }

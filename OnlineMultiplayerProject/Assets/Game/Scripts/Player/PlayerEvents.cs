@@ -24,11 +24,12 @@ public class PlayerEvents : NetworkBehaviour
     public Action PlayerGetKnockdown;
     public Action PlayerGetUp;
 
-    private void FixedUpdate()
+    /*(private void FixedUpdate()
     {
         if (!IsServer)
             return;
         _invoctionList = PlayerStateChanged.GetInvocationList();
         count = _invoctionList.Length;
     }
+    */
 }

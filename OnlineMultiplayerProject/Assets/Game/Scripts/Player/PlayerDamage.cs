@@ -68,8 +68,10 @@ public class PlayerDamage : NetworkBehaviour
         float damage = _configuration.DetermineDamage(type) 
                        * (_playerState == PlayerStateType.Block ? 0.25f : 1f);
         
-        HealthBar.Instance.ChangeHealthServerRpc(_playerScript.PlayerNumberValue, damage);
+        HealthBar.Instance?.ChangeHealthServerRpc(_playerScript.PlayerNumberValue, damage);
         
+        
+        Debug.LogWarning("To-DO: Replace this");
         _playerEvents.GettingDamage?.Invoke(damage);
     }
 }

@@ -19,8 +19,8 @@ public abstract class PlayerState
 
     public PlayerState(StateData input)
     {
-        SetStateType();
         stateData = input;
+        SetStateType();
     }
 
     public abstract void SetStateType();

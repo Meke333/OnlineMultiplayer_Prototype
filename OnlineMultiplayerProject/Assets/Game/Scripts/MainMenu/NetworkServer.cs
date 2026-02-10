@@ -11,7 +11,7 @@ public class NetworkServer : IDisposable
     
     private List<NetworkObject> _playerPrefabs;
 
-    private int playerNumberIndex = 1;
+    public static int PlayerNumberIndex { get; private set; } = 1;
     
     
     // two events for backfilling:
@@ -78,7 +78,7 @@ public class NetworkServer : IDisposable
             _authIdToUserData.Remove(authId);
             OnClientLeft?.Invoke(authId);
 
-            playerNumberIndex--;
+            PlayerNumberIndex--;
         }
 
         //playerNumberIndex = _clientIdtoActiveCheck.Count;
@@ -152,17 +152,17 @@ public class NetworkServer : IDisposable
         //To-Do: Position
         
         //PlayerNumber
-        if (playerNumberIndex > 2)
+        if (PlayerNumberIndex > 2)
         {
             Debug.Log("There are already 2 players in the game!");
         }
         else
         {
 
-            PlayerNumberType number = (PlayerNumberType)playerNumberIndex;
-            Debug.Log("PlayerNumber: " + playerNumberIndex + "; " + (PlayerNumberType)playerNumberIndex);
+            PlayerNumberType number = (PlayerNumberType)PlayerNumberIndex;
+            Debug.Log("PlayerNumber: " + PlayerNumberIndex + "; " + (PlayerNumberType)PlayerNumberIndex);
             PlayerScript player = playerObject.GetComponentInChildren<PlayerScript>();
-            player.SetPlayerNumberType((PlayerNumberType)playerNumberIndex);
+            player.SetPlayerNumberType((PlayerNumberType)PlayerNumberIndex);
             
             switch (number)
             {
@@ -182,7 +182,7 @@ public class NetworkServer : IDisposable
             }
             Debug.Log("Hello 4");
             
-            playerNumberIndex++;
+            PlayerNumberIndex++;
             
             Debug.Log("Hello 5");
         }

@@ -8,6 +8,7 @@ public class PlayerAnimator : NetworkBehaviour
     [SerializeField] private Animator _animator;
     [SerializeField] private PlayerEvents _playerEvents;
 
+    /*
     public NetworkVariable<AttackType> AttackTypeVariable = new NetworkVariable<AttackType>(0,
         NetworkVariableReadPermission.Everyone, 
         NetworkVariableWritePermission.Server); 
@@ -29,37 +30,16 @@ public class PlayerAnimator : NetworkBehaviour
     public NetworkVariable<bool> IsKnockedDownVariable = new NetworkVariable<bool>(false,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
-    
-
-    public override void OnNetworkSpawn()
-    {
-        Debug.Log("Hello Spawn Animator 1: " + IsClient);
-        if (!IsServer) return;
-        Debug.Log("Hello Spawn Animator 2: " + IsClient);
-        
-        _playerEvents.TransmitAttack += TransmitAttackEventClientRpc;
-        _playerEvents.TransmitMissedAttack += TransmitMissedAttackEventClientRpc;
-        _playerEvents.CheckedForMissedAttack += CheckedForMissedAttackEventClientRpc;
-        _playerEvents.TransmitDodgeDirection += TransmitDodgeDirectionEventClientRpc;
-        _playerEvents.PlayerStateChanged += PlayerStateChangedEvent;
-        _playerEvents.PlayerGetUp += PlayerGetUpEvent;
-    }
-    
-    public override void OnNetworkDespawn()
-    {
-        if (!IsServer) return;
-
-        _playerEvents.TransmitAttack -= TransmitAttackEventClientRpc;
-        _playerEvents.TransmitMissedAttack -= TransmitMissedAttackEventClientRpc;
-        _playerEvents.CheckedForMissedAttack -= CheckedForMissedAttackEventClientRpc;
-        _playerEvents.TransmitDodgeDirection -= TransmitDodgeDirectionEventClientRpc;
-        _playerEvents.PlayerStateChanged -= PlayerStateChangedEvent;
-        _playerEvents.PlayerGetUp -= PlayerGetUpEvent;
-    }
+    */
     
     private async void DelayAnimatorBoolDeactivation(string name)
     {
         await Task.Delay(300);
+        DeactivateBoolClientRpc(name);
+    }
+
+    private void ImmediateAnimatorBoolDeactivation(string name)
+    {
         DeactivateBoolClientRpc(name);
     }
 
@@ -73,10 +53,16 @@ public class PlayerAnimator : NetworkBehaviour
 
     //Async Wait Method calling ClientRpc
     
+    [ServerRpc]
+    public void TransmitAttackServerRpc(int direction, AttackType type)
+    {
+        Debug.Log("HELLO YOU BITCH");
+        TransmitAttackEventClientRpc(direction, type);
+    }
+    
     [ClientRpc]
     private void TransmitAttackEventClientRpc(int direction, AttackType type)
     {
-        _animator.SetBool(PlayerAnimatorStrings.AttackBool, true);
         _animator.SetFloat(PlayerAnimatorStrings.AttackDirection, direction);
         
 //Create a Network Variable
@@ -88,8 +74,15 @@ public class PlayerAnimator : NetworkBehaviour
         };
         
         _animator.SetFloat(PlayerAnimatorStrings.AttackType, number);
+        _animator.SetBool(PlayerAnimatorStrings.AttackBool, true);
 
         DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.AttackBool);
+    }
+
+
+    public void TransmitMissedAttack(bool value)
+    {
+        TransmitMissedAttackEventClientRpc(value);
     }
     
     [ClientRpc]
@@ -98,28 +91,53 @@ public class PlayerAnimator : NetworkBehaviour
 //Create a Network Variable
         _animator.SetBool(PlayerAnimatorStrings.DidAttackMiss, value);
 
-        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.DidAttackMiss);
+        //DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.DidAttackMiss);
     }
 
+    public void CheckedForMissedAttack()
+    {
+        CheckedForMissedAttackEventClientRpc();
+    }
+    
     [ClientRpc]
     private void CheckedForMissedAttackEventClientRpc()
     {
 //Create a Network Variable & Convert Trigger as Bool!!
         _animator.SetBool(PlayerAnimatorStrings.MissCheckBool, true);
 
-        DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.MissCheckBool);
+        //DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.MissCheckBool);
+    }
+
+    [ServerRpc]
+    public void AttackEndedServerRpc()
+    {
+        AttackEndedClientRpc();
     }
 
     [ClientRpc]
+    private void AttackEndedClientRpc()
+    {
+        ImmediateAnimatorBoolDeactivation(PlayerAnimatorStrings.DidAttackMiss);
+        ImmediateAnimatorBoolDeactivation(PlayerAnimatorStrings.MissCheckBool);
+    }
+    
+
+    public void TransmitDodgeDirection(int direction)
+    {
+        TransmitDodgeDirectionEventClientRpc(direction);
+    }
+    
+    [ClientRpc]
     private void TransmitDodgeDirectionEventClientRpc(int direction)
     {
-//Create a Network Variable
         _animator.SetFloat(PlayerAnimatorStrings.MoveDirection, direction);
     }
 
     
-    public void PlayerStateChangedEvent(PlayerStateType state)
+    [ServerRpc]
+    public void PlayerStateChangedEventServerRpc(PlayerStateType state)
     { 
+        Debug.Log("1" + state.ToString());
 //Create a Network Variable
         PlayerStateChangedEventClientRpc(state);
     }
@@ -127,6 +145,7 @@ public class PlayerAnimator : NetworkBehaviour
     [ClientRpc]
     private void PlayerStateChangedEventClientRpc(PlayerStateType state)
     { 
+        Debug.Log("2" + state.ToString());
 //Create a Network Variable
         Debug.Log("PlayerStateChanged: " + state);
         _animator.SetBool(PlayerAnimatorStrings.IsBlocking, state == PlayerStateType.Block);
@@ -152,11 +171,6 @@ public class PlayerAnimator : NetworkBehaviour
     }
 
     #endregion
-    
-
-
-
-
     
     
 }

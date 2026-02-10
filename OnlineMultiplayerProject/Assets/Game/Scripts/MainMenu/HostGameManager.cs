@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 public class HostGameManager : IDisposable
 {
     //How many players can connect!!
-    private const int MaxConnections = 10;
+    private const int MaxConnections = 2;
     private Allocation _allocation;
     private List<NetworkObject> _playerPrefabs;
     private string _joinCode;
