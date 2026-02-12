@@ -24,15 +24,14 @@ public class PlayerAttack : NetworkBehaviour
         if (!_playerStateMachine)
             return;
         
+        Debug.Log("ZZZ: 1");
+        
         bool didHit = NetworkServer.PlayerNumberIndex <= 2 
                       || InteractionBetweenPlayersMediator.Instance.
                           AttackInteraction(
                               _playerScript.PlayerNumber.Value, 
                               _attackDirection, 
                               _attackType);
-
-        Debug.LogWarning("REMOVE THIS LATER");
-        didHit = false;
         
         if (!didHit)
             AttackMissedClientRpc();

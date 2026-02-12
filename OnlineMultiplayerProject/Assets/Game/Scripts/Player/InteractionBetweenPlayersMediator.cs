@@ -22,6 +22,8 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
 
     public bool AttackInteraction(PlayerNumberType attacker, int direction, AttackType type)
     {
+        
+        Debug.Log("ZZZ: 2");
         PlayerDamage target = attacker == PlayerNumberType.PlayerOne ? playerTwo : playerOne;
 
         bool result = target.DoesAttackLand(direction, type);

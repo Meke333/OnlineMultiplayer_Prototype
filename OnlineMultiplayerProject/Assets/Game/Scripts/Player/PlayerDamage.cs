@@ -4,37 +4,19 @@ using UnityEngine;
 public class PlayerDamage : NetworkBehaviour
 {
     [SerializeField] private PlayerScript _playerScript;
-    [SerializeField] private PlayerEvents _playerEvents;
+    [SerializeField] private PlayerStateMachine _playerStateMachine;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private AttackDamageConfiguration _configuration;
     
     private PlayerStateType _playerState;
-    
-    public override void OnNetworkSpawn()
-    {
-        if (!IsOwner) return;
-
-        _playerEvents.StateChanged += PlayerStateChanged;
-
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        if (!IsOwner) return;
-        
-        _playerEvents.StateChanged -= PlayerStateChanged;
-    }
-
-    private void PlayerStateChanged(PlayerStateType obj)
-    {
-        _playerState = obj;
-    }
 
     public bool DoesAttackLand(int direction, AttackType type)
     {
+        Debug.Log("ZZZ: 3");
+        
         bool result = true;
         
-        switch (_playerState)
+        switch (_playerStateMachine.playerStateType.Value)
         {
             case PlayerStateType.Idle:
             case PlayerStateType.Attack:
@@ -59,19 +41,21 @@ public class PlayerDamage : NetworkBehaviour
         
         return result;
     }
-
+    
     public void ProcessDamage(AttackType type)
     {
+        Debug.Log("ZZZ: 4");
+        
+        Debug.Log("ZZZ: 5");
         //Alarm HP Bar
         
         //Determine
         float damage = _configuration.DetermineDamage(type) 
                        * (_playerState == PlayerStateType.Block ? 0.25f : 1f);
         
-        HealthBar.Instance?.ChangeHealthServerRpc(_playerScript.PlayerNumberValue, damage);
+        HealthBar.Instance?.ChangeHealthRpc(_playerScript.PlayerNumberValue, damage);
         
         
-        Debug.LogWarning("To-DO: Replace this");
-        _playerEvents.GettingDamage?.Invoke(damage);
+        //Report Back to Statemachine that you got hurt!
     }
 }

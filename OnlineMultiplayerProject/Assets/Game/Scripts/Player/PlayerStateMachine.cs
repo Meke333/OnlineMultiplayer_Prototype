@@ -60,10 +60,6 @@ public class PlayerStateMachine : NetworkBehaviour
         _inputReader.BlockEvent += BlockInputChangeServerRpc;
         _inputReader.LeftAttackEvent += LeftAttackInputChangeServerRpc;
         _inputReader.RightAttackEvent += RightAttackInputChangeServerRpc;
-
-        _playerEvents.GettingDamage += GetDamageServerRpc;
-        _playerEvents.KnockedDown += GetKnockedDownServerRpc;
-        _playerEvents.AttackEnded += AttackEndedServerRpc;
     }
 
     public override void OnNetworkDespawn()
@@ -75,9 +71,6 @@ public class PlayerStateMachine : NetworkBehaviour
         _inputReader.BlockEvent -= BlockInputChangeServerRpc;
         _inputReader.LeftAttackEvent -= LeftAttackInputChangeServerRpc;
         _inputReader.RightAttackEvent -= RightAttackInputChangeServerRpc;
-        
-        _playerEvents.GettingDamage -= GetDamageServerRpc;
-        _playerEvents.KnockedDown -= GetKnockedDownServerRpc;
     }
 
     private void Update()
@@ -121,7 +114,7 @@ public class PlayerStateMachine : NetworkBehaviour
     private void MoveInputChangeServerRpc(Vector2 direction)
     {
         _stateData.inputStateData.moveDirection = direction;
-        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; MoveInput + " + direction.ToString());
+        //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; MoveInput + " + direction.ToString());
         
         _playerAnimator.TransmitDodgeDirection(direction.x == 0 
             ? 0 
@@ -134,21 +127,21 @@ public class PlayerStateMachine : NetworkBehaviour
     private void BlockInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.blockInput = input;
-        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; Block + " + input.ToString());
+        //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; Block + " + input.ToString());
     }
 
     [ServerRpc]
     private void LeftAttackInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.leftAttackInput = input;
-        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; LeftAttack + " + input.ToString());
+        //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; LeftAttack + " + input.ToString());
     }
 
     [ServerRpc]
     private void RightAttackInputChangeServerRpc(bool input)
     {
         _stateData.inputStateData.rightAttackInput = input;
-        Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; RightAttack + " + input.ToString());
+        //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; RightAttack + " + input.ToString());
     }
 
     [ServerRpc]
@@ -190,12 +183,9 @@ public class PlayerStateMachine : NetworkBehaviour
     public void AttackEndedServerRpc()
     {
         _stateData.didAttackEnd = true;
-        
-        Debug.Log("AttackEnded 3");
 
         if (!IsOwner)
             return;
-        Debug.LogWarning("HERE'S THE PROBLEM!!");
         
         _playerAnimator.AttackEndedServerRpc();
     }
@@ -204,7 +194,7 @@ public class PlayerStateMachine : NetworkBehaviour
     {
         //Debug.Log("Server State Invoke Event: " + IsServer + "; " + IsClient + "; " + IsLocalPlayer);
 
-        Debug.Log("IS THIS THE SERVER??? " + IsServer);
+        //Debug.Log("IS THIS THE SERVER??? " + IsServer);
 
         attackDirection.Value = _stateData.attackDirection;
         attackType.Value = _stateData.attackType;
@@ -231,7 +221,7 @@ public class PlayerStateMachine : NetworkBehaviour
             return;
         
         _lastClientStateType = playerStateType.Value;
-        Debug.Log("PLEASE WORK");
+        //Debug.Log("PLEASE WORK");
         
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
 
