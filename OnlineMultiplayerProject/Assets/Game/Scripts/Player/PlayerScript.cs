@@ -76,22 +76,41 @@ public class PlayerScript : NetworkBehaviour
         if (!InitialTransformInformation.Instance)
             return;
         //Position
-        Transform information = PlayerNumber.Value switch
+
+        Transform playerTransform = PlayerNumber.Value switch
         {
             PlayerNumberType.PlayerOne => InitialTransformInformation.Instance.PlayerOneInformation,
             PlayerNumberType.PlayerTwo => InitialTransformInformation.Instance.PlayerTwoInformation,
             _ => InitialTransformInformation.Instance.PlayerTwoInformation
         };
-
-        transform.SetPositionAndRotation(information.position, information.rotation);
+/*
+        Transform opponentTransform;
+        
+        switch (PlayerNumber.Value)
+        {
+            case PlayerNumberType.PlayerOne:
+                playerTransform = InitialTransformInformation.Instance.PlayerOneInformation;
+                opponentTransform = InitialTransformInformation.Instance.PlayerTwoInformation;
+                break;
+            case PlayerNumberType.PlayerTwo:
+            default:
+                playerTransform = InitialTransformInformation.Instance.PlayerTwoInformation;
+                opponentTransform = InitialTransformInformation.Instance.PlayerOneInformation;
+                break;
+                
+        }
+  */      
+        transform.SetPositionAndRotation(playerTransform.position, playerTransform.rotation);
         
         //Cinemachine
-        if (!IsOwner) return;
+        if (!IsOwner) 
+            return;
 
         CinemachineVirtualCameraBase cinemachine = CinemachineCore.GetVirtualCamera(0);
         if (cinemachine)
         {
-            cinemachine.Follow = _cinemachineCameraTarget.transform;
+            cinemachine.transform.position = _cinemachineCameraTarget.transform.position;
+            cinemachine.transform.rotation = _cinemachineCameraTarget.transform.rotation;
             //cinemachine.LookAt = _cinemachineCameraTarget.transform;
         }
 
