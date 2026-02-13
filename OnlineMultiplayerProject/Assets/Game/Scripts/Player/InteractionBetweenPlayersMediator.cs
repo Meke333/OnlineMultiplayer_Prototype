@@ -22,11 +22,15 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
 
     public bool AttackInteraction(PlayerNumberType attacker, int direction, AttackType type)
     {
-        
-        Debug.Log("ZZZ: 2");
         PlayerDamage target = attacker == PlayerNumberType.PlayerOne ? playerTwo : playerOne;
 
+        Debug.Log("WHERE IS IT CHECKING???");
+        Debug.Log("R: target = " + target.GetNumberType());
+        Debug.Log("R: attacker = " + attacker);
+        
         bool result = target.DoesAttackLand(direction, type);
+        
+        Debug.Log("R: " + result);
         if (result)
             target.ProcessDamage(type);
         

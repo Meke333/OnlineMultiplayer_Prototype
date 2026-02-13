@@ -56,7 +56,6 @@ public class PlayerAnimator : NetworkBehaviour
     [ServerRpc]
     public void TransmitAttackServerRpc(int direction, AttackType type)
     {
-        Debug.Log("HELLO YOU BITCH");
         TransmitAttackEventClientRpc(direction, type);
     }
     

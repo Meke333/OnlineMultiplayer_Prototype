@@ -7,13 +7,14 @@ public class PlayerDamage : NetworkBehaviour
     [SerializeField] private PlayerStateMachine _playerStateMachine;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private AttackDamageConfiguration _configuration;
-    
-    private PlayerStateType _playerState;
 
+    public PlayerNumberType GetNumberType()
+    {
+        return _playerScript.PlayerNumber.Value;
+    }
+    
     public bool DoesAttackLand(int direction, AttackType type)
     {
-        Debug.Log("ZZZ: 3");
-        
         bool result = true;
         
         switch (_playerStateMachine.playerStateType.Value)
@@ -24,6 +25,10 @@ public class PlayerDamage : NetworkBehaviour
             case PlayerStateType.Hurt:
                 break;
             case PlayerStateType.Dodge:
+                Debug.Log("R: DODGE: " + _inputReader.MoveDirection.x  + "; " + direction);
+                Debug.Log("R: DODGE: " + "left dodge: " + (_inputReader.MoveDirection.x < 0 && direction < 0) );
+                Debug.Log("R: DODGE: " + "right dodge: " + (_inputReader.MoveDirection.x > 0 && direction > 0) );
+                
                 if (_inputReader.MoveDirection.x < 0 && direction < 0)
                     break;
                 if (_inputReader.MoveDirection.x > 0 && direction > 0)
@@ -35,27 +40,43 @@ public class PlayerDamage : NetworkBehaviour
                 result = false;
                 break;
             default:
-                Debug.LogError("State not implemented: " + _playerState);
+                Debug.LogError("State not implemented: " + _playerStateMachine.playerStateType.Value);
                 break;
         }
         
         return result;
     }
+
+    public bool IsAttackGettingBlocked()
+    {
+        Debug.Log("R: AttackBlocked? " + _playerStateMachine.playerStateType.Value);
+        return _playerStateMachine.playerStateType.Value ==  PlayerStateType.Block;
+    }
     
     public void ProcessDamage(AttackType type)
     {
-        Debug.Log("ZZZ: 4");
-        
-        Debug.Log("ZZZ: 5");
-        //Alarm HP Bar
+        Debug.Log("R: Processing Damage: " + _playerStateMachine.playerStateType.Value);
         
         //Determine
         float damage = _configuration.DetermineDamage(type) 
-                       * (_playerState == PlayerStateType.Block ? 0.25f : 1f);
+                       * (_playerStateMachine.playerStateType.Value == PlayerStateType.Block ? 0.125f : 1f);
         
         HealthBar.Instance?.ChangeHealthRpc(_playerScript.PlayerNumberValue, damage);
         
         
-        //Report Back to Statemachine that you got hurt!
+        
+        Debug.Log("R: Processing Damage: IsOwner? " + IsOwner);
+        if (!IsOwner)
+            return;
+        
+        
+        
+        //Check here if Player goes down
+        
+        if (IsAttackGettingBlocked())
+            return;
+        
+        Debug.Log("R: Processing Damage: Get DamageServerRpc");
+        _playerStateMachine.GetDamageServerRpc();
     }
 }

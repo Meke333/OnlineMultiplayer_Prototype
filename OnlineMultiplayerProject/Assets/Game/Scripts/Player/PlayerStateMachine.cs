@@ -145,8 +145,9 @@ public class PlayerStateMachine : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void GetDamageServerRpc(float damage)
+    public void GetDamageServerRpc()
     {
+        Debug.Log("R: GetDamageServerRpc; " + IsOwner);
         _currentState.OnDamage();
     }
     

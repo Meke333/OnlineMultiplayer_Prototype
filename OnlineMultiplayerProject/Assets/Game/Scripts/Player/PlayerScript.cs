@@ -97,7 +97,7 @@ public class PlayerScript : NetworkBehaviour
                 playerTransform = InitialTransformInformation.Instance.PlayerTwoInformation;
                 opponentTransform = InitialTransformInformation.Instance.PlayerOneInformation;
                 break;
-                
+        
         }
   */      
         transform.SetPositionAndRotation(playerTransform.position, playerTransform.rotation);
