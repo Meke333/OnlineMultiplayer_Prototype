@@ -25,13 +25,13 @@ public class PlayerDamage : NetworkBehaviour
             case PlayerStateType.Hurt:
                 break;
             case PlayerStateType.Dodge:
-                Debug.Log("R: DODGE: " + _inputReader.MoveDirection.x  + "; " + direction);
-                Debug.Log("R: DODGE: " + "left dodge: " + (_inputReader.MoveDirection.x < 0 && direction < 0) );
-                Debug.Log("R: DODGE: " + "right dodge: " + (_inputReader.MoveDirection.x > 0 && direction > 0) );
+                Debug.Log("R: DODGE: " + _playerStateMachine.dodgeDirection.Value  + "; " + direction);
+                Debug.Log("R: DODGE: " + "left dodge: " + (_playerStateMachine.dodgeDirection.Value < 0 && direction > 0) );
+                Debug.Log("R: DODGE: " + "right dodge: " + (_playerStateMachine.dodgeDirection.Value > 0 && direction < 0) );
                 
-                if (_inputReader.MoveDirection.x < 0 && direction < 0)
+                if (_playerStateMachine.dodgeDirection.Value < 0 && direction < 0)
                     break;
-                if (_inputReader.MoveDirection.x > 0 && direction > 0)
+                if (_playerStateMachine.dodgeDirection.Value > 0 && direction > 0)
                     break;
                 
                 result = false;

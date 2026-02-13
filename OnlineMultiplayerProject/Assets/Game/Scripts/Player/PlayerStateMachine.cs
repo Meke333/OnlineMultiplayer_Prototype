@@ -31,6 +31,10 @@ public class PlayerStateMachine : NetworkBehaviour
     public NetworkVariable<AttackType> attackType = new NetworkVariable<AttackType>(0, 
         NetworkVariableReadPermission.Everyone, 
         NetworkVariableWritePermission.Server);
+    
+    public NetworkVariable<int> dodgeDirection = new NetworkVariable<int>(0,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
 
     private PlayerStateType _lastClientStateType;
         
@@ -115,6 +119,8 @@ public class PlayerStateMachine : NetworkBehaviour
     {
         _stateData.inputStateData.moveDirection = direction;
         //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; MoveInput + " + direction.ToString());
+        
+        dodgeDirection.Value = direction.x == 0 ? 0 : direction.x < 0 ? -1 : 1;
         
         _playerAnimator.TransmitDodgeDirection(direction.x == 0 
             ? 0 
