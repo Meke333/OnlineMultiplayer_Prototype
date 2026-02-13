@@ -144,7 +144,7 @@ public class PlayerAnimator : NetworkBehaviour
     [ClientRpc]
     private void PlayerStateChangedEventClientRpc(PlayerStateType state)
     { 
-        Debug.Log("2" + state.ToString());
+        //Debug.Log("2" + state.ToString());
 //Create a Network Variable
         Debug.Log("PlayerStateChanged: " + state);
         _animator.SetBool(PlayerAnimatorStrings.IsBlocking, state == PlayerStateType.Block);
