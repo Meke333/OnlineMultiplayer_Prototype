@@ -66,10 +66,8 @@ public class PlayerDamage : NetworkBehaviour
         
         
         Debug.Log("R: Processing Damage: IsOwner? " + IsOwner);
-        if (!IsOwner)
-            return;
-        
-        
+        //if (!IsOwner)
+            //return;
         
         //Check here if Player goes down
         
@@ -77,6 +75,6 @@ public class PlayerDamage : NetworkBehaviour
             return;
         
         Debug.Log("R: Processing Damage: Get DamageServerRpc");
-        _playerStateMachine.GetDamageServerRpc();
+        _playerStateMachine.GetDamage();
     }
 }

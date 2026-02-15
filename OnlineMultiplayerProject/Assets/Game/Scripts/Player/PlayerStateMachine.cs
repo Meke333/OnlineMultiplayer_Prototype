@@ -150,10 +150,12 @@ public class PlayerStateMachine : NetworkBehaviour
         //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; RightAttack + " + input.ToString());
     }
 
-    [ServerRpc]
-    public void GetDamageServerRpc()
+    public void GetDamage()
     {
-        Debug.Log("R: GetDamageServerRpc; " + IsOwner);
+        Debug.Log("R: GetDamageServerRpc; " + IsOwner + IsServer);
+        if (!IsServer)
+            return;
+        
         _currentState.OnDamage();
     }
     
