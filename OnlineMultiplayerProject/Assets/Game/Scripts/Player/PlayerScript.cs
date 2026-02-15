@@ -54,9 +54,7 @@ public class PlayerScript : NetworkBehaviour
     
     public void SetPlayerNumberType(PlayerNumberType playerNumberType)
     {
-        if (!IsServer && !IsHost)
-            return;
-        
+       
         PlayerNumberValue = playerNumberType;
         PlayerNumber.Value = PlayerNumberValue;
         
@@ -108,9 +106,14 @@ public class PlayerScript : NetworkBehaviour
         //Cinemachine
         if (!IsOwner) 
             return;
-        
-        HealthBar.Instance?.ChangePlayerImageRpc(PlayerNumber.Value, characterIndex);
-        HealthBar.Instance?.ChangePlayerNameRpc(PlayerNumber.Value, playerName);
+
+        if (HealthBar.Instance)
+        {
+            HealthBar.Instance.ChangePlayerImageRpc(PlayerNumber.Value, characterIndex);
+            HealthBar.Instance.ChangePlayerNameRpc(PlayerNumber.Value, playerName);
+            if (IsOwner)
+                HealthBar.Instance.RetrieveInformationServerRpc();
+        }
 
         CinemachineVirtualCameraBase cinemachine = CinemachineCore.GetVirtualCamera(0);
         if (cinemachine)

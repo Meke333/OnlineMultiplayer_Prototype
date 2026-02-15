@@ -33,6 +33,11 @@ public class HealthBar : NetworkBehaviour
     NetworkVariable<int> playerTwoScore = new NetworkVariable<int>(0,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
+
+    private int _playerOneImageIndex = -1;
+    private int _playerTwoImageIndex = -1;
+    private FixedString32Bytes _playerOneName;
+    private FixedString32Bytes _playerTwoName;
     
     public override void OnNetworkSpawn()
     {
@@ -138,25 +143,74 @@ public class HealthBar : NetworkBehaviour
             return;
         }
         
-        Image target = playerNumber switch
-        {
-            PlayerNumberType.PlayerOne => playerOneImage,
-            PlayerNumberType.PlayerTwo => playerTwoImage,
-        };
+        if (index < 0)
+            return;
 
-        target.sprite = _configuration.PlayerSprite[index];
+        Image target = null;
+        
+        switch (playerNumber)
+        {
+            case PlayerNumberType.PlayerOne:
+                target = playerOneImage;
+                _playerOneImageIndex = index;
+                break;
+            case PlayerNumberType.PlayerTwo:
+            default:
+                target = playerTwoImage;
+                _playerTwoImageIndex = index;
+                break;
+        }
+        
+        if (target)
+            target.sprite = _configuration.PlayerSprite[index];
     }
     
     [Rpc(SendTo.Everyone)]
     public void ChangePlayerNameRpc(PlayerNumberType playerNumber, FixedString32Bytes playerName)
     {
-        TMPro.TMP_Text target = playerNumber switch
-        {
-            PlayerNumberType.PlayerOne => playerOneNameText,
-            PlayerNumberType.PlayerTwo => playerTwoNameText,
-        };
+        TMPro.TMP_Text targetText;
+        
 
-        target.text = playerName.Value;
+        switch (playerNumber)
+        {
+            case PlayerNumberType.PlayerOne:
+                targetText = playerOneNameText;
+                _playerOneName = playerName;
+                break;
+            case PlayerNumberType.PlayerTwo:
+            default:
+                targetText = playerTwoNameText;
+                _playerTwoName = playerName;
+                break;
+        }   
+
+        targetText.text = playerName.Value;
+    }
+
+    //IM ALREADY CHECKING FOR OWNERSHIP WHY DO YOU NOT WORK???
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void RetrieveInformationServerRpc()
+    {
+        Debug.Log("INIT: " + _playerOneImageIndex + "; " 
+                  + _playerTwoImageIndex + "; " 
+                  + _playerOneName.Value + "; " 
+                  + _playerTwoName.Value);
+        if (!IsOwner)
+            return;
+        
+        SendInformation(
+            _playerOneImageIndex, 
+            _playerTwoImageIndex,  
+            _playerOneName.Value, 
+            _playerTwoName.Value);;
+    }
+    
+    private void SendInformation(int index1, int index2, FixedString32Bytes name1, FixedString32Bytes name2)
+    {
+        ChangePlayerImageRpc(PlayerNumberType.PlayerOne, index1);
+        ChangePlayerImageRpc(PlayerNumberType.PlayerTwo, index2);
+        ChangePlayerNameRpc(PlayerNumberType.PlayerOne, name1);
+        ChangePlayerNameRpc(PlayerNumberType.PlayerTwo, name2);
     }
     
     

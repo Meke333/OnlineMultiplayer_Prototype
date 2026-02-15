@@ -163,7 +163,6 @@ public class NetworkServer : IDisposable
             PlayerNumberType number = (PlayerNumberType)PlayerNumberIndex;
             Debug.Log("PlayerNumber: " + PlayerNumberIndex + "; " + (PlayerNumberType)PlayerNumberIndex);
             PlayerScript player = playerObject.GetComponentInChildren<PlayerScript>();
-            player.SetPlayerNumberType((PlayerNumberType)PlayerNumberIndex);
             
             switch (number)
             {
@@ -179,6 +178,7 @@ public class NetworkServer : IDisposable
 
             if (player.IsHost || player.IsServer)
             {
+                player.SetPlayerNumberType((PlayerNumberType)PlayerNumberIndex);
                 player.UpdatePlayerAfterLoadClientRpc(
                     userdata.PrefabIndex, 
                     new FixedString32Bytes(userdata.userName));
