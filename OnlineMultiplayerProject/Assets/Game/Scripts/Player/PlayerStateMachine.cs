@@ -182,10 +182,18 @@ public class PlayerStateMachine : NetworkBehaviour
             //Run server-side logic, possibly also call a ClientRpc
     //  }
 
-    [ServerRpc]
-    private void GetKnockedDownServerRpc()
+    public void GetKnockedDown()
     {
+        Debug.Log("R: GetKnockedDown; " + IsOwner + IsServer);
+        if (!IsServer)
+            return;
+        
         _currentState.OnKnockdown();
+    }
+
+    public void GetUp()
+    {
+        //TO-DO
     }
 
     [ServerRpc]

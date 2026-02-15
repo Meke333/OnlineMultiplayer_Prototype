@@ -60,9 +60,16 @@ public class PlayerDamage : NetworkBehaviour
         //Determine
         float damage = _configuration.DetermineDamage(type) 
                        * (_playerStateMachine.playerStateType.Value == PlayerStateType.Block ? 0.125f : 1f);
-        
-        HealthBar.Instance?.ChangeHealthRpc(_playerScript.PlayerNumberValue, damage);
-        
+
+        if (HealthBar.Instance)
+        {
+            HealthBar.Instance.ChangeHealthRpc(_playerScript.PlayerNumberValue, damage);
+            if (HealthBar.Instance.CheckKnockdownStatus(_playerScript.PlayerNumberValue))
+            {
+                _playerStateMachine.GetKnockedDown();
+            }
+        }
+
         
         
         Debug.Log("R: Processing Damage: IsOwner? " + IsOwner);

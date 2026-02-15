@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -95,21 +96,21 @@ public class NetworkServer : IDisposable
 
         
         Debug.Log("Approval for: " + userData.userName);
-        Debug.Log(userData.PrefabIndex);
+        //Debug.Log(userData.PrefabIndex);
 
         //CHECK IF USER DATA IS VALID HERE!!! (name checkbox)
 
-        Debug.Log("ClientNetworkId = " + request.ClientNetworkId);
+        //Debug.Log("ClientNetworkId = " + request.ClientNetworkId);
         
         //To-Do: If ClientID is the same and the it's old in the dictionary: replace it!
         
         if (!_clientIdToAuth.TryAdd(request.ClientNetworkId, userData.userAuthID))
             _clientIdToAuth[request.ClientNetworkId] = userData.userAuthID;
-        Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
+        //Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
         
         if (!_authIdToUserData.TryAdd(userData.userAuthID, userData))
             _authIdToUserData[userData.userAuthID] = userData;
-        Debug.Log(_authIdToUserData[userData.userAuthID] == null);
+        //Debug.Log(_authIdToUserData[userData.userAuthID] == null);
         
         OnUserJoined?.Invoke(userData);
         
@@ -117,11 +118,11 @@ public class NetworkServer : IDisposable
         response.CreatePlayerObject = false;
         response.Approved = true;
         response.Pending = false;
-        Debug.Log("Hello 0");
-        Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
-        Debug.Log(_authIdToUserData[userData.userAuthID] == null);
+        //Debug.Log("Hello 0");
+        //Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
+        //Debug.Log(_authIdToUserData[userData.userAuthID] == null);
         await SpawnPlayerDelayed(request.ClientNetworkId);
-        Debug.Log("Hello 6");
+        //Debug.Log("Hello 6");
         
         //response.CreatePlayerObject = true;
     }
@@ -178,7 +179,9 @@ public class NetworkServer : IDisposable
 
             if (player.IsHost || player.IsServer)
             {
-                player.UpdatePlayerAfterLoadClientRpc();
+                player.UpdatePlayerAfterLoadClientRpc(
+                    userdata.PrefabIndex, 
+                    new FixedString32Bytes(userdata.userName));
             }
             Debug.Log("Hello 4");
             
