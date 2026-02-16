@@ -23,7 +23,6 @@ public class NetworkServer : IDisposable
     
     private Dictionary<ulong, string> _clientIdToAuth = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authIdToUserData = new Dictionary<string, UserData>();
-    private Dictionary<ulong, bool> _clientIdtoActiveCheck = new Dictionary<ulong, bool>();
     
     public NetworkServer(NetworkManager networkManager, List<NetworkObject> playerPrefabs)
     {
@@ -70,7 +69,6 @@ public class NetworkServer : IDisposable
 
     private void DoOnDisconnect(ulong clientId)
     {
-        //For some reason this gets called, whenever a client gets Approved???
         Debug.Log("DoOnDisconnect");
         if (_clientIdToAuth.TryGetValue(clientId, out string authId))
         {
@@ -78,7 +76,7 @@ public class NetworkServer : IDisposable
             OnUserLeft?.Invoke(_authIdToUserData[authId]);
             _authIdToUserData.Remove(authId);
             OnClientLeft?.Invoke(authId);
-
+            
             PlayerNumberIndex--;
         }
 
@@ -167,12 +165,16 @@ public class NetworkServer : IDisposable
             switch (number)
             {
                 case PlayerNumberType.PlayerOne:
-                    InteractionBetweenPlayersMediator.Instance.playerOne =
+                    InteractionBetweenPlayersMediator.Instance.playerOneDamage =
                         playerObject.GetComponentInChildren<PlayerDamage>();
+                    InteractionBetweenPlayersMediator.Instance.playerOneStateMachine =
+                        playerObject.GetComponentInChildren<PlayerStateMachine>();
                     break;
                 case PlayerNumberType.PlayerTwo:
-                    InteractionBetweenPlayersMediator.Instance.playerTwo =
+                    InteractionBetweenPlayersMediator.Instance.playerTwoDamage =
                         playerObject.GetComponentInChildren<PlayerDamage>();
+                    InteractionBetweenPlayersMediator.Instance.playerTwoStateMachine =
+                        playerObject.GetComponentInChildren<PlayerStateMachine>();
                     break;
             }
 

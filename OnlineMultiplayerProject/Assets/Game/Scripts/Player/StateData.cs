@@ -8,5 +8,7 @@ public class StateData
     public AttackType attackType;
     public int attackDirection;
     public bool didAttackEnd;
-    
+
+    public bool recoveredFromKnockdown;
+
 }

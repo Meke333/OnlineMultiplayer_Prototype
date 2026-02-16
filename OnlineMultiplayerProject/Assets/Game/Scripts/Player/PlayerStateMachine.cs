@@ -41,15 +41,22 @@ public class PlayerStateMachine : NetworkBehaviour
 
     [SerializeField, ReadOnly] private bool _isActive; 
 
-    public async void SetUp()
+    private async void SetUp()
     {
+        InteractionBetweenPlayersMediator.SetUpFight();
+        
         await Task.Delay(4000);
         _stateData = new StateData();
         _stateData.inputStateData = new InputStateData();
         _stateData.attackDamageConfiguration = _attackDamageConfiguration;
         _stateData.playerScript = _playerScript;
         
-        _currentState = new IdleState(_stateData);
+        _currentState = new StepBackState(_stateData);
+
+        if (IsServer)
+        {
+            InteractionBetweenPlayersMediator.IncrementPlayerCount();
+        }
         _isActive = true;
     }
 
@@ -68,6 +75,11 @@ public class PlayerStateMachine : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
+        if (IsServer)
+        {
+            InteractionBetweenPlayersMediator.DecrementPlayerCount();
+        }
+        
         if (!IsOwner)
             return;
 
@@ -89,7 +101,12 @@ public class PlayerStateMachine : NetworkBehaviour
             
             _currentState = _currentState.Process();
             statename = _currentState.ToString();
-        
+
+            if (_stateData.recoveredFromKnockdown)
+            {
+                GetUp();
+            }
+            
             if (playerStateType.Value == _currentState.stateType)
                 return;
         
@@ -108,10 +125,7 @@ public class PlayerStateMachine : NetworkBehaviour
         //UpdateChangeToClientsClientRpc();
     }
 
-    protected void ToggleActivity(bool active)
-    {
-        _isActive = active;
-    }
+    #region Input
     
     //ServerRpc
     [ServerRpc]
@@ -149,7 +163,9 @@ public class PlayerStateMachine : NetworkBehaviour
         _stateData.inputStateData.rightAttackInput = input;
         //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; RightAttack + " + input.ToString());
     }
-
+    
+    #endregion
+    
     public void GetDamage()
     {
         Debug.Log("R: GetDamageServerRpc; " + IsOwner + IsServer);
@@ -158,49 +174,51 @@ public class PlayerStateMachine : NetworkBehaviour
         
         _currentState.OnDamage();
     }
-    
-    // In your EventsManagerpublic static event Action SomethingHappened;
-    // In a script listening for this event
-    //  void Start()
-    //  {
-    //      EventsManager.SomethingHappened += OnSomethingHappened;
-    //  }
-    //  void OnSomethingHappened()
-    //  {
-    //      Run local logic
-    //      If multiplayer, send ServerRpc to notify the server
-    //
-    //      if (NetworkManager.Singleton.IsClient)
-    //      {
-    //      NotifyServerOfEventServerRpc();
-    //      }
-    //  }
-    //
-    // [ServerRpc]
-    //  void NotifyServerOfEventServerRpc()
-    //  {
-            //Run server-side logic, possibly also call a ClientRpc
-    //  }
 
     public void GetKnockedDown()
     {
         Debug.Log("R: GetKnockedDown; " + IsOwner + IsServer);
         if (!IsServer)
             return;
+        Debug.Log("R: IS SERVER");
         
         _currentState.OnKnockdown();
+        HealthBar.Instance?.IncreaseScore(
+            _playerScript.PlayerNumberValue == PlayerNumberType.PlayerOne
+                ? PlayerNumberType.PlayerTwo 
+                : PlayerNumberType.PlayerOne
+            , 1);
+    }
+
+    public void GetStepAwayState()
+    {
+        if (!IsServer)
+            return;
+        
+        _currentState.OnStepBack();
+    }
+
+    public void GetContinueState()
+    {
+        if (!IsServer)
+            return;
+        
+        _currentState.OnContinueFight();
     }
 
     public void GetUp()
     {
-        //TO-DO
+        _stateData.recoveredFromKnockdown = false;
+        _playerAnimator.PlayerGetUpEvent();
+        
+        HealthBar.Instance?.ChangeHealth(_playerScript.PlayerNumberValue, HealthBar.MaxHealth, false);
     }
 
     [ServerRpc]
     public void AttackEndedServerRpc()
     {
         _stateData.didAttackEnd = true;
-
+        
         if (!IsOwner)
             return;
         
@@ -218,12 +236,6 @@ public class PlayerStateMachine : NetworkBehaviour
 
 
         //UpdateChangeToClients();
-    }
-
-    [ClientRpc]
-    private void SendMessageClientRpc(int number)
-    {
-        Debug.Log("MESSAGE (" + _playerScript.PlayerNumber.Value + "): " + number);
     }
     
     //ClientRpc

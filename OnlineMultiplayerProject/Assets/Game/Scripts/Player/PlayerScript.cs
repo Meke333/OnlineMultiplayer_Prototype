@@ -23,35 +23,19 @@ public class PlayerScript : NetworkBehaviour
 
     #endregion
 
-    #region Events
-
-    public Action<AttackType, bool> OnIncomingAttack;
-    public Action OnKnockdown;
-
-    #endregion
-
-    /*private async void Start()
+    public override void OnNetworkDespawn()
     {
-        await Task.Delay(4000);
+        if (!IsOwner)
+            return;
         
-        if (IsHost || IsServer)
-        {
-            UpdatePlayerAfterLoadClientRpc();
-        }
-    }*/
-
-
-
-    #region EventCalls
-
-    private void StateChange(PlayerState obj)
-    {
-        throw new NotImplementedException();
+        if (!HealthBar.Instance)
+            return;
+        
+        HealthBar.Instance.ChangeHealthRpc(PlayerNumber.Value, HealthBar.MaxHealth, false);
+        HealthBar.Instance.ChangePlayerImageRpc(PlayerNumber.Value, -1);
+        HealthBar.Instance.ChangePlayerNameRpc(PlayerNumber.Value, new FixedString32Bytes());
     }
 
-
-    #endregion
-    
     public void SetPlayerNumberType(PlayerNumberType playerNumberType)
     {
        
@@ -60,14 +44,6 @@ public class PlayerScript : NetworkBehaviour
         
         //UpdatePlayerNumberClientRpc();
     }
-    
-    /*
-    //ClientRpc
-    [ClientRpc]
-    private void UpdatePlayerNumberClientRpc()
-    {
-    }
-    */
     
     [ClientRpc]
     public void UpdatePlayerAfterLoadClientRpc(int characterIndex, FixedString32Bytes playerName)
@@ -111,8 +87,7 @@ public class PlayerScript : NetworkBehaviour
         {
             HealthBar.Instance.ChangePlayerImageRpc(PlayerNumber.Value, characterIndex);
             HealthBar.Instance.ChangePlayerNameRpc(PlayerNumber.Value, playerName);
-            if (IsOwner)
-                HealthBar.Instance.RetrieveInformationServerRpc();
+            HealthBar.Instance.RetrieveInformationServerRpc();
         }
 
         CinemachineVirtualCameraBase cinemachine = CinemachineCore.GetVirtualCamera(0);

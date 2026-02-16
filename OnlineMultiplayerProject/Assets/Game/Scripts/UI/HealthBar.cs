@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class HealthBar : NetworkBehaviour
 {
+    public const float MaxHealth = 20f;
     public static HealthBar Instance;
     [SerializeField] private Slider playerOneSlider;
     [SerializeField] private Slider playerTwoSlider;
@@ -15,14 +16,16 @@ public class HealthBar : NetworkBehaviour
     [SerializeField] private TMPro.TMP_Text playerTwoNameText;
     [SerializeField] private Image playerOneImage;
     [SerializeField] private Image playerTwoImage;
+    
+    [SerializeField] private TMPro.TMP_Text joinCode;
 
     [SerializeField] private PlayerInformationConfiguration _configuration;
     
-    NetworkVariable<float> playerOneHealth = new NetworkVariable<float>(20, 
+    NetworkVariable<float> playerOneHealth = new NetworkVariable<float>(MaxHealth, 
         NetworkVariableReadPermission.Everyone, 
         NetworkVariableWritePermission.Server);
 
-    NetworkVariable<float> playerTwoHealth = new NetworkVariable<float>(20,
+    NetworkVariable<float> playerTwoHealth = new NetworkVariable<float>(MaxHealth,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
     
@@ -55,15 +58,24 @@ public class HealthBar : NetworkBehaviour
         playerTwoHealth.OnValueChanged += UpdateHealthBar;
         playerOneScore.OnValueChanged += UpdateScore;
         playerTwoScore.OnValueChanged += UpdateScore;
+        
+        joinCode.text = HostSingleton.Instance.GameManager.JoinCode;
+
     }
 
-    
+    private void LateUpdate()
+    {
+        //joinCode.text = HostSingleton.Instance.GameManager.JoinCode;
+    }
+
+
     public override void OnNetworkDespawn()
     {
         playerOneHealth.OnValueChanged -= UpdateHealthBar;
         playerTwoHealth.OnValueChanged -= UpdateHealthBar;
         playerOneScore.OnValueChanged -= UpdateScore;
         playerTwoScore.OnValueChanged -= UpdateScore;
+        
     }
 
     private void UpdateHealthBar(float previousValue, float newValue)
@@ -78,6 +90,17 @@ public class HealthBar : NetworkBehaviour
         
         playerOneScoreText.text = playerOneScore.Value.ToString();
         playerTwoScoreText.text = playerTwoScore.Value.ToString();
+    }
+
+    public void IncreaseScore(PlayerNumberType type, int score)
+    {
+        NetworkVariable<int> target = type switch
+        {
+            PlayerNumberType.PlayerOne => playerOneScore,
+            PlayerNumberType.PlayerTwo => playerTwoScore,
+        };
+        
+        target.Value += score;
     }
     
     
@@ -142,9 +165,6 @@ public class HealthBar : NetworkBehaviour
             Debug.LogError("ChangePlayerImageRpc: index out of range");
             return;
         }
-        
-        if (index < 0)
-            return;
 
         Image target = null;
         
@@ -161,8 +181,10 @@ public class HealthBar : NetworkBehaviour
                 break;
         }
         
-        if (target)
-            target.sprite = _configuration.PlayerSprite[index];
+        if (!target)
+            return;
+        
+        target.sprite = index < 0 ? null : _configuration.PlayerSprite[index];
     }
     
     [Rpc(SendTo.Everyone)]
