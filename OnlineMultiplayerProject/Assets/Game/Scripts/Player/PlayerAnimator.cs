@@ -152,18 +152,20 @@ public class PlayerAnimator : NetworkBehaviour
         switch (state)
         {
             case PlayerStateType.Idle:
+                Debug.Log("ARE YOU CALLED??? " + OwnerClientId);
+                
                 _animator.SetBool(PlayerAnimatorStrings.ContinueFight, true);
 
-                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.ContinueFight, 150);
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.ContinueFight, 500);
                 break;
             case PlayerStateType.StepBack:
                 _animator.SetBool(PlayerAnimatorStrings.StepBackBool, true);
 
-                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.StepBackBool, 150);
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.StepBackBool);
                 break;
             case PlayerStateType.Hurt:
                 _animator.SetBool(PlayerAnimatorStrings.HurtBool, true);
-                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.HurtBool, 150);
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.HurtBool, 100);
                 break;
             case PlayerStateType.Down:
                 _animator.SetBool(PlayerAnimatorStrings.KnockdownBool, true);
