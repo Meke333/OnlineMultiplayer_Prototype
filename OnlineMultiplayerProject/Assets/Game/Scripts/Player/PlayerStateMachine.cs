@@ -53,7 +53,7 @@ public class PlayerStateMachine : NetworkBehaviour
         _stateData.inputStateData = new InputStateData();
         _stateData.attackDamageConfiguration = _attackDamageConfiguration;
         _stateData.playerScript = _playerScript;
-        
+
         _currentState = new StepBackState(_stateData);
         
         _isActive = true;
@@ -78,12 +78,15 @@ public class PlayerStateMachine : NetworkBehaviour
         _inputReader.LeftAttackEvent += LeftAttackInputChangeServerRpc;
         _inputReader.RightAttackEvent += RightAttackInputChangeServerRpc;
     }
-
+    
     public override void OnNetworkDespawn()
     {
         if (IsServer)
         {
             InteractionBetweenPlayersMediator.DecrementPlayerCount();
+            
+            EnvironmentHandler.Instance?.SetDirection(_playerScript.PlayerNumberValue, 0);
+            EnvironmentHandler.Instance?.ResetEnvironmentTransform();
         }
         
         if (!IsOwner)
@@ -93,6 +96,7 @@ public class PlayerStateMachine : NetworkBehaviour
         _inputReader.BlockEvent -= BlockInputChangeServerRpc;
         _inputReader.LeftAttackEvent -= LeftAttackInputChangeServerRpc;
         _inputReader.RightAttackEvent -= RightAttackInputChangeServerRpc;
+        
     }
 
     private void Update()
@@ -141,13 +145,10 @@ public class PlayerStateMachine : NetworkBehaviour
         _stateData.inputStateData.moveDirection = direction;
         //Debug.Log("S: "+ _playerScript.PlayerNumberValue + "; MoveInput + " + direction.ToString());
         
-        dodgeDirection.Value = direction.x == 0 ? 0 : direction.x < 0 ? -1 : 1;
-        
-        _playerAnimator.TransmitDodgeDirection(direction.x == 0 
-            ? 0 
-            : direction.x < 0 
-                ? -1 
-                : 1 );
+        int temp = direction.x == 0 ? 0 : direction.x < 0 ? -1 : 1;
+        dodgeDirection.Value = temp;
+        EnvironmentHandler.Instance?.SetDirection(_playerScript.PlayerNumberValue, temp);
+        _playerAnimator.TransmitDodgeDirection(temp);
     }
 
     [ServerRpc]
@@ -175,7 +176,6 @@ public class PlayerStateMachine : NetworkBehaviour
     
     public void GetDamage()
     {
-        Debug.Log("R: GetDamageServerRpc; " + IsOwner + IsServer);
         if (!IsServer)
             return;
         
@@ -184,10 +184,8 @@ public class PlayerStateMachine : NetworkBehaviour
 
     public void GetKnockedDown()
     {
-        Debug.Log("R: GetKnockedDown; " + IsOwner + IsServer);
         if (!IsServer)
             return;
-        Debug.Log("R: IS SERVER");
         
         _currentState.OnKnockdown();
         HealthBar.Instance?.IncreaseScore(
@@ -236,6 +234,9 @@ public class PlayerStateMachine : NetworkBehaviour
     {
         attackDirection.Value = _stateData.attackDirection;
         attackType.Value = _stateData.attackType;
+        
+        EnvironmentHandler.Instance?.SetState(_playerScript.PlayerNumberValue, playerStateType.Value);
+
     }
     
     private void UpdateChangeToClients()
@@ -250,7 +251,7 @@ public class PlayerStateMachine : NetworkBehaviour
         _lastClientStateType = playerStateType.Value;
         
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
-
+        
         switch (playerStateType.Value) 
         {
             case PlayerStateType.Attack:
