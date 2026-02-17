@@ -48,18 +48,24 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
                 : playerOneStateMachine;
         
         target.GetStepAwayState();
+        
+        FightHandler.Instance?.Down();
+        FightHandler.Instance?.Count();
     }
 
     public void FightContinueInteraction()
     {
-        playerOneStateMachine.GetContinueState();
-        playerTwoStateMachine.GetContinueState();
+        playerOneStateMachine?.GetContinueState();
+        playerTwoStateMachine?.GetContinueState();
+
+        FightHandler.Instance?.ToggleWaitText(false);
+        FightHandler.Instance?.StartFight();
     }
 
     public void InterruptFight()
     {
-        playerOneStateMachine.GetStepAwayState();
-        playerTwoStateMachine.GetStepAwayState();
+        playerOneStateMachine?.GetStepAwayState();
+        playerTwoStateMachine?.GetStepAwayState();
     }
 
     public static void IncrementPlayerCount()
@@ -81,10 +87,16 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
             return;
 
         Instance.InterruptFight();
+        
+        FightHandler.Instance?.ToggleWaitText(true);
     }
 
     public static void SetUpFight()
     {
+        if (activePlayers < 1)
+            return;
         
+        FightHandler.Instance?.ToggleWaitText(false);
+        FightHandler.Instance?.GetReady();
     }
 }

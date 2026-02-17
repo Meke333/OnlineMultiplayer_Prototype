@@ -43,7 +43,10 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private async void SetUp()
     {
-        InteractionBetweenPlayersMediator.SetUpFight();
+        if (IsServer)
+        {
+            InteractionBetweenPlayersMediator.SetUpFight();
+        }
         
         await Task.Delay(4000);
         _stateData = new StateData();
@@ -52,12 +55,15 @@ public class PlayerStateMachine : NetworkBehaviour
         _stateData.playerScript = _playerScript;
         
         _currentState = new StepBackState(_stateData);
-
+        
+        _isActive = true;
+        
+        Update();
+        
         if (IsServer)
         {
             InteractionBetweenPlayersMediator.IncrementPlayerCount();
         }
-        _isActive = true;
     }
 
     public override void OnNetworkSpawn()
@@ -104,6 +110,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
             if (_stateData.recoveredFromKnockdown)
             {
+                FightHandler.Instance?.CancelCount();
                 GetUp();
             }
             
@@ -227,18 +234,9 @@ public class PlayerStateMachine : NetworkBehaviour
     
     private void UpdateChangeToServer()
     {
-        //Debug.Log("Server State Invoke Event: " + IsServer + "; " + IsClient + "; " + IsLocalPlayer);
-
-        //Debug.Log("IS THIS THE SERVER??? " + IsServer);
-
         attackDirection.Value = _stateData.attackDirection;
         attackType.Value = _stateData.attackType;
-
-
-        //UpdateChangeToClients();
     }
-    
-    //ClientRpc
     
     private void UpdateChangeToClients()
     {
@@ -250,7 +248,6 @@ public class PlayerStateMachine : NetworkBehaviour
             return;
         
         _lastClientStateType = playerStateType.Value;
-        //Debug.Log("PLEASE WORK");
         
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
 
