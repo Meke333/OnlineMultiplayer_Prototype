@@ -76,8 +76,20 @@ public abstract class PlayerState
     //Create an Event for this to happen
     public virtual void OnKnockdown()
     {
-        //nextState = new KnockdownState(stateData)
-        //stageType = StageType.Exit;
+        nextState = new KnockdownState(stateData);
+        stageType = StageType.Exit;
+        Debug.Log("BITCH WHY YOU AINT ACTZIVATION");
+    }
+
+    public virtual void OnStepBack()
+    {
+        nextState = new StepBackState((stateData));
+        stageType = StageType.Exit;
+    }
+
+    public virtual void OnContinueFight()
+    {
+        
     }
 
 }

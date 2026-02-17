@@ -18,7 +18,7 @@ public class HostGameManager : IDisposable
     private const int MaxConnections = 2;
     private Allocation _allocation;
     private List<NetworkObject> _playerPrefabs;
-    private string _joinCode;
+    public string JoinCode { get; private set; }
     private string _lobbyID;
     public NetworkServer NetworkServer {get; private set;}
 
@@ -40,7 +40,7 @@ public class HostGameManager : IDisposable
         _playerPrefabs = playerPrefabs;
     }
     
-    public async Task StartHostAsync()
+    public async Task StartHostAsync(HostData hostData)
     {
         try
         {
@@ -56,8 +56,8 @@ public class HostGameManager : IDisposable
         try
         {
             //Step 2: Get current join code for allocated relay for the clients to enter
-            _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
-            Debug.Log(_joinCode);
+            JoinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
+            Debug.Log(JoinCode);
         }
         catch (Exception e)
         {
@@ -76,13 +76,13 @@ public class HostGameManager : IDisposable
         try
         {
             CreateLobbyOptions options = new CreateLobbyOptions();
-            options.IsPrivate = false;
+            options.IsPrivate = hostData.isPrivate;
             options.Data = new Dictionary<string, Unity.Services.Lobbies.Models.DataObject>()
             {
                 {
                     "JoinCode", new DataObject(
                         visibility: DataObject.VisibilityOptions.Member,
-                        value: _joinCode
+                        value: JoinCode
                     )
                 }
             };

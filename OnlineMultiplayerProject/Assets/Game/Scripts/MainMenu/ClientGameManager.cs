@@ -63,8 +63,12 @@ public class ClientGameManager : IDisposable
 
         string payload = JsonUtility.ToJson(userData); //JSON to Byte Array
         byte[] payloadBytes = System.Text.Encoding.UTF8.GetBytes(payload);
-        NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
         
+        
+        //here for smooth joining for this project
+        await Task.Delay(1500);
+        
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
         NetworkManager.Singleton.StartClient();
     }
 

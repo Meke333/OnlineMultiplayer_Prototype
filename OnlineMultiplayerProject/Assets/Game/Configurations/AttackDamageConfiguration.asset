@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d62039a61cf4e0195615d8d8d478bc7, type: 3}
   m_Name: AttackDamageConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::AttackDamageConfiguration
-  jab_straight: 1
-  hook: 2
-  gut: 3
+  left_jab: 0.25
+  right_straight: 1.5
+  left_hook: 2
+  right_hook: 2
+  left_gut: 3
+  right_gut: 3

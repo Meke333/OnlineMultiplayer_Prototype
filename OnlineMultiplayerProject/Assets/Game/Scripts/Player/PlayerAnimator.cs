@@ -32,9 +32,9 @@ public class PlayerAnimator : NetworkBehaviour
         NetworkVariableWritePermission.Server);
     */
     
-    private async void DelayAnimatorBoolDeactivation(string name)
+    private async void DelayAnimatorBoolDeactivation(string name, int delay = 300)
     {
-        await Task.Delay(300);
+        await Task.Delay(delay);
         DeactivateBoolClientRpc(name);
     }
 
@@ -151,9 +151,19 @@ public class PlayerAnimator : NetworkBehaviour
         
         switch (state)
         {
+            case PlayerStateType.Idle:
+                _animator.SetBool(PlayerAnimatorStrings.ContinueFight, true);
+
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.ContinueFight, 150);
+                break;
+            case PlayerStateType.StepBack:
+                _animator.SetBool(PlayerAnimatorStrings.StepBackBool, true);
+
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.StepBackBool, 150);
+                break;
             case PlayerStateType.Hurt:
                 _animator.SetBool(PlayerAnimatorStrings.HurtBool, true);
-                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.HurtBool);
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.HurtBool, 150);
                 break;
             case PlayerStateType.Down:
                 _animator.SetBool(PlayerAnimatorStrings.KnockdownBool, true);
@@ -161,7 +171,15 @@ public class PlayerAnimator : NetworkBehaviour
                 break;
         }
     }
-    private void PlayerGetUpEvent()
+    
+    public void PlayerGetUpEvent()
+    {
+        Debug.Log("GetUp: ServerRpc");
+        PlayerGetUpEventClientRpc();
+    }
+    
+    [ClientRpc]
+    private void PlayerGetUpEventClientRpc()
     {
 //Create a Network Variable & Convert Trigger as Bool!!
         _animator.SetBool(PlayerAnimatorStrings.GetUpBool, true);
@@ -172,24 +190,4 @@ public class PlayerAnimator : NetworkBehaviour
     #endregion
     
     
-}
-
-public static class PlayerAnimatorStrings
-{
-    #region Parameters
-
-    public const string AttackDirection = "AttackDirection";
-    public const string AttackType = "AttackType";
-    public const string MoveDirection = "MoveDirection";
-    public const string IsBlocking = "IsBlocking";
-    public const string AttackBool = "AttackBool";
-    public const string GetUpBool = "GetUpBool";
-    public const string DidAttackMiss = "DidAttackMiss";
-    public const string MissCheckBool = "MissCheckBool";
-    public const string KnockdownBool = "KnockdownBool";
-    public const string HurtBool = "HurtBool";
-
-    #endregion
-    
-
 }

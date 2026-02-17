@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
@@ -70,7 +71,7 @@ public class LobbyList : MonoBehaviour
             return;
 
         isJoining = true;
-
+        
         try
         {
             //the lobby retruned contains the data from the dictionary - the handed over ones not

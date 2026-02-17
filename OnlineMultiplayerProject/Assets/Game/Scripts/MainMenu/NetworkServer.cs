@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -22,7 +23,6 @@ public class NetworkServer : IDisposable
     
     private Dictionary<ulong, string> _clientIdToAuth = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authIdToUserData = new Dictionary<string, UserData>();
-    private Dictionary<ulong, bool> _clientIdtoActiveCheck = new Dictionary<ulong, bool>();
     
     public NetworkServer(NetworkManager networkManager, List<NetworkObject> playerPrefabs)
     {
@@ -69,7 +69,6 @@ public class NetworkServer : IDisposable
 
     private void DoOnDisconnect(ulong clientId)
     {
-        //For some reason this gets called, whenever a client gets Approved???
         Debug.Log("DoOnDisconnect");
         if (_clientIdToAuth.TryGetValue(clientId, out string authId))
         {
@@ -77,7 +76,7 @@ public class NetworkServer : IDisposable
             OnUserLeft?.Invoke(_authIdToUserData[authId]);
             _authIdToUserData.Remove(authId);
             OnClientLeft?.Invoke(authId);
-
+            
             PlayerNumberIndex--;
         }
 
@@ -95,21 +94,21 @@ public class NetworkServer : IDisposable
 
         
         Debug.Log("Approval for: " + userData.userName);
-        Debug.Log(userData.PrefabIndex);
+        //Debug.Log(userData.PrefabIndex);
 
         //CHECK IF USER DATA IS VALID HERE!!! (name checkbox)
 
-        Debug.Log("ClientNetworkId = " + request.ClientNetworkId);
+        //Debug.Log("ClientNetworkId = " + request.ClientNetworkId);
         
         //To-Do: If ClientID is the same and the it's old in the dictionary: replace it!
         
         if (!_clientIdToAuth.TryAdd(request.ClientNetworkId, userData.userAuthID))
             _clientIdToAuth[request.ClientNetworkId] = userData.userAuthID;
-        Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
+        //Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
         
         if (!_authIdToUserData.TryAdd(userData.userAuthID, userData))
             _authIdToUserData[userData.userAuthID] = userData;
-        Debug.Log(_authIdToUserData[userData.userAuthID] == null);
+        //Debug.Log(_authIdToUserData[userData.userAuthID] == null);
         
         OnUserJoined?.Invoke(userData);
         
@@ -117,11 +116,11 @@ public class NetworkServer : IDisposable
         response.CreatePlayerObject = false;
         response.Approved = true;
         response.Pending = false;
-        Debug.Log("Hello 0");
-        Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
-        Debug.Log(_authIdToUserData[userData.userAuthID] == null);
+        //Debug.Log("Hello 0");
+        //Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
+        //Debug.Log(_authIdToUserData[userData.userAuthID] == null);
         await SpawnPlayerDelayed(request.ClientNetworkId);
-        Debug.Log("Hello 6");
+        //Debug.Log("Hello 6");
         
         //response.CreatePlayerObject = true;
     }
@@ -162,23 +161,29 @@ public class NetworkServer : IDisposable
             PlayerNumberType number = (PlayerNumberType)PlayerNumberIndex;
             Debug.Log("PlayerNumber: " + PlayerNumberIndex + "; " + (PlayerNumberType)PlayerNumberIndex);
             PlayerScript player = playerObject.GetComponentInChildren<PlayerScript>();
-            player.SetPlayerNumberType((PlayerNumberType)PlayerNumberIndex);
             
             switch (number)
             {
                 case PlayerNumberType.PlayerOne:
-                    InteractionBetweenPlayersMediator.Instance.playerOne =
+                    InteractionBetweenPlayersMediator.Instance.playerOneDamage =
                         playerObject.GetComponentInChildren<PlayerDamage>();
+                    InteractionBetweenPlayersMediator.Instance.playerOneStateMachine =
+                        playerObject.GetComponentInChildren<PlayerStateMachine>();
                     break;
                 case PlayerNumberType.PlayerTwo:
-                    InteractionBetweenPlayersMediator.Instance.playerTwo =
+                    InteractionBetweenPlayersMediator.Instance.playerTwoDamage =
                         playerObject.GetComponentInChildren<PlayerDamage>();
+                    InteractionBetweenPlayersMediator.Instance.playerTwoStateMachine =
+                        playerObject.GetComponentInChildren<PlayerStateMachine>();
                     break;
             }
 
             if (player.IsHost || player.IsServer)
             {
-                player.UpdatePlayerAfterLoadClientRpc();
+                player.SetPlayerNumberType((PlayerNumberType)PlayerNumberIndex);
+                player.UpdatePlayerAfterLoadClientRpc(
+                    userdata.PrefabIndex, 
+                    new FixedString32Bytes(userdata.userName));
             }
             Debug.Log("Hello 4");
             

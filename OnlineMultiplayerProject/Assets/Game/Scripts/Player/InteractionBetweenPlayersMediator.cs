@@ -5,8 +5,13 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
 {
     public static InteractionBetweenPlayersMediator Instance {get; private set;}
     
-    public PlayerDamage playerOne;
-    public PlayerDamage playerTwo;
+    public PlayerDamage playerOneDamage;
+    public PlayerDamage playerTwoDamage;
+
+    public PlayerStateMachine playerOneStateMachine;
+    public PlayerStateMachine playerTwoStateMachine;
+
+    public static int activePlayers = 0;
 
     private void Awake()
     {
@@ -22,18 +27,64 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
 
     public bool AttackInteraction(PlayerNumberType attacker, int direction, AttackType type)
     {
-        PlayerDamage target = attacker == PlayerNumberType.PlayerOne ? playerTwo : playerOne;
-
-        Debug.Log("WHERE IS IT CHECKING???");
-        Debug.Log("R: target = " + target.GetNumberType());
-        Debug.Log("R: attacker = " + attacker);
+        PlayerDamage target = 
+            attacker == PlayerNumberType.PlayerOne 
+                ? playerTwoDamage 
+                : playerOneDamage;
         
         bool result = target.DoesAttackLand(direction, type);
         
-        Debug.Log("R: " + result);
         if (result)
-            target.ProcessDamage(type);
+            target.ProcessDamage(type, direction);
         
         return result;
+    }
+
+    public void StepAwayInteraction(PlayerNumberType knockedDown)
+    {
+        PlayerStateMachine target = 
+            knockedDown == PlayerNumberType.PlayerOne 
+                ? playerTwoStateMachine 
+                : playerOneStateMachine;
+        
+        target.GetStepAwayState();
+    }
+
+    public void FightContinueInteraction()
+    {
+        playerOneStateMachine.GetContinueState();
+        playerTwoStateMachine.GetContinueState();
+    }
+
+    public void InterruptFight()
+    {
+        playerOneStateMachine.GetStepAwayState();
+        playerTwoStateMachine.GetStepAwayState();
+    }
+
+    public static void IncrementPlayerCount()
+    {
+        activePlayers++;
+
+        if (activePlayers < 2)
+            return;
+        
+        Instance.FightContinueInteraction();
+        
+    }
+
+    public static void DecrementPlayerCount()
+    {
+        activePlayers--;
+        
+        if (activePlayers >= 2)
+            return;
+
+        Instance.InterruptFight();
+    }
+
+    public static void SetUpFight()
+    {
+        
     }
 }

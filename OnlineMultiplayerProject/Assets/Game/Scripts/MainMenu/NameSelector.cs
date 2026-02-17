@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +29,7 @@ public class NameSelector : MonoBehaviour
         _nameField.text = PlayerPrefs.GetString(PlayerNameKey, string.Empty);
         Name = _nameField.text;
         PrefabDropdown.value = PlayerPrefs.GetInt(PlayerPrefabKey, 0);
-        
+
 
         HandleNameChanged();
     }
@@ -50,6 +51,8 @@ public class NameSelector : MonoBehaviour
 
     public void DoConnect()
     {
+        OnPrefabIndexChanged(PrefabDropdown.value);
+        
         PlayerPrefs.SetString(PlayerNameKey, _nameField.text);
         PlayerPrefs.SetInt(PlayerPrefabKey, PrefabSelectedIndex);
         Name = _nameField.text;

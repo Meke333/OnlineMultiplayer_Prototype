@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 using Unity.Cinemachine;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -22,56 +23,30 @@ public class PlayerScript : NetworkBehaviour
 
     #endregion
 
-    #region Events
-
-    public Action<AttackType, bool> OnIncomingAttack;
-    public Action OnKnockdown;
-
-    #endregion
-
-    /*private async void Start()
+    public override void OnNetworkDespawn()
     {
-        await Task.Delay(4000);
-        
-        if (IsHost || IsServer)
-        {
-            UpdatePlayerAfterLoadClientRpc();
-        }
-    }*/
-
-
-
-    #region EventCalls
-
-    private void StateChange(PlayerState obj)
-    {
-        throw new NotImplementedException();
-    }
-
-
-    #endregion
-    
-    public void SetPlayerNumberType(PlayerNumberType playerNumberType)
-    {
-        if (!IsServer && !IsHost)
+        if (!IsOwner)
             return;
         
+        if (!HealthBar.Instance)
+            return;
+        
+        HealthBar.Instance.ChangeHealthRpc(PlayerNumber.Value, HealthBar.MaxHealth, false);
+        HealthBar.Instance.ChangePlayerImageRpc(PlayerNumber.Value, -1);
+        HealthBar.Instance.ChangePlayerNameRpc(PlayerNumber.Value, new FixedString32Bytes());
+    }
+
+    public void SetPlayerNumberType(PlayerNumberType playerNumberType)
+    {
+       
         PlayerNumberValue = playerNumberType;
         PlayerNumber.Value = PlayerNumberValue;
         
         //UpdatePlayerNumberClientRpc();
     }
     
-    /*
-    //ClientRpc
     [ClientRpc]
-    private void UpdatePlayerNumberClientRpc()
-    {
-    }
-    */
-    
-    [ClientRpc]
-    public void UpdatePlayerAfterLoadClientRpc()
+    public void UpdatePlayerAfterLoadClientRpc(int characterIndex, FixedString32Bytes playerName)
     {
         if (!InitialTransformInformation.Instance)
             return;
@@ -102,9 +77,18 @@ public class PlayerScript : NetworkBehaviour
   */      
         transform.SetPositionAndRotation(playerTransform.position, playerTransform.rotation);
         
+        
+        
         //Cinemachine
         if (!IsOwner) 
             return;
+
+        if (HealthBar.Instance)
+        {
+            HealthBar.Instance.ChangePlayerImageRpc(PlayerNumber.Value, characterIndex);
+            HealthBar.Instance.ChangePlayerNameRpc(PlayerNumber.Value, playerName);
+            HealthBar.Instance.RetrieveInformationServerRpc();
+        }
 
         CinemachineVirtualCameraBase cinemachine = CinemachineCore.GetVirtualCamera(0);
         if (cinemachine)
