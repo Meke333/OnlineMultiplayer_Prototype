@@ -87,6 +87,7 @@ public class PlayerStateMachine : NetworkBehaviour
             
             EnvironmentHandler.Instance?.SetDirection(_playerScript.PlayerNumberValue, 0);
             EnvironmentHandler.Instance?.ResetEnvironmentTransform();
+            HealthBar.Instance?.ResetScore();
         }
         
         if (!IsOwner)
