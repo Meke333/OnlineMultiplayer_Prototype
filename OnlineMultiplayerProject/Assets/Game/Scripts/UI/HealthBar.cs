@@ -103,6 +103,12 @@ public class HealthBar : NetworkBehaviour
         target.Value += score;
     }
     
+    public void ResetScore()
+    {
+        playerOneScore.Value = 0;
+        playerTwoScore.Value = 0;
+    }
+    
     
     [Rpc(SendTo.Everyone, InvokePermission = RpcInvokePermission.Everyone)]
     private void SetUpRpc()
