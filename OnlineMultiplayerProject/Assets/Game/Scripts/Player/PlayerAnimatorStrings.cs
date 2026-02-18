@@ -14,6 +14,9 @@
     public const string MissCheckBool = "MissCheckBool";
     public const string KnockdownBool = "KnockdownBool";
     public const string HurtBool = "HurtBool";
+    public const string EnemyAttackDirection = "EnemyAttackDirection";
+    public const string EnemyAttackType = "EnemyAttackType";
+    
 
     #endregion
     

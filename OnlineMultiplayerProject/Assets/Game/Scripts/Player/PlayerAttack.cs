@@ -15,6 +15,11 @@ public class PlayerAttack : NetworkBehaviour
     {
         _attackDirection =  direction;
         _attackType = type;
+
+        InteractionBetweenPlayersMediator.Instance.TransmitAttackInteraction
+            (_playerScript.PlayerNumber.Value,
+                _attackDirection,
+                _attackType);
     }
     
     //ServerRPC
@@ -37,6 +42,13 @@ public class PlayerAttack : NetworkBehaviour
             AttackMissedClientRpc();
 
         AttackCheckedClientRpc();
+        
+        InteractionBetweenPlayersMediator.Instance.TransmitAttackInteraction
+        (_playerScript.PlayerNumber.Value,
+            0,
+            AttackType.Jab_Straight, 
+            true);
+        
     }
 
     [ClientRpc]

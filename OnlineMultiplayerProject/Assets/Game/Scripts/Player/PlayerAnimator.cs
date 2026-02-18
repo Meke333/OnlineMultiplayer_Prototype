@@ -7,30 +7,8 @@ public class PlayerAnimator : NetworkBehaviour
 {
     [SerializeField] private Animator _animator;
     [SerializeField] private PlayerEvents _playerEvents;
-
-    /*
-    public NetworkVariable<AttackType> AttackTypeVariable = new NetworkVariable<AttackType>(0,
-        NetworkVariableReadPermission.Everyone, 
-        NetworkVariableWritePermission.Server); 
-    public NetworkVariable<bool> DidAttackMissVariable = new NetworkVariable<bool>(false,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
-    public NetworkVariable<bool> MissCheckVariable = new NetworkVariable<bool>(false, 
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
-    public NetworkVariable<float> MoveDirectionVariable = new NetworkVariable<float>(0, 
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
-    public NetworkVariable<bool> IsBlockingVariable = new NetworkVariable<bool>(false,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
-    public NetworkVariable<bool> IsHurtVariable = new NetworkVariable<bool>(false,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
-    public NetworkVariable<bool> IsKnockedDownVariable = new NetworkVariable<bool>(false,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
-    */
+    
+    
     
     private async void DelayAnimatorBoolDeactivation(string name, int delay = 300)
     {
@@ -185,6 +163,60 @@ public class PlayerAnimator : NetworkBehaviour
         _animator.SetBool(PlayerAnimatorStrings.GetUpBool, true);
         
         DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.GetUpBool);
+    }
+
+    public void EnemyTransmitAttack(AttackType type, int direction)
+    {
+        EnemyTransmitAttackClientRpc(type, direction);
+    }
+
+    [ClientRpc]
+    private void EnemyTransmitAttackClientRpc(AttackType type, int direction)
+    {
+        AttackTransition(type, direction);
+    }
+
+    private async void AttackTransition(AttackType type, int direction)
+    {
+        float previousType = _animator.GetFloat(PlayerAnimatorStrings.EnemyAttackType);
+        float previousDirection = _animator.GetFloat(PlayerAnimatorStrings.EnemyAttackDirection);
+        
+        if (type != AttackType.Hook)
+        {
+            direction = 0;
+        }
+        float goalDirection = (float) direction;
+
+        float goalType = type switch
+        {
+            AttackType.Jab_Straight => 0,
+            AttackType.Hook => 1,
+            AttackType.Gut => 2,
+        };
+
+        if (Mathf.Abs(previousType - goalType) < 0.1f
+            && Mathf.Abs(previousDirection - goalDirection) < 0.1f)
+            return;
+
+        float maxTime = 0.5f;
+        float timer = 0;
+        
+        while (timer < maxTime)
+        {
+            
+            
+            _animator.SetFloat(PlayerAnimatorStrings.EnemyAttackType, 
+                Mathf.Lerp(previousType, goalType, timer / maxTime));
+
+            _animator.SetFloat(PlayerAnimatorStrings.EnemyAttackDirection, 
+                Mathf.Lerp(previousDirection, goalDirection, timer / maxTime));
+            
+            await Task.Yield();
+            timer += Time.deltaTime;
+        }
+        
+        _animator.SetFloat(PlayerAnimatorStrings.EnemyAttackType, goalType);
+        _animator.SetFloat(PlayerAnimatorStrings.EnemyAttackDirection, goalDirection);
     }
 
     #endregion

@@ -88,6 +88,8 @@ public class PlayerStateMachine : NetworkBehaviour
             EnvironmentHandler.Instance?.SetDirection(_playerScript.PlayerNumberValue, 0);
             EnvironmentHandler.Instance?.ResetEnvironmentTransform();
             HealthBar.Instance?.ResetScore();
+
+            FightHandler.Instance?.CancelCount();
         }
         
         if (!IsOwner)
@@ -174,6 +176,11 @@ public class PlayerStateMachine : NetworkBehaviour
     }
     
     #endregion
+
+    public void TransmitEnemyAttack(AttackType type, int direction)
+    {
+        _playerAnimator.EnemyTransmitAttack(type, direction);
+    }
     
     public void GetDamage()
     {
