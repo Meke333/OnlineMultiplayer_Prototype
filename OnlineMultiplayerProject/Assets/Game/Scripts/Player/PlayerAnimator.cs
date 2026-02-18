@@ -152,8 +152,6 @@ public class PlayerAnimator : NetworkBehaviour
         switch (state)
         {
             case PlayerStateType.Idle:
-                Debug.Log("ARE YOU CALLED??? " + OwnerClientId);
-                
                 _animator.SetBool(PlayerAnimatorStrings.ContinueFight, true);
 
                 DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.ContinueFight, 500);
