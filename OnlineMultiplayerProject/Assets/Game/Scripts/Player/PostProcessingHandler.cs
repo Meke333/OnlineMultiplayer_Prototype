@@ -221,6 +221,4 @@ public class PostProcessingHandler : MonoBehaviour
         _resetToken.Cancel();
         _resetToken = new CancellationTokenSource();
     }
-    
-    
 }
