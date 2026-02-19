@@ -69,8 +69,22 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         FightHandler.Instance?.Count();
     }
 
-    public void FightContinueInteraction()
+    public async void FightContinueInteraction()
     {
+
+        float timer = 0.5f;
+        while (timer > 0 && activePlayers >= 2)
+        {
+            playerOneStateMachine?.GetContinueState();
+            playerTwoStateMachine?.GetContinueState();
+            
+            await Task.Yield();
+            timer -= Time.deltaTime;
+        }
+
+        if (activePlayers < 2)
+            return;
+        
         playerOneStateMachine?.GetContinueState();
         playerTwoStateMachine?.GetContinueState();
 

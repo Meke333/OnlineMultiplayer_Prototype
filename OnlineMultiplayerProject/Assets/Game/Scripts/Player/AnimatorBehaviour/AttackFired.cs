@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class AttackFired : StateMachineBehaviour
@@ -26,7 +27,7 @@ public class AttackFired : StateMachineBehaviour
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override async void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
         if (!_playerAttack)
@@ -35,10 +36,20 @@ public class AttackFired : StateMachineBehaviour
             return;
         }
 
-        if (_playerAttack.IsOwner)
+        float timer = 0.5f;
+
+        while (timer > 0)
         {
-            _playerAttack.PerformAttackServerRpc();
+            
+            if (_playerAttack.IsOwner)
+            {
+                _playerAttack.PerformAttackServerRpc();
+            }
+            
+            await Task.Yield();
+            timer -= Time.deltaTime;
         }
+
         
         
 

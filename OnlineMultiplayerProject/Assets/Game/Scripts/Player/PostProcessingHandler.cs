@@ -218,6 +218,9 @@ public class PostProcessingHandler : MonoBehaviour
 
     public void ResetEffects()
     {
+        DodgingEffect(false);
+        DownedEffect(false);
+        
         _resetToken.Cancel();
         _resetToken = new CancellationTokenSource();
     }

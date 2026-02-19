@@ -119,35 +119,29 @@ public class NetworkServer : IDisposable
         //Debug.Log("Hello 0");
         //Debug.Log(_clientIdToAuth[request.ClientNetworkId] == null);
         //Debug.Log(_authIdToUserData[userData.userAuthID] == null);
-        await SpawnPlayerDelayed(request.ClientNetworkId);
+        await SpawnPlayerDelayed(request.ClientNetworkId, userData);
         //Debug.Log("Hello 6");
         
         //response.CreatePlayerObject = true;
     }
 
-    private async Task SpawnPlayerDelayed(ulong clientId)
+    private async Task SpawnPlayerDelayed(ulong clientId, UserData userdata)
     {
-        Debug.Log("Hello 1");
         await Task.Delay(3000);
-        Debug.Log("Hello 2.1");
-        
         
         Debug.Log(_clientIdToAuth[clientId] == null);
         
-        UserData userdata = GetUserDataByClientId(clientId);
+        //UserData userdata = GetUserDataByClientId(clientId);
 
         //To-Do: Exchange Position and Rotation dependent on Playernumber
         Debug.Log("_playerPrefab == null: " + (_playerPrefabs == null));
         Debug.Log("userData == null: " + (userdata == null));
         
-        Debug.Log("Hello 2.2: " + _playerPrefabs.Count + "; " + userdata.PrefabIndex);
         NetworkObject playerObject = GameObject.Instantiate(_playerPrefabs[userdata.PrefabIndex], 
             new Vector3(100, 50, 100),
             Quaternion.identity);
-        Debug.Log("Hello 2.3");
         playerObject.SpawnAsPlayerObject(clientId);
-        Debug.Log("Spawn Player: " + _playerPrefabs[userdata.PrefabIndex] + "; ID: " + clientId);
-        Debug.Log("Hello 3");
+        Debug.Log("Spawn Player: " + userdata.PrefabIndex + "; " + (_playerPrefabs[userdata.PrefabIndex]).ToString() + "; ID: " + clientId);
         //To-Do: Position
         
         //PlayerNumber
@@ -185,11 +179,11 @@ public class NetworkServer : IDisposable
                     userdata.PrefabIndex, 
                     new FixedString32Bytes(userdata.userName));
             }
-            Debug.Log("Hello 4");
+            //Debug.Log("Hello 4");
             
             PlayerNumberIndex++;
             
-            Debug.Log("Hello 5");
+            //Debug.Log("Hello 5");
         }
     }
     

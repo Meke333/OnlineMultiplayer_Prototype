@@ -10,6 +10,8 @@ public class PlayerAttack : NetworkBehaviour
     private int _attackDirection;
     private AttackType _attackType;
     
+    private bool _didAttack;
+    
     [ServerRpc]
     public void PrepareAttackServerRpc(int direction, AttackType type)
     {
@@ -20,12 +22,17 @@ public class PlayerAttack : NetworkBehaviour
             (_playerScript.PlayerNumber.Value,
                 _attackDirection,
                 _attackType);
+        
     }
     
     //ServerRPC
     [ServerRpc]
     public void PerformAttackServerRpc()
     {
+        if (_didAttack)
+            return;
+        _didAttack = true;
+        
         if (!_playerStateMachine)
             return;
         
@@ -56,6 +63,7 @@ public class PlayerAttack : NetworkBehaviour
             return;
         
         _playerStateMachine.AttackCheckedServerRpc();
+        
     }
     
     [ClientRpc]
@@ -65,5 +73,11 @@ public class PlayerAttack : NetworkBehaviour
             return;
         
         _playerStateMachine.AttackMissedServerRpc();
+    }
+
+    [ServerRpc]
+    public void AttackEndedServerRpc()
+    {
+        _didAttack = false;
     }
 }

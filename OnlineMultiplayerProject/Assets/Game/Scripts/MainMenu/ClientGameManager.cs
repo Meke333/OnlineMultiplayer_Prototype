@@ -58,7 +58,8 @@ public class ClientGameManager : IDisposable
         UserData userData = new UserData
         {
             userName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Client Unknown"),
-            userAuthID = AuthenticationService.Instance.PlayerId
+            userAuthID = AuthenticationService.Instance.PlayerId,
+            PrefabIndex = PlayerPrefs.GetInt(NameSelector.PlayerPrefabKey, 0)
         };
 
         string payload = JsonUtility.ToJson(userData); //JSON to Byte Array
