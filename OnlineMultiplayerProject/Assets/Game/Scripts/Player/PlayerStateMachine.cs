@@ -244,7 +244,6 @@ public class PlayerStateMachine : NetworkBehaviour
         attackType.Value = _stateData.attackType;
         
         EnvironmentHandler.Instance?.SetState(_playerScript.PlayerNumberValue, playerStateType.Value);
-
     }
     
     private void UpdateChangeToClients()
@@ -257,6 +256,8 @@ public class PlayerStateMachine : NetworkBehaviour
             return;
         
         _lastClientStateType = playerStateType.Value;
+        
+        PostProcessingHandler.Instance?.EvaluatePlayerStateClientRpc(playerStateType.Value);
         
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
         

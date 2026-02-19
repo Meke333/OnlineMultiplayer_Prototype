@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
-public class InteractionBetweenPlayersMediator : MonoBehaviour
+public class InteractionBetweenPlayersMediator : NetworkBehaviour
 {
     public static InteractionBetweenPlayersMediator Instance {get; private set;}
     
@@ -104,6 +105,7 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         Instance.InterruptFight();
         
         FightHandler.Instance?.ToggleWaitText(true);
+        PostProcessingHandler.Instance?.ResetEffects();
     }
 
     public static void SetUpFight()

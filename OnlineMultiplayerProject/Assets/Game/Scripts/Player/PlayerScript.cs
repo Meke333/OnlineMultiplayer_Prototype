@@ -78,10 +78,11 @@ public class PlayerScript : NetworkBehaviour
         transform.SetPositionAndRotation(playerTransform.position, playerTransform.rotation);
         
         
-        
         //Cinemachine
         if (!IsOwner) 
             return;
+        
+        
 
         if (HealthBar.Instance)
         {
