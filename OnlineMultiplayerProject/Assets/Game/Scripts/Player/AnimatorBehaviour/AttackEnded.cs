@@ -6,7 +6,7 @@ public class AttackEnded : StateMachineBehaviour
     [SerializeField] private PlayerStateMachine _playerStateMachine;
 
     // OnStateEnter is called before OnStateEnter is called on any state inside this state machine
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         _playerStateMachine = animator.transform.root.GetComponentInChildren<PlayerStateMachine>();
     }
@@ -30,25 +30,19 @@ public class AttackEnded : StateMachineBehaviour
     //}
 
     // OnStateMachineExit is called when exiting a state machine via its Exit Node
-    override public void OnStateMachineExit(Animator animator, int stateMachinePathHash)
+    public override void OnStateMachineExit(Animator animator, int stateMachinePathHash)
     {
         if (!_playerStateMachine)
         {
-            Debug.LogError("PlayerStateMachine is null");
+            //Debug.LogError("PlayerStateMachine is null");
         }
         
-        Debug.Log("AttackEnded 1");
+        //Debug.Log("AttackEnded 1");
         if (_playerStateMachine.IsOwner) 
         {
-            Debug.Log("AttackEnded 2");
+            //Debug.Log("AttackEnded 2");
             _playerStateMachine.AttackEndedServerRpc();
         }
 
-    }
-
-    private void SetUp(Animator animator)
-    {
-        if (!_playerStateMachine)
-            _playerStateMachine = animator.transform.root.GetComponentInChildren<PlayerStateMachine>();
     }
 }

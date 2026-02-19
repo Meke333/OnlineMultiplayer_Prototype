@@ -1,6 +1,3 @@
-using System;
-using System.Data;
-using System.Threading.Tasks;
 using Unity.Cinemachine;
 using Unity.Collections;
 using Unity.Netcode;
@@ -78,10 +75,11 @@ public class PlayerScript : NetworkBehaviour
         transform.SetPositionAndRotation(playerTransform.position, playerTransform.rotation);
         
         
-        
         //Cinemachine
         if (!IsOwner) 
             return;
+        
+        
 
         if (HealthBar.Instance)
         {

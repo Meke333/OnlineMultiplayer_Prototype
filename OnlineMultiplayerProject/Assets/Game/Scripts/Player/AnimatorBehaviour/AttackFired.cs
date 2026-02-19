@@ -9,7 +9,7 @@ public class AttackFired : StateMachineBehaviour
     //To-Do: Put in c# Action here
     
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         //if (_playerEvents == null || _playerScript == null)
         if (!_playerAttack)    
@@ -26,16 +26,8 @@ public class AttackFired : StateMachineBehaviour
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
-        /*if (_playerEvents == null)
-            return;
-
-        if (_playerScript.IsOwner)
-        {
-            _playerEvents?.AttackFired?.Invoke();
-        }*/
 
         if (!_playerAttack)
         {
@@ -58,16 +50,6 @@ public class AttackFired : StateMachineBehaviour
         {
             _playerAttack = animator.transform.root.GetComponentInChildren<PlayerAttack>();
         }
-            
         
-        /*if (_playerEvents == null)
-        {
-            _playerEvents = animator.transform.root.GetComponentInChildren<PlayerEvents>();
-        }
-
-        if (_playerScript == null)
-        {
-            _playerScript = animator.transform.root.GetComponentInChildren<PlayerScript>();
-        }*/
     }
 }

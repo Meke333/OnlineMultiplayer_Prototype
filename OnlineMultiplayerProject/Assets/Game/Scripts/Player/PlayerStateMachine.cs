@@ -49,10 +49,12 @@ public class PlayerStateMachine : NetworkBehaviour
         }
         
         await Task.Delay(4000);
-        _stateData = new StateData();
-        _stateData.inputStateData = new InputStateData();
-        _stateData.attackDamageConfiguration = _attackDamageConfiguration;
-        _stateData.playerScript = _playerScript;
+        _stateData = new StateData
+        {
+            inputStateData = new InputStateData(),
+            attackDamageConfiguration = _attackDamageConfiguration,
+            playerScript = _playerScript
+        };
 
         _currentState = new StepBackState(_stateData);
         
@@ -88,6 +90,8 @@ public class PlayerStateMachine : NetworkBehaviour
             EnvironmentHandler.Instance?.SetDirection(_playerScript.PlayerNumberValue, 0);
             EnvironmentHandler.Instance?.ResetEnvironmentTransform();
             HealthBar.Instance?.ResetScore();
+
+            FightHandler.Instance?.CancelCount();
         }
         
         if (!IsOwner)
@@ -174,6 +178,11 @@ public class PlayerStateMachine : NetworkBehaviour
     }
     
     #endregion
+
+    public void TransmitEnemyAttack(AttackType type, int direction)
+    {
+        _playerAnimator.EnemyTransmitAttack(type, direction);
+    }
     
     public void GetDamage()
     {
@@ -237,7 +246,6 @@ public class PlayerStateMachine : NetworkBehaviour
         attackType.Value = _stateData.attackType;
         
         EnvironmentHandler.Instance?.SetState(_playerScript.PlayerNumberValue, playerStateType.Value);
-
     }
     
     private void UpdateChangeToClients()
@@ -251,6 +259,8 @@ public class PlayerStateMachine : NetworkBehaviour
         
         _lastClientStateType = playerStateType.Value;
         
+        PostProcessingHandler.Instance?.EvaluatePlayerStateClientRpc(playerStateType.Value);
+        
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
         
         switch (playerStateType.Value) 
@@ -258,7 +268,7 @@ public class PlayerStateMachine : NetworkBehaviour
             case PlayerStateType.Attack:
 
                 _playerAttack.PrepareAttackServerRpc(attackDirection.Value, attackType.Value);
-                Debug.Log("ATTACK: " + attackDirection.Value + "; " + attackType.Value);
+                //Debug.Log("ATTACK: " + attackDirection.Value + "; " + attackType.Value);
 
                 _playerAnimator.TransmitAttackServerRpc(attackDirection.Value, attackType.Value);
                 break;

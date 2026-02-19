@@ -86,7 +86,7 @@ public class HealthBar : NetworkBehaviour
 
     private void UpdateScore(int previousValue, int newValue)
     {
-        Debug.Log("KD: UpdateScore");
+        //Debug.Log("KD: UpdateScore");
         
         playerOneScoreText.text = playerOneScore.Value.ToString();
         playerTwoScoreText.text = playerTwoScore.Value.ToString();
@@ -138,16 +138,6 @@ public class HealthBar : NetworkBehaviour
             temp.Value -= value;
         else
             temp.Value = value;
-        
-        //if value <= 0 then inform the statemachine of the corresponding player!!
-        /*if (!IsServer)
-            return;
-
-        if (temp.Value <= 0)
-        {
-            //stateMachine.GetKnockedDown();
-        }
-        */
     }
 
     public bool CheckKnockdownStatus(PlayerNumberType playerNumber)

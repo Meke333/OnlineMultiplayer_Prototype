@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
-public class InteractionBetweenPlayersMediator : MonoBehaviour
+public class InteractionBetweenPlayersMediator : NetworkBehaviour
 {
     public static InteractionBetweenPlayersMediator Instance {get; private set;}
     
@@ -25,6 +27,20 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         }
     }
 
+    public async void TransmitAttackInteraction(PlayerNumberType attacker, int direction, AttackType type, bool isDelayed = false)
+    {
+        PlayerStateMachine target = 
+            attacker == PlayerNumberType.PlayerOne 
+                ? playerTwoStateMachine 
+                : playerOneStateMachine;
+
+        if (isDelayed)
+            await Task.Delay(300);
+
+        target.TransmitEnemyAttack(type, direction);
+        
+    }
+    
     public bool AttackInteraction(PlayerNumberType attacker, int direction, AttackType type)
     {
         PlayerDamage target = 
@@ -89,6 +105,7 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         Instance.InterruptFight();
         
         FightHandler.Instance?.ToggleWaitText(true);
+        PostProcessingHandler.Instance?.ResetEffects();
     }
 
     public static void SetUpFight()

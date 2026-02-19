@@ -15,6 +15,11 @@ public class PlayerAttack : NetworkBehaviour
     {
         _attackDirection =  direction;
         _attackType = type;
+
+        InteractionBetweenPlayersMediator.Instance.TransmitAttackInteraction
+            (_playerScript.PlayerNumber.Value,
+                _attackDirection,
+                _attackType);
     }
     
     //ServerRPC
@@ -23,8 +28,6 @@ public class PlayerAttack : NetworkBehaviour
     {
         if (!_playerStateMachine)
             return;
-        
-        Debug.Log("ZZZ: 1");
         
         bool didHit = NetworkServer.PlayerNumberIndex <= 2 
                       || InteractionBetweenPlayersMediator.Instance.
@@ -37,6 +40,13 @@ public class PlayerAttack : NetworkBehaviour
             AttackMissedClientRpc();
 
         AttackCheckedClientRpc();
+        
+        InteractionBetweenPlayersMediator.Instance.TransmitAttackInteraction
+        (_playerScript.PlayerNumber.Value,
+            0,
+            AttackType.Jab_Straight, 
+            true);
+        
     }
 
     [ClientRpc]
@@ -45,7 +55,6 @@ public class PlayerAttack : NetworkBehaviour
         if (!IsOwner)
             return;
         
-        Debug.Log("ATTACK 1");
         _playerStateMachine.AttackCheckedServerRpc();
     }
     
@@ -54,8 +63,6 @@ public class PlayerAttack : NetworkBehaviour
     {
         if (!IsOwner)
             return;
-        
-        Debug.Log("ATTACK 2");
         
         _playerStateMachine.AttackMissedServerRpc();
     }

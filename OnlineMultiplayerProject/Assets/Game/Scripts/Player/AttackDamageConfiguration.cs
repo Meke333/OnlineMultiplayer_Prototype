@@ -18,7 +18,7 @@ public class AttackDamageConfiguration : ScriptableObject
         //left
         if (direction < 0)
         {
-            Debug.Log("Left Attack");
+            //Debug.Log("Left Attack");
             result = type switch
             {
                 AttackType.Jab_Straight => left_jab,
@@ -29,7 +29,7 @@ public class AttackDamageConfiguration : ScriptableObject
         //right
         else if (direction > 0)
         {
-            Debug.Log("Right Attack");
+            //Debug.Log("Right Attack");
             result = type switch
             {
                 AttackType.Jab_Straight => right_straight,
