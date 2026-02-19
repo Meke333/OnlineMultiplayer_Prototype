@@ -5,7 +5,7 @@ public class FightHandler : MonoBehaviour
 {
     public static FightHandler Instance;
     
-    private bool continueCount;
+    private bool _continueCount;
     
     
     private void Awake()
@@ -23,13 +23,13 @@ public class FightHandler : MonoBehaviour
     
     public async void Count()
     {
-        if (continueCount)
+        if (_continueCount)
             return;
-        continueCount = true;
+        _continueCount = true;
 
         int count = 0;
         
-        while (continueCount && count < 10)
+        while (_continueCount && count < 10)
         {
             //wait one second
             await Task.Delay(1000);
@@ -41,12 +41,12 @@ public class FightHandler : MonoBehaviour
         
         
         FightUIHandler.Instance.SetCountText(0);
-        continueCount = false;
+        _continueCount = false;
     }
 
     public void CancelCount()
     {
-        continueCount = false;
+        _continueCount = false;
     }
 
     public void ToggleWaitText(bool isOn)

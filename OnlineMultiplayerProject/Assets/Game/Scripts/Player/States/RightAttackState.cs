@@ -12,8 +12,6 @@ public class RightAttackState : PlayerState
         
         stateData.attackType = DetermineAttackType();
         stateData.attackDirection = 1;
-        Debug.Log("SETSTATETYPE NOW");
-        
     }
 
     protected override void Enter()

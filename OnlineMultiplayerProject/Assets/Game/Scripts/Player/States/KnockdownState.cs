@@ -70,13 +70,11 @@ public class KnockdownState : PlayerState
 
     protected override void LeftAttack(bool isPressed)
     {
-        //Do nothing
         return; 
     }
 
     protected override void RightAttack(bool isPressed)
     {
-        //Do nothing
         return;
     }
 }

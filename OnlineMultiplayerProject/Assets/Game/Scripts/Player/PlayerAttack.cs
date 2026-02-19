@@ -29,8 +29,6 @@ public class PlayerAttack : NetworkBehaviour
         if (!_playerStateMachine)
             return;
         
-        Debug.Log("ZZZ: 1");
-        
         bool didHit = NetworkServer.PlayerNumberIndex <= 2 
                       || InteractionBetweenPlayersMediator.Instance.
                           AttackInteraction(
@@ -57,7 +55,6 @@ public class PlayerAttack : NetworkBehaviour
         if (!IsOwner)
             return;
         
-        Debug.Log("ATTACK 1");
         _playerStateMachine.AttackCheckedServerRpc();
     }
     
@@ -66,8 +63,6 @@ public class PlayerAttack : NetworkBehaviour
     {
         if (!IsOwner)
             return;
-        
-        Debug.Log("ATTACK 2");
         
         _playerStateMachine.AttackMissedServerRpc();
     }

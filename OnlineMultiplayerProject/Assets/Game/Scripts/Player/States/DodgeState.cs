@@ -16,7 +16,7 @@ public class DodgeState : PlayerState
         if (Mathf.Abs(direction.x) >= 0.01f)
             return;
      
-        Debug.Log("BlockButton: " + stateData.inputStateData.blockInput);
+        //Debug.Log("BlockButton: " + stateData.inputStateData.blockInput);
         if (stateData.inputStateData.blockInput)
             nextState = new BlockState(stateData);
         else

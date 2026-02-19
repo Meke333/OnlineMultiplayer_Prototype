@@ -124,7 +124,7 @@ public class PlayerAnimator : NetworkBehaviour
     { 
         //Debug.Log("2" + state.ToString());
 //Create a Network Variable
-        Debug.Log("PlayerStateChanged: " + state);
+        //Debug.Log("PlayerStateChanged: " + state);
         _animator.SetBool(PlayerAnimatorStrings.IsBlocking, state == PlayerStateType.Block);
         
         switch (state)
@@ -152,7 +152,7 @@ public class PlayerAnimator : NetworkBehaviour
     
     public void PlayerGetUpEvent()
     {
-        Debug.Log("GetUp: ServerRpc");
+        //Debug.Log("GetUp: ServerRpc");
         PlayerGetUpEventClientRpc();
     }
     

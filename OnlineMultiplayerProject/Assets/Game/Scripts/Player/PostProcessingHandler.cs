@@ -10,8 +10,6 @@ public class PostProcessingHandler : MonoBehaviour
 {
     public static PostProcessingHandler Instance;
     
-    public PlayerScript playerScript;
-    
     [SerializeField] private Volume volume;
 
     [SerializeField] private float _vignetteMaxValue = 0.35f;
@@ -134,7 +132,6 @@ public class PostProcessingHandler : MonoBehaviour
         
         if (_resetToken.IsCancellationRequested)
         {
-            Debug.Log("Cancel Effect");
             SetOwnVignetteIntensity(0);
             SetOwnChromaticAberrationIntensity(0);;
             return;
@@ -177,7 +174,6 @@ public class PostProcessingHandler : MonoBehaviour
         
         if (_resetToken.IsCancellationRequested)
         {
-            Debug.Log("Cancel Effect");
             SetOwnScreenSpaceLensFlareIntensityClientRpc(0);
             return;
         }
@@ -212,7 +208,6 @@ public class PostProcessingHandler : MonoBehaviour
 
         if (_resetToken.IsCancellationRequested)
         {
-            Debug.Log("Cancel Effect");
             SetOwnMotionBlurIntensity(0);
             return;
         }

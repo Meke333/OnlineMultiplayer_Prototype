@@ -49,10 +49,12 @@ public class PlayerStateMachine : NetworkBehaviour
         }
         
         await Task.Delay(4000);
-        _stateData = new StateData();
-        _stateData.inputStateData = new InputStateData();
-        _stateData.attackDamageConfiguration = _attackDamageConfiguration;
-        _stateData.playerScript = _playerScript;
+        _stateData = new StateData
+        {
+            inputStateData = new InputStateData(),
+            attackDamageConfiguration = _attackDamageConfiguration,
+            playerScript = _playerScript
+        };
 
         _currentState = new StepBackState(_stateData);
         
@@ -266,7 +268,7 @@ public class PlayerStateMachine : NetworkBehaviour
             case PlayerStateType.Attack:
 
                 _playerAttack.PrepareAttackServerRpc(attackDirection.Value, attackType.Value);
-                Debug.Log("ATTACK: " + attackDirection.Value + "; " + attackType.Value);
+                //Debug.Log("ATTACK: " + attackDirection.Value + "; " + attackType.Value);
 
                 _playerAnimator.TransmitAttackServerRpc(attackDirection.Value, attackType.Value);
                 break;
