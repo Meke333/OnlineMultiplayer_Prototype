@@ -66,9 +66,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "<align=\"center>CONTROLS</align>\n<u>Offense</u>\t\nLeft Punch - [J]\nRight
-    Punch - [K]\n\nAim with <b>Punch</b> Input: \nHook - [\u25B2] + Punch\nGut -
-    [\u25BC] + Punch\n\n<u>Defense </u>\t\nDodge Left - [\u25C4] / [A]\nDodge Right
-    - [\u25BA] / [D]\nBlock -  [Space]"
+    Punch - [K]\n\nAim with <b>Punch</b> Input: \nHook - [\u25B2] / [W] + Punch\nGut
+    - [\u25BC] / [S] + Punch\n\n<u>Defense </u>\t\nDodge Left - [\u25C4] / [A]\nDodge
+    Right - [\u25BA] / [D]\nBlock -  [Space]"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

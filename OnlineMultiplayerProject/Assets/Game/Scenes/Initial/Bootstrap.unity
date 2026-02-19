@@ -152,9 +152,8 @@ MonoBehaviour:
   _hostSingletonPrefab: {fileID: 2780248949876912947, guid: ef3adcfff6a8f2a4fa96b43d3fb45080, type: 3}
   _serverSingletonPrefab: {fileID: 7964865004955132549, guid: ec2bd871967f94d4990862bc328864a8, type: 3}
   _playerPrefabs:
-  - {fileID: 6822425671528688239, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
-  - {fileID: 6822425671528688239, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
-  - {fileID: 6822425671528688239, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
+  - {fileID: 6614601709704799805, guid: c834fe3e2eb517e46a5fd23898fcfc97, type: 3}
+  - {fileID: 470355152965848736, guid: d45a4c0b02ec0b241908595f25e546ee, type: 3}
 --- !u!4 &11672128
 Transform:
   m_ObjectHideFlags: 0

@@ -185,7 +185,8 @@ public class PlayerAnimator : NetworkBehaviour
         {
             direction = 0;
         }
-        float goalDirection = (float) direction;
+        
+        float goalDirection = (float) -direction;
 
         float goalType = type switch
         {

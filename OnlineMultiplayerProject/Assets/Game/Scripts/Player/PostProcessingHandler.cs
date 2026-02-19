@@ -118,8 +118,8 @@ public class PostProcessingHandler : MonoBehaviour
             SetOwnVignetteIntensity(vignetteValue);
             SetOwnChromaticAberrationIntensity(aberrationValue);
 
-            vignetteValue -= 0.05f;
-            aberrationValue -= 0.1f;
+            vignetteValue -= 0.5f * Time.deltaTime;
+            aberrationValue -= Time.deltaTime;
             
             await Task.Yield();
 
@@ -161,7 +161,7 @@ public class PostProcessingHandler : MonoBehaviour
         while (whileLoopCheck)
         {
             SetOwnScreenSpaceLensFlareIntensityClientRpc(value);
-            value += isDown ? 0.02f: -0.05f;
+            value += isDown ? 0.5f * Time.deltaTime: -2 * Time.deltaTime;
 
             await Task.Yield();
             
@@ -196,7 +196,7 @@ public class PostProcessingHandler : MonoBehaviour
         while (whileLoopCheck)
         {
             SetOwnMotionBlurIntensity(motionBlurValue);
-            motionBlurValue += isDodging ? 0.1f : -0.1f;
+            motionBlurValue += isDodging ? Time.deltaTime : -Time.deltaTime;
             
             await Task.Yield();
 

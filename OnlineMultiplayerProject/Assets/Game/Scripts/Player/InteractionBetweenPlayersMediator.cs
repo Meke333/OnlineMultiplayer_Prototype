@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
-public class InteractionBetweenPlayersMediator : NetworkBehaviour
+public class InteractionBetweenPlayersMediator : MonoBehaviour
 {
     public static InteractionBetweenPlayersMediator Instance {get; private set;}
     

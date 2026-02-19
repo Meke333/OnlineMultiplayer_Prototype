@@ -1472,7 +1472,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3684aea0ffc94d27a11912b974ee3acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionBetweenPlayersMediator
-  ShowTopMostFoldoutHeaderGroup: 1
   playerOneDamage: {fileID: 0}
   playerTwoDamage: {fileID: 0}
   playerOneStateMachine: {fileID: 0}
@@ -1662,7 +1661,7 @@ Transform:
   m_GameObject: {fileID: 996628301}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 1.15}
+  m_LocalPosition: {x: 0, y: 0, z: 1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3026,7 +3025,7 @@ Transform:
   m_GameObject: {fileID: 1852286881}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.15}
+  m_LocalPosition: {x: 0, y: 0, z: -1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3772,7 +3771,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5febe0179a41a49ffce20292958bf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PostProcessingHandler
-  playerScript: {fileID: 0}
   volume: {fileID: 3141171824746077487}
   _vignetteMaxValue: 0.35
   _motionBlurMaxValue: 0.255
