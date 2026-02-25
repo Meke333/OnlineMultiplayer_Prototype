@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2456af38bf3a40a4a04f32fd65469774, type: 3}
+  m_Name: AudioClipConfigurations
+  m_EditorClassIdentifier: Assembly-CSharp::AudioClipConfigurations
+  Punch: {fileID: 0}
+  Voice_GetSet: {fileID: 0}
+  Voice_Fight: {fileID: 0}
+  Voice_KnockDown: {fileID: 0}
+  Voice_One: {fileID: 0}
+  Voice_Two: {fileID: 0}
+  Voice_Three: {fileID: 0}
+  Voice_Four: {fileID: 0}
+  Voice_Five: {fileID: 0}
+  Voice_Six: {fileID: 0}
+  Voice_Seven: {fileID: 0}
+  Voice_Eight: {fileID: 0}
+  Voice_Nine: {fileID: 0}
+  Voice_Ten: {fileID: 0}
