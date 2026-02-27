@@ -1,9 +1,18 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = nameof(AudioClipConfigurations), menuName = "GameConfig/AudioConfig")]
 public class AudioClipConfigurations : ScriptableObject
 {
-    public AudioClip Punch;
+    public AudioClip Punch1;
+    public AudioClip Punch2;
+    public AudioClip Block1;
+    public AudioClip Block2;
+    public AudioClip Bell;
+    public AudioClip TripleBell;
+    public AudioClip Rumble;
+    public AudioClip Dodge;
+    
     
     public AudioClip Voice_GetSet;
     public AudioClip Voice_Fight;
@@ -23,7 +32,14 @@ public class AudioClipConfigurations : ScriptableObject
     {
         return type switch
         {
-            AudioType.Punch => Punch,
+            AudioType.Punch1 => Punch1,
+            AudioType.Punch2 => Punch2,
+            AudioType.Block1 => Block1,
+            AudioType.Block2 => Block2,
+            AudioType.Bell => Bell,
+            AudioType.TripleBell => TripleBell,
+            AudioType.Rumble => Rumble,
+            AudioType.Dodge => Dodge,
             AudioType.Voice_GetSet => Voice_GetSet,
             AudioType.Voice_Fight => Voice_Fight,
             AudioType.Voice_KnockDown => Voice_KnockDown,

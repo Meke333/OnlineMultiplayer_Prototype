@@ -2,13 +2,13 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerAudio : MonoBehaviour
+public class PlayerAudio : NetworkBehaviour
 {
     public static PlayerAudio Instance;
 
     [SerializeField] private AudioClipConfigurations _configuration;
 
-    private Camera _camera;
+    //private Camera _camera;
     
     public void Awake()
     {
@@ -17,7 +17,7 @@ public class PlayerAudio : MonoBehaviour
         else if  (Instance != this &&  Instance != null)
             Destroy(this.gameObject);
         
-        _camera = Camera.main;
+        //_camera = Camera.main;
     }
     
     private void PlaySoundEffect(AudioClip clip)
@@ -25,34 +25,62 @@ public class PlayerAudio : MonoBehaviour
         if (!clip)
             return;
         
-        AudioSource.PlayClipAtPoint(clip, _camera.transform.position);
+        AudioSource.PlayClipAtPoint(clip, transform.position);
+        //AudioSource.PlayClipAtPoint(clip, _camera.transform.position);
     }
 
     [ClientRpc]
     public void PlaySoundEffectClientRpc(AudioType type)
     {
+        Debug.Log("PLAY THE AUDIO BITCH");
         PlaySoundEffect(_configuration.GetClip(type));
     }
 
-    [ClientRpc]
-    public void PlayCountVoiceClientRpc(int count)
+    public void PlaySoundEffect(AudioType type)
     {
-        AudioClip result = count switch
+        Debug.Log("Audio 1");
+        
+        PlaySoundEffectClientRpc(type);
+    }
+
+    public void PlayCountVoice(int count)
+    {
+        Debug.Log("Audio Count");
+        
+        AudioType result = count switch
         {
-            1 => _configuration.GetClip(AudioType.Voice_One),
-            2 => _configuration.GetClip(AudioType.Voice_Two),
-            3 => _configuration.GetClip(AudioType.Voice_Three),
-            4 => _configuration.GetClip(AudioType.Voice_Four),
-            5 => _configuration.GetClip(AudioType.Voice_Five),
-            6 => _configuration.GetClip(AudioType.Voice_Six),
-            7 => _configuration.GetClip(AudioType.Voice_Seven),
-            8 => _configuration.GetClip(AudioType.Voice_Eight),
-            9 => _configuration.GetClip(AudioType.Voice_Nine),
-            _ => null
+            1 => AudioType.Voice_One,
+            2 => AudioType.Voice_Two,
+            3 => AudioType.Voice_Three,
+            4 => AudioType.Voice_Four,
+            5 => AudioType.Voice_Five,
+            6 => AudioType.Voice_Six,
+            7 => AudioType.Voice_Seven,
+            8 => AudioType.Voice_Eight,
+            9 => AudioType.Voice_Nine,
         };
         
         PlaySoundEffect(result);
     }
-    
+
+    public void EvaluatePlayerState(PlayerStateType type)
+    {
+        Debug.Log("Audio State");
+
+        
+        switch (type)
+        {
+            case PlayerStateType.Dodge:
+                PlaySoundEffectClientRpc(AudioType.Dodge);
+                break;
+            case PlayerStateType.Hurt:
+                PlaySoundEffectClientRpc(AudioType.Punch1);
+                break;
+            case PlayerStateType.Down:
+                break;
+            case PlayerStateType.StepBack:
+                break;
+        }
+    }
     
 }

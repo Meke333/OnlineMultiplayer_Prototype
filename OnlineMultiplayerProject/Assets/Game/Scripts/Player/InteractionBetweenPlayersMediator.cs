@@ -51,7 +51,10 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         bool result = target.DoesAttackLand(direction, type);
         
         if (result)
+        {
+            PlayerAudio.Instance.PlaySoundEffect(AudioType.Punch1);
             target.ProcessDamage(type, direction);
+        }
         
         return result;
     }
@@ -65,6 +68,8 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         
         target.GetStepAwayState();
         
+        
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Rumble);
         FightHandler.Instance?.Down();
         FightHandler.Instance?.Count();
     }
@@ -105,6 +110,7 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         if (activePlayers < 2)
             return;
         
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Bell);
         Instance.FightContinueInteraction();
         
     }
@@ -115,7 +121,8 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         
         if (activePlayers >= 2)
             return;
-
+        
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.TripleBell);
         Instance.InterruptFight();
         
         FightHandler.Instance?.ToggleWaitText(true);

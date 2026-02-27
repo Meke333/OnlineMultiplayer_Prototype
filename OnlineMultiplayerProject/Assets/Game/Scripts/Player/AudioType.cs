@@ -1,6 +1,13 @@
 ﻿public enum AudioType
 {
-    Punch,
+    Punch1,
+    Punch2,
+    Block1,
+    Block2,
+    Bell,
+    TripleBell,
+    Rumble,
+    Dodge,
     Voice_GetSet,
     Voice_Fight,
     Voice_KnockDown,
