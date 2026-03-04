@@ -37,6 +37,7 @@ public class FightHandler : MonoBehaviour
             count++;
             //Update Text here:
             FightUIHandler.Instance.SetCountText(count);
+            PlayerAudio.Instance.PlayCountVoice(count);
         }
         
         
@@ -57,19 +58,21 @@ public class FightHandler : MonoBehaviour
     public void GetReady()
     {
         FightUIHandler.Instance.SetPromptText(TextType.GetReady);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_GetSet);
         ResetText();
     }
 
     public void StartFight()
     {
         FightUIHandler.Instance.SetPromptText(TextType.Fight);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_Fight);
         ResetText();
     }
 
     public void Down()
     {
-        
         FightUIHandler.Instance.SetPromptText(TextType.Down);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_KnockDown);
         ResetText();
     }
 

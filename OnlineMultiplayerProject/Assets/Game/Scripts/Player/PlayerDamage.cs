@@ -84,5 +84,9 @@ public class PlayerDamage : NetworkBehaviour
             //Debug.Log("R: Processing Damage: Get DamageServerRpc");
             _playerStateMachine.GetDamage();
         }
+        else
+        {
+            PlayerAudio.Instance.PlaySoundEffect(AudioType.Block1);
+        }
     }
 }

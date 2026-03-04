@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2456af38bf3a40a4a04f32fd65469774, type: 3}
+  m_Name: AudioClipConfigurations
+  m_EditorClassIdentifier: Assembly-CSharp::AudioClipConfigurations
+  Punch1: {fileID: 8300000, guid: 6ef22962d6344ce48a998ca91610c451, type: 3}
+  Punch2: {fileID: 8300000, guid: 27cd7834990b288458cdf2137a729fdc, type: 3}
+  Block1: {fileID: 8300000, guid: b0ebe133e3bb7d246bf60762c9e8c392, type: 3}
+  Block2: {fileID: 8300000, guid: bac7bccc431793d4f9e57c8a5c1abd49, type: 3}
+  Bell: {fileID: 8300000, guid: 634749dc6521c6a46a89176866de2e58, type: 3}
+  TripleBell: {fileID: 8300000, guid: 9ad8acfd98c984e4594ccd0f944679ae, type: 3}
+  Rumble: {fileID: 8300000, guid: f49393e05ad44314fa2ca6ee90da0bae, type: 3}
+  Dodge: {fileID: 8300000, guid: 4019810e82c525141ad71f87d6643edb, type: 3}
+  Voice_GetSet: {fileID: 8300000, guid: 32bbac06af7c8be4caf6c63c895678ce, type: 3}
+  Voice_Fight: {fileID: 8300000, guid: 177d5e9ade7ab9246903b9c51c139e42, type: 3}
+  Voice_KnockDown: {fileID: 8300000, guid: 0db3385751ed0c1438ce9a8de6f79e07, type: 3}
+  Voice_One: {fileID: 8300000, guid: 0e5f046481c783244a3757559bb84f2c, type: 3}
+  Voice_Two: {fileID: 8300000, guid: b5e9150e40636414cb103f2157891f19, type: 3}
+  Voice_Three: {fileID: 8300000, guid: 32101a1f505f8c14e88e1430aee1d994, type: 3}
+  Voice_Four: {fileID: 8300000, guid: bea585aaca9e2e54a9f8ee61e9a502a6, type: 3}
+  Voice_Five: {fileID: 8300000, guid: 664655fa152888c4fa494f5b9cf0c5d9, type: 3}
+  Voice_Six: {fileID: 8300000, guid: a2ff9f200835b8e42aa8383f8ab6e49b, type: 3}
+  Voice_Seven: {fileID: 8300000, guid: bd06dc45b95c66949816a95725c8b7ad, type: 3}
+  Voice_Eight: {fileID: 8300000, guid: 4fec718914d17624d9fd73387e107a40, type: 3}
+  Voice_Nine: {fileID: 8300000, guid: 9d5042181e853af4a858982a6057524e, type: 3}
+  Voice_Ten: {fileID: 8300000, guid: e1d7d1d6e66ec7744a3e0c81d4884b38, type: 3}

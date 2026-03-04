@@ -227,6 +227,7 @@ public class PlayerStateMachine : NetworkBehaviour
         _playerAnimator.PlayerGetUpEvent();
         
         HealthBar.Instance?.ChangeHealth(_playerScript.PlayerNumberValue, HealthBar.MaxHealth, false);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Rumble);
     }
 
     [ServerRpc]
@@ -260,6 +261,7 @@ public class PlayerStateMachine : NetworkBehaviour
         _lastClientStateType = playerStateType.Value;
         
         PostProcessingHandler.Instance?.EvaluatePlayerStateClientRpc(playerStateType.Value);
+        PlayerAudio.Instance.EvaluatePlayerState(playerStateType.Value);
         
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
         
