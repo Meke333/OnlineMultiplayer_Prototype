@@ -163,12 +163,16 @@ public class NetworkServer : IDisposable
                         playerObject.GetComponentInChildren<PlayerDamage>();
                     InteractionBetweenPlayersMediator.Instance.playerOneStateMachine =
                         playerObject.GetComponentInChildren<PlayerStateMachine>();
+                    InteractionBetweenPlayersMediator.Instance.playerOneVoiceConfig =
+                        player.CharacterVoiceConfiguration;
                     break;
                 case PlayerNumberType.PlayerTwo:
                     InteractionBetweenPlayersMediator.Instance.playerTwoDamage =
                         playerObject.GetComponentInChildren<PlayerDamage>();
                     InteractionBetweenPlayersMediator.Instance.playerTwoStateMachine =
                         playerObject.GetComponentInChildren<PlayerStateMachine>();
+                    InteractionBetweenPlayersMediator.Instance.playerTwoVoiceConfig =
+                        player.CharacterVoiceConfiguration;
                     break;
             }
 

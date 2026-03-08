@@ -151,8 +151,6 @@ public class HealthBar : NetworkBehaviour
         return temp.Value <= 0;
     }
 
-    //May change it out later.....
-    //Call by Spawn
     [Rpc(SendTo.Everyone)]
     public void ChangePlayerImageRpc(PlayerNumberType playerNumber, int index)
     {

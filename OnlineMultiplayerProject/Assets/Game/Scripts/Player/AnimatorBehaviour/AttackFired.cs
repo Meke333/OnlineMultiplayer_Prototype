@@ -36,7 +36,7 @@ public class AttackFired : StateMachineBehaviour
             return;
         }
 
-        float timer = 0.5f;
+        float timer = 0.25f;
 
         while (timer > 0)
         {

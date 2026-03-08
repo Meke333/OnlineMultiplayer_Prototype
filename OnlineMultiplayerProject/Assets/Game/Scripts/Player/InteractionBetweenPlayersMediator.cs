@@ -12,6 +12,9 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
 
     public PlayerStateMachine playerOneStateMachine;
     public PlayerStateMachine playerTwoStateMachine;
+    
+    public CharacterVoiceClipConfiguration playerOneVoiceConfig;
+    public CharacterVoiceClipConfiguration playerTwoVoiceConfig;
 
     public static int activePlayers = 0;
 

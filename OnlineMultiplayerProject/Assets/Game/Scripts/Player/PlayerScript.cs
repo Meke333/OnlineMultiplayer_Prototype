@@ -7,11 +7,16 @@ public class PlayerScript : NetworkBehaviour
 {
     [SerializeField] private InputReader _playerInputReader;
     [SerializeField] private PlayerStateMachine _playerStateMachine; 
+    [SerializeField] private PlayerAnimator _playerAnimator; 
+    public CharacterVoiceClipConfiguration CharacterVoiceConfiguration;
     
     public NetworkVariable<PlayerNumberType> PlayerNumber = new NetworkVariable<PlayerNumberType>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [field: SerializeField] public PlayerNumberType PlayerNumberValue { get; private set; }
 
     [SerializeField] private GameObject _cinemachineCameraTarget;
+
+    [SerializeField] private GameObject _characterGraphics;
+    [SerializeField] private GameObject _glovesGraphics;
     
     #region Input
 
@@ -47,7 +52,6 @@ public class PlayerScript : NetworkBehaviour
     {
         if (!InitialTransformInformation.Instance)
             return;
-        //Position
 
         Transform playerTransform = PlayerNumber.Value switch
         {
@@ -79,7 +83,6 @@ public class PlayerScript : NetworkBehaviour
         if (!IsOwner) 
             return;
         
-        
 
         if (HealthBar.Instance)
         {
@@ -88,6 +91,11 @@ public class PlayerScript : NetworkBehaviour
             HealthBar.Instance.RetrieveInformationServerRpc();
         }
 
+        _playerAnimator.ToggleAnimators(true);
+        
+        _characterGraphics.SetActive(false);
+        _glovesGraphics.SetActive(true);
+        
         CinemachineVirtualCameraBase cinemachine = CinemachineCore.GetVirtualCamera(0);
         if (cinemachine)
         {

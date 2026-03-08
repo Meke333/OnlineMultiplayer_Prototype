@@ -1,13 +1,15 @@
 ﻿using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerAudio : NetworkBehaviour
 {
     public static PlayerAudio Instance;
 
-    [SerializeField] private AudioClipConfigurations _configuration;
+    [FormerlySerializedAs("_configuration")] [SerializeField] private AudioClipConfigurations _audioConfiguration;
 
+    
     //private Camera _camera;
     
     public void Awake()
@@ -33,7 +35,24 @@ public class PlayerAudio : NetworkBehaviour
     public void PlaySoundEffectClientRpc(AudioType type)
     {
         Debug.Log("PLAY THE AUDIO BITCH");
-        PlaySoundEffect(_configuration.GetClip(type));
+        PlaySoundEffect(_audioConfiguration.GetClip(type));
+    }
+    
+    [ClientRpc]
+    public void PlaySoundEffectClientRpc(CharacterVoiceType type, PlayerNumberType playerNumberType)
+    {
+        CharacterVoiceClipConfiguration temp = playerNumberType switch
+        {
+            PlayerNumberType.PlayerOne => InteractionBetweenPlayersMediator.Instance.playerOneVoiceConfig,
+            PlayerNumberType.PlayerTwo => InteractionBetweenPlayersMediator.Instance.playerTwoVoiceConfig, 
+            _ => null
+        };
+
+        if (temp == null)
+            return;
+        
+        Debug.Log("PLAY THE AUDIO BITCH");
+        PlaySoundEffect(temp.GetAudioClip(type));
     }
 
     public void PlaySoundEffect(AudioType type)
@@ -46,6 +65,9 @@ public class PlayerAudio : NetworkBehaviour
     public void PlayCountVoice(int count)
     {
         Debug.Log("Audio Count");
+
+        if (count <= 0 || count > 9)
+            return;
         
         AudioType result = count switch
         {
@@ -63,24 +85,36 @@ public class PlayerAudio : NetworkBehaviour
         PlaySoundEffect(result);
     }
 
-    public void EvaluatePlayerState(PlayerStateType type)
+    public void EvaluatePlayerState(PlayerStateType type, PlayerNumberType player)
     {
         Debug.Log("Audio State");
 
         
         switch (type)
         {
+            case PlayerStateType.Attack:
+                PlaySoundEffectClientRpc(CharacterVoiceType.Attack, player);
+                break;
             case PlayerStateType.Dodge:
                 PlaySoundEffectClientRpc(AudioType.Dodge);
                 break;
             case PlayerStateType.Hurt:
+                PlaySoundEffectClientRpc(CharacterVoiceType.Hurt, player);
                 PlaySoundEffectClientRpc(AudioType.Punch1);
                 break;
             case PlayerStateType.Down:
+                PlaySoundEffectClientRpc(CharacterVoiceType.KnockDown, player);
                 break;
             case PlayerStateType.StepBack:
                 break;
         }
+    }
+
+    public void GetUpSound(PlayerNumberType player)
+    {
+        PlaySoundEffectClientRpc(AudioType.Rumble);
+        PlaySoundEffectClientRpc(CharacterVoiceType.GetUp, player);
+        
     }
     
 }

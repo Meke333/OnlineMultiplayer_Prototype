@@ -36,6 +36,8 @@ public class PlayerAttack : NetworkBehaviour
         if (!_playerStateMachine)
             return;
         
+        Debug.Log("ATTACK TRIGGER");
+        
         bool didHit = NetworkServer.PlayerNumberIndex <= 2 
                       || InteractionBetweenPlayersMediator.Instance.
                           AttackInteraction(

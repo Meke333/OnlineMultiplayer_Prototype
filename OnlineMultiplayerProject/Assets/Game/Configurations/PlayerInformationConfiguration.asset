@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: PlayerInformationConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInformationConfiguration
   <PlayerSprite>k__BackingField:
-  - {fileID: 21300000, guid: 7a9e374666ad6cc47807bb001844f3d8, type: 3}
-  - {fileID: 21300000, guid: d1546f8db185caf4dafcfa58efa3ba2c, type: 3}
-  - {fileID: 21300000, guid: af17f91b4376d6a41a793c056c02dadc, type: 3}
+  - {fileID: 21300000, guid: ed0c9dbc41be9e8438ad7bb4e805ed21, type: 3}
+  - {fileID: 21300000, guid: 22565a44a9d84ec47ba3da439ef90b36, type: 3}
