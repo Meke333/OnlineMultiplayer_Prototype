@@ -6,9 +6,15 @@ using UnityEngine;
 public class PlayerAnimator : NetworkBehaviour
 {
     [SerializeField] private Animator _animator;
+    [SerializeField] private Animator _gloveAnimator;
+    [SerializeField] private Animator _characterAnimator;
     [SerializeField] private PlayerEvents _playerEvents;
-    
-    
+
+
+    public void ToggleAnimators(bool isGlove)
+    {
+        _animator = isGlove? _gloveAnimator : _characterAnimator;
+    }
     
     private async void DelayAnimatorBoolDeactivation(string name, int delay = 300)
     {
@@ -18,7 +24,7 @@ public class PlayerAnimator : NetworkBehaviour
 
     private void ImmediateAnimatorBoolDeactivation(string name)
     {
-        DeactivateBoolClientRpc(name);
+        _animator.SetBool(name, false);
     }
 
     [ClientRpc]
@@ -34,12 +40,15 @@ public class PlayerAnimator : NetworkBehaviour
     [ServerRpc]
     public void TransmitAttackServerRpc(int direction, AttackType type)
     {
+        Debug.Log("HELLO 1");
         TransmitAttackEventClientRpc(direction, type);
     }
     
     [ClientRpc]
     private void TransmitAttackEventClientRpc(int direction, AttackType type)
     {
+        Debug.Log("HELLO 2");
+        
         _animator.SetFloat(PlayerAnimatorStrings.AttackDirection, direction);
         
 //Create a Network Variable
@@ -87,6 +96,11 @@ public class PlayerAnimator : NetworkBehaviour
 
     [ServerRpc]
     public void AttackEndedServerRpc()
+    {
+        AttackEndedClientRpc();
+    }
+    
+    public void AttackEnded()
     {
         AttackEndedClientRpc();
     }
@@ -142,10 +156,12 @@ public class PlayerAnimator : NetworkBehaviour
             case PlayerStateType.Hurt:
                 _animator.SetBool(PlayerAnimatorStrings.HurtBool, true);
                 DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.HurtBool, 100);
+                ImmediateAnimatorBoolDeactivation(PlayerAnimatorStrings.MissCheckBool);
                 break;
             case PlayerStateType.Down:
                 _animator.SetBool(PlayerAnimatorStrings.KnockdownBool, true);
                 DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.KnockdownBool);
+                ImmediateAnimatorBoolDeactivation(PlayerAnimatorStrings.MissCheckBool);
                 break;
         }
     }

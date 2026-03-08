@@ -52,12 +52,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player1
       objectReference: {fileID: 0}
+    - target: {fileID: 3963574713323088100, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
+      propertyPath: _gloveAnimator
+      value: 
+      objectReference: {fileID: 4354661564061040011}
     - target: {fileID: 6822425671528688239, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3362863275
+      value: 1211142549
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
+--- !u!95 &4354661564061040011 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4110436994733830617, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
+  m_PrefabInstance: {fileID: 388973360779643986}
+  m_PrefabAsset: {fileID: 0}

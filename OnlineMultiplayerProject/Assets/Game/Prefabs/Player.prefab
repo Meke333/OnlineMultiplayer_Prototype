@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 679736961
+  GlobalObjectIdHash: 1211142549
   InScenePlacedSourceGlobalObjectIdHash: 679736961
   DeferredDespawnTick: 0
   Ownership: 1
@@ -137,10 +137,14 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _playerInputReader: {fileID: 11400000, guid: 7987022d871063d448def10db8243e69, type: 2}
   _playerStateMachine: {fileID: 2544463415049462545}
+  _playerAnimator: {fileID: 3963574713323088100}
+  CharacterVoiceConfiguration: {fileID: 0}
   PlayerNumber:
     m_InternalValue: 0
   <PlayerNumberValue>k__BackingField: 0
   _cinemachineCameraTarget: {fileID: 9126858374209596906}
+  _characterGraphics: {fileID: 0}
+  _glovesGraphics: {fileID: 2194901018554973096}
 --- !u!114 &2335969950896661212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +246,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimator
   ShowTopMostFoldoutHeaderGroup: 1
   _animator: {fileID: 4110436994733830617}
+  _gloveAnimator: {fileID: 4110436994733830617}
+  _characterAnimator: {fileID: 0}
   _playerEvents: {fileID: 2335969950896661212}
 --- !u!1 &6559212970219866934
 GameObject:
