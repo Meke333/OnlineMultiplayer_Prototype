@@ -11,6 +11,12 @@ public class PlayerAttack : NetworkBehaviour
     private AttackType _attackType;
     
     private bool _didAttack;
+
+    private AttackFired _attackFired;
+
+    public AttackFired currentAttackFired;
+    
+    private PlayerStateType _playerStateType;
     
     [ServerRpc]
     public void PrepareAttackServerRpc(int direction, AttackType type)
@@ -29,14 +35,23 @@ public class PlayerAttack : NetworkBehaviour
     [ServerRpc]
     public void PerformAttackServerRpc()
     {
+        Debug.Log("TRI: 1; " + _didAttack);
+        
         if (_didAttack)
             return;
         _didAttack = true;
         
+        Debug.Log("TRI: 2");
+        DismissAttackFiredRpc();
+        
+        //currentAttackFired.isActive = false;
+        
+        Debug.Log("TRI: 4; " + (_playerStateMachine));
+        
         if (!_playerStateMachine)
             return;
         
-        Debug.Log("ATTACK TRIGGER");
+        Debug.Log("ATTACK TRIGGER: " + _playerScript.PlayerNumber.Value);
         
         bool didHit = NetworkServer.PlayerNumberIndex <= 2 
                       || InteractionBetweenPlayersMediator.Instance.
@@ -56,6 +71,14 @@ public class PlayerAttack : NetworkBehaviour
             AttackType.Jab_Straight, 
             true);
         
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void DismissAttackFiredRpc()
+    {
+        
+        Debug.Log("TRI: 3");
+        currentAttackFired.isActive = false;
     }
 
     [ClientRpc]
@@ -80,6 +103,26 @@ public class PlayerAttack : NetworkBehaviour
     [ServerRpc]
     public void AttackEndedServerRpc()
     {
+        Debug.Log("TRIGGER STOP");
+        currentAttackFired.isActive = false;
         _didAttack = false;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void PlayerStateChangedRpc(PlayerStateType type)
+    {
+        if (_playerStateType == type)
+            return;
+        
+        Debug.Log("STATE!!!" + type);
+        _playerStateType = type;
+
+        if (type == PlayerStateType.Down || type == PlayerStateType.Hurt || type == PlayerStateType.StepBack)
+        {
+            Debug.Log("STATE 2!!!");
+            if (currentAttackFired && currentAttackFired.isActive)
+                currentAttackFired.isActive = false;
+            _didAttack = false;
+        }
     }
 }

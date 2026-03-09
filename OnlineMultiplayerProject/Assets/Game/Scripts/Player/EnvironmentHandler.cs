@@ -118,7 +118,7 @@ public class EnvironmentHandler : NetworkBehaviour
                 _playerOneDirection = direction;
                 break;
             case PlayerNumberType.PlayerTwo:
-                _playerTwoDirection = direction;
+                _playerTwoDirection = -direction;
                 break;
         }
     }

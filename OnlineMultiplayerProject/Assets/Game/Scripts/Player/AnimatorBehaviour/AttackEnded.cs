@@ -7,6 +7,8 @@ public class AttackEnded : StateMachineBehaviour
     [SerializeField] private PlayerStateMachine _playerStateMachine;
     [SerializeField] private PlayerAttack _playerAttack;
 
+    [SerializeField] private AttackFired[] _attackFired;
+
     // OnStateEnter is called before OnStateEnter is called on any state inside this state machine
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -38,6 +40,11 @@ public class AttackEnded : StateMachineBehaviour
         if (!_playerStateMachine)
         {
             //Debug.LogError("PlayerStateMachine is null");
+        }
+
+        for (int i = 0; i < _attackFired.Length; i++)
+        {
+            _attackFired[i].isActive = false;
         }
 
         float timer = 0.5f;
