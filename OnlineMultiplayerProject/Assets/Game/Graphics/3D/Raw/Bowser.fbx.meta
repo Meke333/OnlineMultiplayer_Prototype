@@ -689,7 +689,7 @@ ModelImporter:
       name: Bowser_Armature|B_Attack_Gut.L_Check
       takeName: Bowser_Armature|B_Attack_Gut.L
       internalID: 2418170998659532530
-      firstFrame: 30
+      firstFrame: 29
       lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
@@ -776,7 +776,7 @@ ModelImporter:
       name: Bowser_Armature|B_Attack_Gut.R_Check
       takeName: Bowser_Armature|B_Attack_Gut.R
       internalID: -9000569442274275295
-      firstFrame: 30
+      firstFrame: 29
       lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
@@ -863,7 +863,7 @@ ModelImporter:
       name: Bowser_Armature|B_Attack_Hook.L_Check
       takeName: Bowser_Armature|B_Attack_Hook.L
       internalID: 7087992550941073931
-      firstFrame: 25
+      firstFrame: 24
       lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
@@ -950,7 +950,7 @@ ModelImporter:
       name: Bowser_Armature|B_Attack_Hook.R_Check
       takeName: Bowser_Armature|B_Attack_Hook.R
       internalID: -241474033453310331
-      firstFrame: 25
+      firstFrame: 24
       lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
@@ -1037,7 +1037,7 @@ ModelImporter:
       name: Bowser_Armature|B_Attack_Jab.L_Check
       takeName: Bowser_Armature|B_Attack_Jab.L
       internalID: 2920966395883388345
-      firstFrame: 10
+      firstFrame: 9
       lastFrame: 10
       wrapMode: 0
       orientationOffsetY: 0
@@ -1124,7 +1124,7 @@ ModelImporter:
       name: Bowser_Armature|B_Attack_Jab.R_Check
       takeName: Bowser_Armature|B_Attack_Jab.R
       internalID: -7052572441122972325
-      firstFrame: 25
+      firstFrame: 24
       lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0

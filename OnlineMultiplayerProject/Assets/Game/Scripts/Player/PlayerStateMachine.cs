@@ -264,6 +264,7 @@ public class PlayerStateMachine : NetworkBehaviour
         PlayerAudio.Instance.EvaluatePlayerState(playerStateType.Value, _playerScript.PlayerNumber.Value);
         
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
+        _playerAttack.PlayerStateChangedRpc(playerStateType.Value);
         
         switch (playerStateType.Value) 
         {
