@@ -246,6 +246,7 @@ public class PlayerStateMachine : NetworkBehaviour
         attackDirection.Value = _stateData.attackDirection;
         attackType.Value = _stateData.attackType;
         
+        PlayerAudio.Instance.EvaluatePlayerState(playerStateType.Value, _playerScript.PlayerNumber.Value);
         EnvironmentHandler.Instance?.SetState(_playerScript.PlayerNumberValue, playerStateType.Value);
     }
     
@@ -261,7 +262,6 @@ public class PlayerStateMachine : NetworkBehaviour
         _lastClientStateType = playerStateType.Value;
         
         PostProcessingHandler.Instance?.EvaluatePlayerStateClientRpc(playerStateType.Value);
-        PlayerAudio.Instance.EvaluatePlayerState(playerStateType.Value, _playerScript.PlayerNumber.Value);
         
         _playerAnimator.PlayerStateChangedEventServerRpc(playerStateType.Value);
         _playerAttack.PlayerStateChangedRpc(playerStateType.Value);

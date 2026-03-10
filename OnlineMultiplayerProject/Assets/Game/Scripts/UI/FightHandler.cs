@@ -58,21 +58,21 @@ public class FightHandler : MonoBehaviour
     public void GetReady()
     {
         FightUIHandler.Instance.SetPromptText(TextType.GetReady);
-        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_GetSet);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_GetSet, 0.75f);
         ResetText();
     }
 
     public void StartFight()
     {
         FightUIHandler.Instance.SetPromptText(TextType.Fight);
-        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_Fight);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_Fight, 0.75f);
         ResetText();
     }
 
     public void Down()
     {
         FightUIHandler.Instance.SetPromptText(TextType.Down);
-        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_KnockDown);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Voice_KnockDown, 0.75f);
         ResetText();
     }
 

@@ -12,6 +12,8 @@ public class CharacterVoiceClipConfiguration : ScriptableObject
     
     public AudioClip GetAudioClip(CharacterVoiceType type)
     {
+	    Debug.Log("Voice: " + type);
+	    
 	    AudioClip[] voiceClip = type switch
 	    {
 		    CharacterVoiceType.Attack => Attack,
@@ -21,6 +23,8 @@ public class CharacterVoiceClipConfiguration : ScriptableObject
 		    _ => null
 	    };
 
+	    Debug.Log("Voice: " + (voiceClip));
+	    
 	    if (voiceClip == null)
 		    return null;
 	    

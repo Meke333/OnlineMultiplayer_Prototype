@@ -21,7 +21,7 @@ public class AttackFired : StateMachineBehaviour
         if (_playerAttack)
             _playerAttack.currentAttackFired = this;
         
-        Debug.Log("AttackFired has entered the State");
+        //Debug.Log("AttackFired has entered the State");
 
         isActive = true;
     }
@@ -46,12 +46,12 @@ public class AttackFired : StateMachineBehaviour
         float timer = 0.5f;
         
         
-        Debug.Log("ATTACK TRIGGER STARTED");
+        //Debug.Log("ATTACK TRIGGER STARTED");
 
         while (timer > 0 && isActive)
         {
 
-            Debug.Log("TRIGGER YOOOOOOOOO; " + timer + "; " + isActive + ";;; " + _playerAttack.IsOwner);
+            //Debug.Log("TRIGGER YOOOOOOOOO; " + timer + "; " + isActive + ";;; " + _playerAttack.IsOwner);
             if (_playerAttack.IsOwner)
             {
                 _playerAttack.PerformAttackServerRpc();
@@ -62,7 +62,7 @@ public class AttackFired : StateMachineBehaviour
         }
 
         
-        Debug.Log("ENDED TRIGGER");
+        //Debug.Log("ENDED TRIGGER");
 
     }
     

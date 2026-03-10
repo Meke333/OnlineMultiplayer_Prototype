@@ -12,7 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85be68ccd3e5440facded98ec4dbece5, type: 3}
   m_Name: ZavokVoiceClips
   m_EditorClassIdentifier: Assembly-CSharp::CharacterVoiceClipConfiguration
-  Attack: []
-  Hurt: []
-  KnockDown: []
-  GetUp: []
+  Attack:
+  - {fileID: 8300000, guid: 2579f234a34269742bfe4dd0e5da4f91, type: 3}
+  - {fileID: 8300000, guid: 5e4ba5dda61033849b727920a3ed4068, type: 3}
+  - {fileID: 8300000, guid: a1c50b8794a95ed4bbeb90ad6eb43fff, type: 3}
+  - {fileID: 8300000, guid: 8e2668df9a7dc044a8a11f94c1a0edde, type: 3}
+  - {fileID: 8300000, guid: 77574317773c4614ca9ab3eada108950, type: 3}
+  - {fileID: 8300000, guid: 124e636a60869964e82f51b6e0eefa84, type: 3}
+  - {fileID: 8300000, guid: 28bdcc93eaccc5542aee8ae6b498cd50, type: 3}
+  - {fileID: 8300000, guid: 67ac8a8aaff3b8848829c090f3f3e2dc, type: 3}
+  - {fileID: 8300000, guid: 96b6f2d8108ef3d419a784bef154bc27, type: 3}
+  - {fileID: 8300000, guid: edd33dfa19ae33f409d6b004dedf3c69, type: 3}
+  - {fileID: 8300000, guid: 6f2ff786adfbe764d8b0cb750ee43054, type: 3}
+  - {fileID: 8300000, guid: 2324f222b47d1e648b0970437ff6ab70, type: 3}
+  - {fileID: 8300000, guid: 42a02d06a8f5bdc4e85568a9d0760276, type: 3}
+  - {fileID: 8300000, guid: c8b32868096384e468d6d1ca668380d8, type: 3}
+  - {fileID: 8300000, guid: 3d1d422e2283d224687059a5c66221f4, type: 3}
+  - {fileID: 8300000, guid: 5ffba49fae8b37b49aa1bda84cb4a2f9, type: 3}
+  - {fileID: 8300000, guid: ca5972144b577cc4ca7a46a9e57ada69, type: 3}
+  - {fileID: 8300000, guid: b9515e5ed6925ab44902affd29c58b4f, type: 3}
+  Hurt:
+  - {fileID: 8300000, guid: 9aee967032da5a34db4ee4cd545e7d30, type: 3}
+  - {fileID: 8300000, guid: acd9ac7f55dd89d4db637c974c3f8da0, type: 3}
+  - {fileID: 8300000, guid: 0d71d79a755b11b46bb3750b2bb22493, type: 3}
+  - {fileID: 8300000, guid: 748af47ef3d9aa24099367e804369278, type: 3}
+  - {fileID: 8300000, guid: 0b0ddcc2fed6aed49b167866843c299c, type: 3}
+  - {fileID: 8300000, guid: fb613f88d67592741b059224583895c1, type: 3}
+  - {fileID: 8300000, guid: a04f402ab34666b4c8688099395a51c6, type: 3}
+  - {fileID: 8300000, guid: a5a3bb54b82f3924a93e166e22bebffd, type: 3}
+  - {fileID: 8300000, guid: 0216642956383f343ba4779fa2d9930f, type: 3}
+  KnockDown:
+  - {fileID: 8300000, guid: 185be937554b60f439541eb7c29d5232, type: 3}
+  - {fileID: 8300000, guid: 6cb5ba56a70111142a751099d6ad9671, type: 3}
+  - {fileID: 8300000, guid: 1b265009b3893b04681eb36dbf11204c, type: 3}
+  - {fileID: 8300000, guid: a70107c15b19ead4a822eed0af69a2f1, type: 3}
+  - {fileID: 8300000, guid: 90b86e6706f009542a8f56f0564d32cc, type: 3}
+  - {fileID: 8300000, guid: ce34388180eeb5a42920b8c4083a75f6, type: 3}
+  - {fileID: 8300000, guid: 83894ecf54d1e714690f9fbee1f25528, type: 3}
+  - {fileID: 8300000, guid: d70e44f86c664464cbe5aa7edf6de5b1, type: 3}
+  GetUp:
+  - {fileID: 8300000, guid: f4ebe13721bdc974096f121df5696cf1, type: 3}
+  - {fileID: 8300000, guid: cebb7b7a3ea76344c88f93e83638a352, type: 3}
+  - {fileID: 8300000, guid: a262c5d6a544c6c4b930beade152d6f9, type: 3}
+  - {fileID: 8300000, guid: 5bf4b3bfff5a7f44cb5e78df02f1cb2a, type: 3}
+  - {fileID: 8300000, guid: bf1a8a95e5596364b8d37a0a7149af51, type: 3}
+  - {fileID: 8300000, guid: 2742d9012e6760e4081a9eda84ef487e, type: 3}

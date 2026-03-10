@@ -35,23 +35,23 @@ public class PlayerAttack : NetworkBehaviour
     [ServerRpc]
     public void PerformAttackServerRpc()
     {
-        Debug.Log("TRI: 1; " + _didAttack);
+        //Debug.Log("TRI: 1; " + _didAttack);
         
         if (_didAttack)
             return;
         _didAttack = true;
         
-        Debug.Log("TRI: 2");
+        //Debug.Log("TRI: 2");
         DismissAttackFiredRpc();
         
         //currentAttackFired.isActive = false;
         
-        Debug.Log("TRI: 4; " + (_playerStateMachine));
+        //Debug.Log("TRI: 4; " + (_playerStateMachine));
         
         if (!_playerStateMachine)
             return;
         
-        Debug.Log("ATTACK TRIGGER: " + _playerScript.PlayerNumber.Value);
+        //Debug.Log("ATTACK TRIGGER: " + _playerScript.PlayerNumber.Value);
         
         bool didHit = NetworkServer.PlayerNumberIndex <= 2 
                       || InteractionBetweenPlayersMediator.Instance.
@@ -77,7 +77,7 @@ public class PlayerAttack : NetworkBehaviour
     public void DismissAttackFiredRpc()
     {
         
-        Debug.Log("TRI: 3");
+        //Debug.Log("TRI: 3");
         currentAttackFired.isActive = false;
     }
 
@@ -103,7 +103,7 @@ public class PlayerAttack : NetworkBehaviour
     [ServerRpc]
     public void AttackEndedServerRpc()
     {
-        Debug.Log("TRIGGER STOP");
+        //Debug.Log("TRIGGER STOP");
         currentAttackFired.isActive = false;
         _didAttack = false;
     }
@@ -114,12 +114,12 @@ public class PlayerAttack : NetworkBehaviour
         if (_playerStateType == type)
             return;
         
-        Debug.Log("STATE!!!" + type);
+        //Debug.Log("STATE!!!" + type);
         _playerStateType = type;
 
         if (type == PlayerStateType.Down || type == PlayerStateType.Hurt || type == PlayerStateType.StepBack)
         {
-            Debug.Log("STATE 2!!!");
+            //Debug.Log("STATE 2!!!");
             if (currentAttackFired && currentAttackFired.isActive)
                 currentAttackFired.isActive = false;
             _didAttack = false;

@@ -58,7 +58,11 @@ PrefabInstance:
       objectReference: {fileID: 4354661564061040011}
     - target: {fileID: 6822425671528688239, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1211142549
+      value: 3362863275
+      objectReference: {fileID: 0}
+    - target: {fileID: 8829045608157741384, guid: 8105ff4d735f89541817e6fb0c651b45, type: 3}
+      propertyPath: _characterVoiceConfigIndex
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

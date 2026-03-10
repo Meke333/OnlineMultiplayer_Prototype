@@ -7,8 +7,8 @@ public class PlayerScript : NetworkBehaviour
 {
     [SerializeField] private InputReader _playerInputReader;
     [SerializeField] private PlayerStateMachine _playerStateMachine; 
-    [SerializeField] private PlayerAnimator _playerAnimator; 
-    public CharacterVoiceClipConfiguration CharacterVoiceConfiguration;
+    [SerializeField] private PlayerAnimator _playerAnimator;
+    [SerializeField] private int _characterVoiceConfigIndex;
     
     public NetworkVariable<PlayerNumberType> PlayerNumber = new NetworkVariable<PlayerNumberType>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [field: SerializeField] public PlayerNumberType PlayerNumberValue { get; private set; }
@@ -59,6 +59,28 @@ public class PlayerScript : NetworkBehaviour
             PlayerNumberType.PlayerTwo => InitialTransformInformation.Instance.PlayerTwoInformation,
             _ => InitialTransformInformation.Instance.PlayerTwoInformation
         };
+        
+        /*switch (PlayerNumber.Value)
+        {
+            case PlayerNumberType.PlayerOne:
+                InteractionBetweenPlayersMediator.Instance.playerOneDamage =
+                    gameObject.GetComponentInChildren<PlayerDamage>();
+                InteractionBetweenPlayersMediator.Instance.playerOneStateMachine =
+                    gameObject.GetComponentInChildren<PlayerStateMachine>();
+                InteractionBetweenPlayersMediator.Instance.playerOneVoiceConfig =
+                    CharacterVoiceConfiguration;
+                break;
+            case PlayerNumberType.PlayerTwo:
+            default:
+                InteractionBetweenPlayersMediator.Instance.playerTwoDamage =
+                    gameObject.GetComponentInChildren<PlayerDamage>();
+                InteractionBetweenPlayersMediator.Instance.playerTwoStateMachine =
+                    gameObject.GetComponentInChildren<PlayerStateMachine>();
+                InteractionBetweenPlayersMediator.Instance.playerTwoVoiceConfig =
+                    CharacterVoiceConfiguration;
+                break;
+        }
+        */
 /*
         Transform opponentTransform;
         
@@ -82,7 +104,17 @@ public class PlayerScript : NetworkBehaviour
         //Cinemachine
         if (!IsOwner) 
             return;
+
         
+        if (TransmitConfiguration.Instance)
+        {
+            Debug.Log(TransmitConfiguration.Instance == null);
+            Debug.Log(PlayerNumber.Value);
+            Debug.Log(_characterVoiceConfigIndex);
+            
+            TransmitConfiguration.Instance.SetAudioConfigurationRpc(PlayerNumber.Value, _characterVoiceConfigIndex);
+            TransmitConfiguration.Instance.RetrieveInformationServerRpc();
+        }
 
         if (HealthBar.Instance)
         {
