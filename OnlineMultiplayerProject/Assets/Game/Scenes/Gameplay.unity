@@ -246,6 +246,80 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &153248982
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 153248985}
+  - component: {fileID: 153248983}
+  - component: {fileID: 153248984}
+  m_Layer: 0
+  m_Name: TransmitConfiguration
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &153248983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153248982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3776514468
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 0
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 0
+  SyncOwnerTransformWhenParented: 0
+  AllowOwnerToParent: 0
+--- !u!114 &153248984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153248982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 424f472c39d448e1bd91e1b9ff1ca406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TransmitConfiguration
+  ShowTopMostFoldoutHeaderGroup: 1
+  _allConfigs: {fileID: 11400000, guid: e87e8c4fa7fd99e49a9cc610a6ccd681, type: 2}
+  playerOneVoiceConfig: {fileID: 0}
+  playerTwoVoiceConfig: {fileID: 0}
+--- !u!4 &153248985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153248982}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &293788656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,7 +1553,7 @@ GameObject:
   m_Component:
   - component: {fileID: 719101696}
   - component: {fileID: 719101695}
-  - component: {fileID: 719101694}
+  - component: {fileID: 719101697}
   m_Layer: 0
   m_Name: GameplayInformation
   m_TagString: Untagged
@@ -1487,20 +1561,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &719101694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 719101693}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e69053a73694253a00ac80b372c8d0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InitialTransformInformation
-  <PlayerOneInformation>k__BackingField: {fileID: 1852286882}
-  <PlayerTwoInformation>k__BackingField: {fileID: 996628302}
 --- !u!114 &719101695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1517,8 +1577,6 @@ MonoBehaviour:
   playerTwoDamage: {fileID: 0}
   playerOneStateMachine: {fileID: 0}
   playerTwoStateMachine: {fileID: 0}
-  playerOneVoiceConfig: {fileID: 0}
-  playerTwoVoiceConfig: {fileID: 0}
 --- !u!4 &719101696
 Transform:
   m_ObjectHideFlags: 0
@@ -1536,6 +1594,20 @@ Transform:
   - {fileID: 996628302}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &719101697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719101693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e69053a73694253a00ac80b372c8d0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InitialTransformInformation
+  <PlayerOneInformation>k__BackingField: {fileID: 1852286882}
+  <PlayerTwoInformation>k__BackingField: {fileID: 996628302}
 --- !u!1 &894531749
 GameObject:
   m_ObjectHideFlags: 0
@@ -4082,6 +4154,7 @@ SceneRoots:
   - {fileID: 894531750}
   - {fileID: 2119146539}
   - {fileID: 719101696}
+  - {fileID: 153248985}
   - {fileID: 311342416}
   - {fileID: 1433254635}
   - {fileID: 1834570473}

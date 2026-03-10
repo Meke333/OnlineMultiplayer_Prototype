@@ -156,6 +156,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3843379512888772931}
     - target: {fileID: 9215203791810022682, guid: c834fe3e2eb517e46a5fd23898fcfc97, type: 3}
+      propertyPath: _characterVoiceConfigIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9215203791810022682, guid: c834fe3e2eb517e46a5fd23898fcfc97, type: 3}
       propertyPath: CharacterVoiceConfiguration
       value: 
       objectReference: {fileID: 11400000, guid: 57d869e307f8d1147a5d965e347ce709, type: 2}

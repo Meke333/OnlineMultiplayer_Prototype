@@ -108,7 +108,7 @@ public class PlayerAnimator : NetworkBehaviour
     [ClientRpc]
     private void AttackEndedClientRpc()
     {
-        Debug.Log("ATTACK ENDED SCRIPT");
+        //Debug.Log("ATTACK ENDED SCRIPT");
         ImmediateAnimatorBoolDeactivation(PlayerAnimatorStrings.DidAttackMiss);
         ImmediateAnimatorBoolDeactivation(PlayerAnimatorStrings.MissCheckBool);
     }
@@ -147,7 +147,7 @@ public class PlayerAnimator : NetworkBehaviour
             case PlayerStateType.Idle:
                 _animator.SetBool(PlayerAnimatorStrings.ContinueFight, true);
 
-                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.ContinueFight, 500);
+                DelayAnimatorBoolDeactivation(PlayerAnimatorStrings.ContinueFight, 1000);
                 break;
             case PlayerStateType.StepBack:
                 _animator.SetBool(PlayerAnimatorStrings.StepBackBool, true);

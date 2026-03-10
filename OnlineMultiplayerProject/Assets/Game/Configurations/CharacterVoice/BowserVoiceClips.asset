@@ -12,7 +12,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85be68ccd3e5440facded98ec4dbece5, type: 3}
   m_Name: BowserVoiceClips
   m_EditorClassIdentifier: Assembly-CSharp::CharacterVoiceClipConfiguration
-  Attack: []
-  Hurt: []
-  KnockDown: []
-  GetUp: []
+  Attack:
+  - {fileID: 8300000, guid: 53279dffaf178e9418710bdcfdfe407f, type: 3}
+  - {fileID: 8300000, guid: 9ec9de7067e6d9a468e0b09e2619a4e7, type: 3}
+  - {fileID: 8300000, guid: 127fd370538e864458c6dfecbac2c482, type: 3}
+  - {fileID: 8300000, guid: 9137bcffd88adfe4ba2133e1d3ceda82, type: 3}
+  - {fileID: 8300000, guid: 545ebda1f2d6c0344a327912c5f44341, type: 3}
+  - {fileID: 8300000, guid: 6124e547f6ab7e845876ce5a6aae9090, type: 3}
+  - {fileID: 8300000, guid: 97e5a83dea304c348a8118874a14ee78, type: 3}
+  - {fileID: 8300000, guid: db32fef35d129b043bdaf93ebd02704e, type: 3}
+  - {fileID: 8300000, guid: 2c29a88f5a6032f47a15fb684e10bf94, type: 3}
+  - {fileID: 8300000, guid: 070effd05f7094b49aa9439f55109dd3, type: 3}
+  - {fileID: 8300000, guid: 3d63c9078ad32404a984c0e54d9b4401, type: 3}
+  - {fileID: 8300000, guid: 8d24f07cd2e0c3549a59ac37a9856e10, type: 3}
+  - {fileID: 8300000, guid: 67472f984225b484aa9be6d41ef45224, type: 3}
+  - {fileID: 8300000, guid: 3ddb2f885795b1045a1fff13f97dd41a, type: 3}
+  - {fileID: 8300000, guid: e574fcc7408ac3d4c80e51208dd1f52c, type: 3}
+  - {fileID: 8300000, guid: bb47156a3ca252343bbfa9d1f7579ed1, type: 3}
+  - {fileID: 8300000, guid: 890b703f8fc6a8342830345be69699ea, type: 3}
+  - {fileID: 8300000, guid: 05de29c63daf3114b805c524ecba38eb, type: 3}
+  - {fileID: 8300000, guid: 42bd023002aab2f4ea4ffb65c776c9ac, type: 3}
+  - {fileID: 8300000, guid: 081b5c4abda7cc346b2b6386af5fee5c, type: 3}
+  - {fileID: 8300000, guid: 9fd550cdd56c56545a4faf1dffc37244, type: 3}
+  - {fileID: 8300000, guid: 6a97e98bf82d00a469a4d0cfd4be5f14, type: 3}
+  - {fileID: 8300000, guid: 73bee5109557cf649904423189b721b4, type: 3}
+  Hurt:
+  - {fileID: 8300000, guid: e42405740f68df2459ba6e6907f150b2, type: 3}
+  - {fileID: 8300000, guid: 8f37ea5610f56794584ac818ff7d527f, type: 3}
+  - {fileID: 8300000, guid: bed9f9ef65010694480076173e7a2bd2, type: 3}
+  - {fileID: 8300000, guid: 77a51587fd6b43046a5dbeed88a9ca89, type: 3}
+  - {fileID: 8300000, guid: 9be4e41ed5c18e34da0b78db0ec1baaa, type: 3}
+  - {fileID: 8300000, guid: 73adbb7097d6eb94481a4f7651146319, type: 3}
+  - {fileID: 8300000, guid: feda6a7b66ed95443b4c46cf4460f59a, type: 3}
+  - {fileID: 8300000, guid: 41ffa24f2f4287346b850370befe6f48, type: 3}
+  - {fileID: 8300000, guid: 512e5e357b375f34dba1980ac216396e, type: 3}
+  - {fileID: 8300000, guid: ba84bf172560f4345a2924d84f0b98ce, type: 3}
+  - {fileID: 8300000, guid: b7cbbcfeeba218f479b8af47bf641358, type: 3}
+  KnockDown:
+  - {fileID: 8300000, guid: 193c2f0732eebb2458cde88a31c5707e, type: 3}
+  - {fileID: 8300000, guid: 34f34d9b37ee70b49a751db66a131689, type: 3}
+  - {fileID: 8300000, guid: b02a01b4ca1ccf54a890b5f6ddb236ee, type: 3}
+  GetUp:
+  - {fileID: 8300000, guid: 65157c1c2948be442964857c7b700a0a, type: 3}
+  - {fileID: 8300000, guid: 278e00640dc411f409ce1ed94ec21fad, type: 3}

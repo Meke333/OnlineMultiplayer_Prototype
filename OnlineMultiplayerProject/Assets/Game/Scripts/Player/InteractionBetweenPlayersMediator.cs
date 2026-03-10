@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Unity.Netcode;
 using UnityEngine;
 
 public class InteractionBetweenPlayersMediator : MonoBehaviour
@@ -12,9 +11,6 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
 
     public PlayerStateMachine playerOneStateMachine;
     public PlayerStateMachine playerTwoStateMachine;
-    
-    public CharacterVoiceClipConfiguration playerOneVoiceConfig;
-    public CharacterVoiceClipConfiguration playerTwoVoiceConfig;
 
     public static int activePlayers = 0;
 
@@ -55,7 +51,7 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         
         if (result)
         {
-            PlayerAudio.Instance.PlaySoundEffect(AudioType.Punch1);
+            PlayerAudio.Instance.PlaySoundEffect(AudioType.Punch1, 0.85f);
             target.ProcessDamage(type, direction);
         }
         
@@ -113,7 +109,7 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         if (activePlayers < 2)
             return;
         
-        PlayerAudio.Instance.PlaySoundEffect(AudioType.Bell);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.Bell, 0.85f);
         Instance.FightContinueInteraction();
         
     }
@@ -125,7 +121,7 @@ public class InteractionBetweenPlayersMediator : MonoBehaviour
         if (activePlayers >= 2)
             return;
         
-        PlayerAudio.Instance.PlaySoundEffect(AudioType.TripleBell);
+        PlayerAudio.Instance.PlaySoundEffect(AudioType.TripleBell, 0.85f);
         Instance.InterruptFight();
         
         FightHandler.Instance?.ToggleWaitText(true);
