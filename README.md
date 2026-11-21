@@ -53,3 +53,9 @@ Under "Find & Join a Game!"
 You have two methods of joining an existing hosting game.
 1. Enter with a Join Code that the Host provided. Enter the code in the inputfield and press the "Join a Game!" button to enter.
 2. Press the "Search for a Game!" button and select the Game you wanna join in the panel that opens up.
+
+
+# References
+Sound & Voice Effects are from 'Mario & Sonic at the Olympic Games' (DS) & 'Mario & Sonic at the Tokyo 2020 Olympic Games'
+Bowser Model is from 'Super Mario Odyssey'
+
